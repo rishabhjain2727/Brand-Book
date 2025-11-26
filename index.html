@@ -1,1300 +1,1388 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brand Book Creator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --border-radius: 8px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f5f7fb;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 300px;
-            background: white;
-            box-shadow: var(--shadow);
-            padding: 20px;
-            overflow-y: auto;
-            z-index: 10;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-
-        .logo i {
-            font-size: 24px;
-            color: var(--primary);
-            margin-right: 10px;
-        }
-
-        .logo h1 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .pillar-list {
-            list-style: none;
-        }
-
-        .pillar-item {
-            margin-bottom: 5px;
-        }
-
-        .pillar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 15px;
-            background-color: var(--light);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .pillar-header:hover {
-            background-color: var(--light-gray);
-        }
-
-        .pillar-header.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .pillar-header i {
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .pillar-header.active i {
-            transform: rotate(90deg);
-        }
-
-        .sub-pillars {
-            list-style: none;
-            max-height: 0;
-            overflow: hidden;
-            transition: var(--transition);
-            padding-left: 10px;
-        }
-
-        .sub-pillars.show {
-            max-height: 500px;
-        }
-
-        .sub-pillar {
-            padding: 10px 15px;
-            border-left: 2px solid var(--light-gray);
-            margin: 5px 0;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sub-pillar:hover {
-            border-left-color: var(--accent);
-            background-color: rgba(72, 149, 239, 0.1);
-        }
-
-        .sub-pillar.active {
-            border-left-color: var(--primary);
-            background-color: rgba(67, 97, 238, 0.1);
-            font-weight: 600;
-        }
-
-        .sub-pillar i {
-            margin-right: 8px;
-            font-size: 12px;
-            color: var(--gray);
-        }
-
-        .sub-pillar.active i {
-            color: var(--primary);
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-
-        .content-header h2 {
-            font-size: 24px;
-            color: var(--dark);
-        }
-
-        .progress-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .progress-bar {
-            width: 200px;
-            height: 10px;
-            background-color: var(--light-gray);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: var(--success);
-            width: 35%;
-            border-radius: 10px;
-            transition: var(--transition);
-        }
-
-        .progress-text {
-            font-size: 14px;
-            color: var(--gray);
-        }
-
-        .form-container {
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 30px;
-            margin-bottom: 30px;
-            display: none;
-        }
-
-        .form-container.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .form-header {
-            margin-bottom: 20px;
-        }
-
-        .form-header h3 {
-            font-size: 20px;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .form-header p {
-            color: var(--gray);
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group .hint {
-            font-size: 12px;
-            color: var(--gray);
-            margin-top: 5px;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--light-gray);
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            transition: var(--transition);
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-            cursor: pointer;
-        }
-
-        .color-picker-container {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .color-preview {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--light-gray);
-        }
-
-        .file-upload {
-            border: 2px dashed var(--light-gray);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .file-upload:hover {
-            border-color: var(--accent);
-            background-color: rgba(72, 149, 239, 0.05);
-        }
-
-        .file-upload i {
-            font-size: 40px;
-            color: var(--gray);
-            margin-bottom: 10px;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--secondary);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background-color: rgba(67, 97, 238, 0.1);
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .do-dont-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .do-section, .dont-section {
-            padding: 15px;
-            border-radius: var(--border-radius);
-        }
-
-        .do-section {
-            border: 1px solid #d4edda;
-            background-color: #f8fff9;
-        }
-
-        .dont-section {
-            border: 1px solid #f8d7da;
-            background-color: #fff5f6;
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .do-section .section-title {
-            color: #155724;
-        }
-
-        .dont-section .section-title {
-            color: #721c24;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 60px;
-            margin-bottom: 20px;
-            color: var(--light-gray);
-        }
-
-        .repeater-item {
-            background: var(--light);
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-bottom: 15px;
-            border: 1px solid var(--light-gray);
-        }
-
-        .repeater-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .repeater-title {
-            font-weight: 600;
-        }
-
-        .repeater-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 14px;
-        }
-
-        .btn-danger {
-            background-color: var(--warning);
-            color: white;
-        }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
-
-        .multi-select-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .multi-select-item {
-            background: var(--light);
-            padding: 8px 15px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .multi-select-item i {
-            cursor: pointer;
-        }
-
-        .table-input {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table-input th, .table-input td {
-            padding: 10px;
-            border: 1px solid var(--light-gray);
-            text-align: left;
-        }
-
-        .table-input th {
-            background-color: var(--light);
-            font-weight: 600;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 992px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                max-height: 40vh;
-            }
-            
-            .input-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animation for form switching */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Book Creator</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --warning: #f72585;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --border-radius: 8px;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fb;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      background: white;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .logo i {
+      font-size: 24px;
+      color: var(--primary);
+      margin-right: 10px;
+    }
+
+    .logo h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .small-note {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+
+    .pillar-list {
+      list-style: none;
+    }
+
+    .pillar-item {
+      margin-bottom: 5px;
+    }
+
+    .pillar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .pillar-header:hover {
+      background-color: var(--light-gray);
+    }
+
+    .pillar-header.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .pillar-header i {
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .pillar-header.active i {
+      transform: rotate(90deg);
+    }
+
+    .sub-pillars {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: var(--transition);
+      padding-left: 10px;
+    }
+
+    .sub-pillars.show {
+      max-height: 600px;
+    }
+
+    .sub-pillar {
+      padding: 8px 14px;
+      border-left: 2px solid var(--light-gray);
+      margin: 4px 0;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .sub-pillar:hover {
+      border-left-color: var(--accent);
+      background-color: rgba(72, 149, 239, 0.08);
+    }
+
+    .sub-pillar.active {
+      border-left-color: var(--primary);
+      background-color: rgba(67, 97, 238, 0.08);
+      font-weight: 600;
+    }
+
+    .sub-pillar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-pillar i {
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    .sub-pillar.active i {
+      color: var(--primary);
+    }
+
+    .sub-pillar .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--light-gray);
+    }
+
+    .sub-pillar.completed .status-dot {
+      background: #4caf50;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .content-header h2 {
+      font-size: 22px;
+      color: var(--dark);
+    }
+
+    .content-sub {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .progress-bar {
+      width: 220px;
+      height: 10px;
+      background-color: var(--light-gray);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: var(--success);
+      width: 0%;
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    .progress-text {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .form-container {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .form-header h3 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .form-group .hint {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(72, 149, 239, 0.2);
+    }
+
+    .file-upload {
+      border: 2px dashed var(--light-gray);
+      border-radius: var(--border-radius);
+      padding: 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .file-upload i {
+      font-size: 26px;
+      margin-bottom: 6px;
+      color: var(--gray);
+    }
+
+    .file-upload:hover {
+      border-color: var(--accent);
+      background-color: rgba(72, 149, 239, 0.05);
+    }
+
+    .swot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .swot-box {
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      padding: 10px;
+      background: var(--light);
+    }
+
+    .swot-box h4 {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--border-radius);
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.08);
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--gray);
+      padding: 60px 20px;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 12px;
+      color: var(--light-gray);
+    }
+
+    @media (max-width: 992px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        max-height: 40vh;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar with Navigation -->
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fas fa-book"></i>
-                <h1>Brand Book Creator</h1>
-            </div>
-            
-            <ul class="pillar-list">
-                <!-- Brand Overview -->
-                <li class="pillar-item">
-                    <div class="pillar-header active" data-pillar="brand-overview">
-                        <span>Brand Overview</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars show">
-                        <li class="sub-pillar active" data-section="founders-message">
-                            <i class="fas fa-comment-dots"></i>Founder's Message
-                        </li>
-                        <li class="sub-pillar" data-section="brand-history">
-                            <i class="fas fa-history"></i>Brand History
-                        </li>
-                        <li class="sub-pillar" data-section="brand-purpose">
-                            <i class="fas fa-bullseye"></i>Brand Purpose
-                        </li>
-                        <li class="sub-pillar" data-section="company-snapshot">
-                            <i class="fas fa-building"></i>Company Snapshot
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Mission & Vision -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="mission-vision">
-                        <span>Mission & Vision</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="vision-statement">
-                            <i class="fas fa-eye"></i>Vision Statement
-                        </li>
-                        <li class="sub-pillar" data-section="purpose-summary">
-                            <i class="fas fa-file-alt"></i>Purpose Summary
-                        </li>
-                        <li class="sub-pillar" data-section="strategic-objectives">
-                            <i class="fas fa-bullseye"></i>Strategic Objectives
-                        </li>
-                        <li class="sub-pillar" data-section="long-term-aspirations">
-                            <i class="fas fa-rocket"></i>Long-term Aspirations
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Core Values -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="core-values">
-                        <span>Core Values</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="behavioral-examples">
-                            <i class="fas fa-users"></i>Behavioral Examples
-                        </li>
-                        <li class="sub-pillar" data-section="values-in-action">
-                            <i class="fas fa-handshake"></i>Values in Action
-                        </li>
-                        <li class="sub-pillar" data-section="internal-external">
-                            <i class="fas fa-exchange-alt"></i>Internal vs External
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Brand Positioning -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="brand-positioning">
-                        <span>Brand Positioning</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="brand-promise">
-                            <i class="fas fa-hand-holding-heart"></i>Brand Promise
-                        </li>
-                        <li class="sub-pillar" data-section="value-proposition">
-                            <i class="fas fa-chart-line"></i>Value Proposition
-                        </li>
-                        <li class="sub-pillar" data-section="usp">
-                            <i class="fas fa-star"></i>USP
-                        </li>
-                        <li class="sub-pillar" data-section="perception-mapping">
-                            <i class="fas fa-map"></i>Perception Mapping
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Brand Architecture -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="brand-architecture">
-                        <span>Brand Architecture</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="product-hierarchy">
-                            <i class="fas fa-sitemap"></i>Product/Service Hierarchy
-                        </li>
-                        <li class="sub-pillar" data-section="naming-conventions">
-                            <i class="fas fa-tag"></i>Naming Conventions
-                        </li>
-                        <li class="sub-pillar" data-section="brand-relationship">
-                            <i class="fas fa-project-diagram"></i>Brand Relationship Models
-                        </li>
-                        <li class="sub-pillar" data-section="brand-evolution">
-                            <i class="fas fa-seedling"></i>Brand Evolution
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Target Audience -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="target-audience">
-                        <span>Target Audience</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="demographics">
-                            <i class="fas fa-user-friends"></i>Demographics
-                        </li>
-                        <li class="sub-pillar" data-section="psychographics">
-                            <i class="fas fa-brain"></i>Psychographics
-                        </li>
-                        <li class="sub-pillar" data-section="pain-points">
-                            <i class="fas fa-exclamation-triangle"></i>Pain Points
-                        </li>
-                        <li class="sub-pillar" data-section="buyer-journey">
-                            <i class="fas fa-road"></i>Buyer Journey Map
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Competitive Landscape -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="competitive-landscape">
-                        <span>Competitive Landscape</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="market-position">
-                            <i class="fas fa-map-marked-alt"></i>Market Position Map
-                        </li>
-                        <li class="sub-pillar" data-section="swot-analysis">
-                            <i class="fas fa-clipboard-list"></i>SWOT Analysis
-                        </li>
-                        <li class="sub-pillar" data-section="differentiation-factors">
-                            <i class="fas fa-chart-bar"></i>Differentiation Factors
-                        </li>
-                        <li class="sub-pillar" data-section="industry-benchmarks">
-                            <i class="fas fa-tachometer-alt"></i>Industry Benchmarks
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Brand Personality -->
-                <li class="pillar-item">
-                    <div class="pillar-header" data-pillar="brand-personality">
-                        <span>Brand Personality</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <ul class="sub-pillars">
-                        <li class="sub-pillar" data-section="brand-archetype">
-                            <i class="fas fa-user-tie"></i>Brand Archetype
-                        </li>
-                        <li class="sub-pillar" data-section="voice-attributes">
-                            <i class="fas fa-comments"></i>Voice Attributes
-                        </li>
-                        <li class="sub-pillar" data-section="emotional-associations">
-                            <i class="fas fa-heart"></i>Emotional Associations
-                        </li>
-                        <li class="sub-pillar" data-section="personality-in-action">
-                            <i class="fas fa-play-circle"></i>Personality in Action
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Additional pillars would continue here -->
-            </ul>
-        </div>
-        
-        <!-- Main Content Area -->
-        <div class="main-content">
-            <div class="content-header">
-                <h2>Founder's Message</h2>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress"></div>
-                    </div>
-                    <span class="progress-text">35% Complete</span>
-                </div>
-            </div>
-            
-            <!-- Founder's Message Form -->
-            <div class="form-container active" id="founders-message">
-                <div class="form-header">
-                    <h3>Founder's Message</h3>
-                    <p>Share the story and vision behind your brand directly from the founder's perspective.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="founderName">Founder's Name</label>
-                    <input type="text" id="founderName" placeholder="Enter founder's full name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="founderTitle">Founder's Title</label>
-                    <input type="text" id="founderTitle" placeholder="CEO, Founder, etc.">
-                </div>
-                
-                <div class="form-group">
-                    <label for="message">Founder's Message</label>
-                    <textarea id="message" placeholder="Write the founder's message here..."></textarea>
-                    <div class="hint">This should be an inspirational message that reflects the brand's values and mission.</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="founderImage">Founder's Photo</label>
-                    <div class="file-upload" id="founderImageUpload">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Click to upload founder's photo</p>
-                        <div class="hint">Recommended: Square image, minimum 500x500px</div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Brand History Form -->
-            <div class="form-container" id="brand-history">
-                <div class="form-header">
-                    <h3>Brand History</h3>
-                    <p>Document the journey of your brand from inception to the present day.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="foundingYear">Founding Year</label>
-                    <input type="number" id="foundingYear" placeholder="e.g., 2015">
-                </div>
-                
-                <div class="form-group">
-                    <label for="originStory">Origin Story</label>
-                    <textarea id="originStory" placeholder="How was the brand founded? What was the initial inspiration?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="keyMilestones">Key Milestones</label>
-                    <textarea id="keyMilestones" placeholder="List significant events, product launches, or achievements in chronological order"></textarea>
-                    <div class="hint">Use bullet points or a timeline format</div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Brand Purpose Form -->
-            <div class="form-container" id="brand-purpose">
-                <div class="form-header">
-                    <h3>Brand Purpose</h3>
-                    <p>A clear statement of why the brand exists beyond profit (e.g., social impact).</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="purposeStatement">Purpose Statement</label>
-                    <input type="text" id="purposeStatement" placeholder="Enter your brand's purpose statement">
-                    <div class="hint">Keep it concise and impactful</div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Company Snapshot Form -->
-            <div class="form-container" id="company-snapshot">
-                <div class="form-header">
-                    <h3>Company Snapshot</h3>
-                    <p>An overview of the company's current status (e.g., size, locations, key offerings).</p>
-                </div>
-                
-                <div class="input-grid">
-                    <div class="form-group">
-                        <label for="companySize">Company Size</label>
-                        <select id="companySize">
-                            <option value="">Select company size</option>
-                            <option value="1-10">1-10 employees</option>
-                            <option value="11-50">11-50 employees</option>
-                            <option value="51-200">51-200 employees</option>
-                            <option value="201-500">201-500 employees</option>
-                            <option value="501+">501+ employees</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="foundingYearSnapshot">Founding Year</label>
-                        <input type="number" id="foundingYearSnapshot" placeholder="e.g., 2015">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="headquarters">Headquarters Location</label>
-                    <input type="text" id="headquarters" placeholder="City, Country">
-                </div>
-                
-                <div class="form-group">
-                    <label for="keyOfferings">Key Offerings</label>
-                    <textarea id="keyOfferings" placeholder="List your main products or services"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="companyLogo">Company Logo</label>
-                    <div class="file-upload" id="companyLogoUpload">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Click to upload company logo</p>
-                        <div class="hint">Recommended: PNG or SVG format</div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Vision Statement Form -->
-            <div class="form-container" id="vision-statement">
-                <div class="form-header">
-                    <h3>Vision Statement</h3>
-                    <p>Define the future aspirations and long-term goals of your brand.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="visionStatement">Vision Statement</label>
-                    <textarea id="visionStatement" placeholder="Describe the ideal future state your brand aims to create"></textarea>
-                    <div class="hint">This should be inspirational and forward-looking</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="visionTimeframe">Timeframe</label>
-                    <select id="visionTimeframe">
-                        <option value="">Select a timeframe</option>
-                        <option value="5">5 years</option>
-                        <option value="10">10 years</option>
-                        <option value="15">15 years</option>
-                        <option value="20">20+ years</option>
-                    </select>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Purpose Summary Form -->
-            <div class="form-container" id="purpose-summary">
-                <div class="form-header">
-                    <h3>Purpose Summary</h3>
-                    <p>A concise explanation of the brand's core reason for being.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="purposeSummary">Purpose Summary</label>
-                    <input type="text" id="purposeSummary" placeholder="Enter your brand's purpose summary">
-                    <div class="hint">Keep it concise and impactful</div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Strategic Objectives Form -->
-            <div class="form-container" id="strategic-objectives">
-                <div class="form-header">
-                    <h3>Strategic Objectives</h3>
-                    <p>Specific, measurable goals the brand is pursuing.</p>
-                </div>
-                
-                <div id="objectives-container">
-                    <div class="repeater-item">
-                        <div class="repeater-header">
-                            <div class="repeater-title">Objective #1</div>
-                            <div class="repeater-actions">
-                                <button class="btn btn-danger btn-small"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Objective Title</label>
-                            <input type="text" placeholder="Enter objective title">
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea placeholder="Describe the objective"></textarea>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="btn btn-success" id="add-objective">
-                    <i class="fas fa-plus"></i> Add Objective
-                </button>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Behavioral Examples Form -->
-            <div class="form-container" id="behavioral-examples">
-                <div class="form-header">
-                    <h3>Behavioral Examples</h3>
-                    <p>Provide concrete examples of how your core values translate into actions and behaviors.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="value1">Value 1</label>
-                    <input type="text" id="value1" placeholder="e.g., Integrity">
-                </div>
-                
-                <div class="form-group">
-                    <label for="value1Examples">Behavioral Examples for Value 1</label>
-                    <textarea id="value1Examples" placeholder="What does this value look like in practice?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="value2">Value 2</label>
-                    <input type="text" id="value2" placeholder="e.g., Innovation">
-                </div>
-                
-                <div class="form-group">
-                    <label for="value2Examples">Behavioral Examples for Value 2</label>
-                    <textarea id="value2Examples" placeholder="What does this value look like in practice?"></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- USP Form -->
-            <div class="form-container" id="usp">
-                <div class="form-header">
-                    <h3>Unique Selling Proposition (USP)</h3>
-                    <p>What distinguishes the brand from competitors.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="uspInput">Your Unique Selling Proposition</label>
-                    <textarea id="uspInput" placeholder="What makes your brand unique and different from competitors?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Select your key differentiators</label>
-                    <div class="multi-select-container" id="differentiators-container">
-                        <!-- Multi-select items will be added here -->
-                    </div>
-                    <div class="input-with-icon">
-                        <input type="text" id="newDifferentiator" placeholder="Add a new differentiator">
-                        <i class="fas fa-plus" id="add-differentiator"></i>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- SWOT Analysis Form -->
-            <div class="form-container" id="swot-analysis">
-                <div class="form-header">
-                    <h3>SWOT Analysis</h3>
-                    <p>Assessment of strengths, weaknesses, opportunities, and threats.</p>
-                </div>
-                
-                <div class="input-grid">
-                    <div class="form-group">
-                        <label for="strengths">Strengths</label>
-                        <textarea id="strengths" placeholder="Internal positive attributes"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="weaknesses">Weaknesses</label>
-                        <textarea id="weaknesses" placeholder="Internal negative attributes"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="opportunities">Opportunities</label>
-                        <textarea id="opportunities" placeholder="External positive factors"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="threats">Threats</label>
-                        <textarea id="threats" placeholder="External negative factors"></textarea>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Brand Archetype Form -->
-            <div class="form-container" id="brand-archetype">
-                <div class="form-header">
-                    <h3>Brand Archetype</h3>
-                    <p>The character type the brand embodies (e.g., hero, explorer).</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="archetypeSelect">Select Brand Archetype</label>
-                    <select id="archetypeSelect">
-                        <option value="">Select an archetype</option>
-                        <option value="hero">The Hero</option>
-                        <option value="explorer">The Explorer</option>
-                        <option value="sage">The Sage</option>
-                        <option value="innocent">The Innocent</option>
-                        <option value="outlaw">The Outlaw</option>
-                        <option value="magician">The Magician</option>
-                        <option value="regular">The Regular Guy/Gal</option>
-                        <option value="lover">The Lover</option>
-                        <option value="jester">The Jester</option>
-                        <option value="caregiver">The Caregiver</option>
-                        <option value="creator">The Creator</option>
-                        <option value="ruler">The Ruler</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="archetypeDescription">Description</label>
-                    <textarea id="archetypeDescription" placeholder="Describe how this archetype manifests in your brand"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="archetypeImage">Archetype Visual</label>
-                    <div class="file-upload" id="archetypeImageUpload">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Click to upload an image representing your brand archetype</p>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Previous Section
-                    </button>
-                    <button class="btn btn-primary">
-                        Save & Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Empty State for other sections -->
-            <div class="form-container" id="empty-state">
-                <div class="empty-state">
-                    <i class="fas fa-folder-open"></i>
-                    <h3>Select a Section</h3>
-                    <p>Choose a section from the sidebar to start editing your brand book content.</p>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="logo">
+        <i class="fas fa-book"></i>
+        <h1>Brand Book Creator</h1>
+      </div>
+      <p class="small-note">
+        Click a pillar → choose a sub-pillar → fill the section. Saved sections
+        update the completion graph.
+      </p>
+      <ul class="pillar-list" id="pillarList"></ul>
     </div>
 
-    <script>
-        // Initialize with empty state
-        document.addEventListener('DOMContentLoaded', function() {
-            // Show empty state initially for sections without forms
-            document.getElementById('empty-state').classList.add('active');
-            
-            // Set the first sub-pillar as active
-            setActiveSection('founders-message');
-            
-            // Initialize multi-select for USP
-            initializeMultiSelect();
-            
-            // Initialize repeater for strategic objectives
-            initializeRepeater();
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="content-header">
+        <div>
+          <h2 id="sectionTitle">Select a section</h2>
+          <p id="sectionSubtitle" class="content-sub">
+            Start by choosing a pillar and sub-pillar from the left.
+          </p>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+          </div>
+          <span class="progress-text" id="progressText">0% Complete (0 / 0)</span>
+        </div>
+      </div>
+
+      <div id="formRoot">
+        <div class="form-container">
+          <div class="empty-state">
+            <i class="fas fa-folder-open"></i>
+            <h3>No section selected</h3>
+            <p>
+              Pick any sub-pillar from the sidebar to start editing your brand
+              book.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -------- CONFIG: ALL PILLARS & SUB-PILLARS --------
+    // type: 'short', 'long', 'upload', 'swot', 'color', 'table'
+    const BRAND_STRUCTURE = [
+      {
+        id: "brand-overview",
+        label: "Brand Overview",
+        sections: [
+          {
+            id: "founders-message",
+            label: "Founder's Message",
+            type: "long",
+            hint:
+              "Inspiring note from the founder about why this brand exists."
+          },
+          {
+            id: "brand-history",
+            label: "Brand History",
+            type: "long",
+            hint: "Timeline or story of how the brand evolved over time."
+          },
+          {
+            id: "brand-purpose",
+            label: "Brand Purpose",
+            type: "short",
+            hint: "One clear line on why the brand exists beyond profit."
+          },
+          {
+            id: "company-snapshot",
+            label: "Company Snapshot",
+            type: "table",
+            hint: "Current overview: size, locations, key facts."
+          }
+        ]
+      },
+      {
+        id: "mission-vision",
+        label: "Mission & Vision",
+        sections: [
+          {
+            id: "vision-statement",
+            label: "Vision Statement",
+            type: "long",
+            hint: "Future state you want to create."
+          },
+          {
+            id: "purpose-summary",
+            label: "Purpose Summary",
+            type: "short"
+          },
+          {
+            id: "strategic-objectives",
+            label: "Strategic Objectives",
+            type: "table",
+            hint: "List 3–5 key objectives."
+          },
+          {
+            id: "long-term-aspirations",
+            label: "Long-term Aspirations",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "core-values",
+        label: "Core Values",
+        sections: [
+          {
+            id: "behavioral-examples",
+            label: "Behavioral Examples",
+            type: "long"
+          },
+          {
+            id: "values-in-action",
+            label: "Values in Action",
+            type: "long"
+          },
+          {
+            id: "internal-vs-external",
+            label: "Internal vs External Application",
+            type: "table"
+          }
+        ]
+      },
+      {
+        id: "brand-positioning",
+        label: "Brand Positioning",
+        sections: [
+          { id: "brand-promise", label: "Brand Promise", type: "short" },
+          {
+            id: "value-proposition",
+            label: "Value Proposition",
+            type: "long"
+          },
+          { id: "usp", label: "USP", type: "long" },
+          {
+            id: "perception-mapping",
+            label: "Perception Mapping",
+            type: "long",
+            hint: "Describe axes & where you/competitors sit."
+          }
+        ]
+      },
+      {
+        id: "brand-architecture",
+        label: "Brand Architecture",
+        sections: [
+          {
+            id: "product-hierarchy",
+            label: "Product/Service Hierarchy",
+            type: "table"
+          },
+          {
+            id: "naming-conventions",
+            label: "Naming Conventions",
+            type: "long"
+          },
+          {
+            id: "brand-relationship-models",
+            label: "Brand Relationship Models",
+            type: "long"
+          },
+          {
+            id: "brand-evolution",
+            label: "Brand Evolution",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "target-audience",
+        label: "Target Audience",
+        sections: [
+          { id: "demographics", label: "Demographics", type: "table" },
+          {
+            id: "psychographics",
+            label: "Psychographics",
+            type: "long"
+          },
+          { id: "pain-points", label: "Pain Points", type: "long" },
+          {
+            id: "buyer-journey-map",
+            label: "Buyer Journey Map",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "competitive-landscape",
+        label: "Competitive Landscape",
+        sections: [
+          {
+            id: "market-position-map",
+            label: "Market Position Map",
+            type: "upload"
+          },
+          {
+            id: "swot-analysis",
+            label: "SWOT Analysis",
+            type: "swot"
+          },
+          {
+            id: "differentiation-factors",
+            label: "Differentiation Factors",
+            type: "long"
+          },
+          {
+            id: "industry-benchmarks",
+            label: "Industry Benchmarks",
+            type: "table"
+          }
+        ]
+      },
+      {
+        id: "brand-personality",
+        label: "Brand Personality",
+        sections: [
+          {
+            id: "brand-archetype",
+            label: "Brand Archetype",
+            type: "short"
+          },
+          {
+            id: "voice-attributes",
+            label: "Voice Attributes",
+            type: "long"
+          },
+          {
+            id: "emotional-associations",
+            label: "Emotional Associations",
+            type: "long"
+          },
+          {
+            id: "personality-in-action",
+            label: "Personality in Action",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "tone-of-voice",
+        label: "Tone of Voice",
+        sections: [
+          { id: "dos-donts", label: "Do’s & Don’ts", type: "table" },
+          {
+            id: "communication-styles",
+            label: "Communication Styles",
+            type: "long"
+          },
+          {
+            id: "medium-examples",
+            label: "Medium-based Examples",
+            type: "long"
+          },
+          {
+            id: "crisis-tone",
+            label: "Crisis Tone Guidelines",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "messaging-pillars",
+        label: "Messaging Pillars",
+        sections: [
+          {
+            id: "messaging-framework",
+            label: "Messaging Framework",
+            type: "table"
+          },
+          {
+            id: "taglines-slogans",
+            label: "Taglines & Slogans",
+            type: "long"
+          },
+          {
+            id: "elevator-pitch",
+            label: "Elevator Pitch",
+            type: "short"
+          },
+          {
+            id: "copy-style-guide",
+            label: "Copywriting Style Guide",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "logo-guidelines",
+        label: "Logo Guidelines",
+        sections: [
+          { id: "logo-variants", label: "Logo Variants", type: "upload" },
+          {
+            id: "clear-space-sizing",
+            label: "Clear Space & Sizing",
+            type: "long"
+          },
+          {
+            id: "incorrect-usage",
+            label: "Incorrect Usage",
+            type: "upload"
+          },
+          {
+            id: "logo-downloads",
+            label: "Logo File Downloads",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "brand-colors",
+        label: "Brand Colors",
+        sections: [
+          {
+            id: "secondary-colors",
+            label: "Secondary Colors",
+            type: "color"
+          },
+          {
+            id: "color-codes",
+            label: "Color Codes (HEX, RGB, CMYK, Pantone)",
+            type: "table"
+          },
+          {
+            id: "color-usage-guidelines",
+            label: "Usage Guidelines",
+            type: "long"
+          },
+          {
+            id: "accessibility-compliance",
+            label: "Accessibility Compliance",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "typography",
+        label: "Typography",
+        sections: [
+          {
+            id: "supporting-fonts",
+            label: "Supporting Fonts",
+            type: "upload"
+          },
+          {
+            id: "font-hierarchy",
+            label: "Font Hierarchy",
+            type: "table"
+          },
+          {
+            id: "web-print-rules",
+            label: "Web & Print Rules",
+            type: "long"
+          },
+          {
+            id: "line-height-kerning",
+            label: "Line Height & Kerning",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "imagery-style",
+        label: "Imagery Style",
+        sections: [
+          {
+            id: "filters-treatments",
+            label: "Filters & Treatments",
+            type: "long"
+          },
+          {
+            id: "composition",
+            label: "Composition",
+            type: "long"
+          },
+          {
+            id: "subject-guidelines",
+            label: "Subject Guidelines",
+            type: "long"
+          },
+          {
+            id: "image-dos-donts",
+            label: "Image Do’s & Don’ts",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "iconography",
+        label: "Iconography",
+        sections: [
+          {
+            id: "grid-spacing-rules",
+            label: "Grid/Spacing Rules",
+            type: "long"
+          },
+          {
+            id: "icon-color-usage",
+            label: "Icon Color Usage",
+            type: "color"
+          },
+          { id: "icon-dos-donts", label: "Do’s & Don’ts", type: "upload" },
+          {
+            id: "icon-download-pack",
+            label: "Download Pack",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "graphic-elements",
+        label: "Graphic Elements",
+        sections: [
+          {
+            id: "decorative-shapes",
+            label: "Decorative Shapes",
+            type: "upload"
+          },
+          {
+            id: "illustrations",
+            label: "Illustrations",
+            type: "upload"
+          },
+          {
+            id: "backgrounds",
+            label: "Backgrounds",
+            type: "upload"
+          },
+          {
+            id: "layering-rules",
+            label: "Layering Rules",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "motion-guidelines",
+        label: "Motion Guidelines",
+        sections: [
+          {
+            id: "motion-timing-easing",
+            label: "Motion Timing/Easing",
+            type: "long"
+          },
+          { id: "motion-use-cases", label: "Use Cases", type: "long" },
+          {
+            id: "inappropriate-motion",
+            label: "Inappropriate Motion",
+            type: "long"
+          },
+          {
+            id: "export-specs",
+            label: "Export Specs",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "ui-components",
+        label: "UI Components",
+        sections: [
+          { id: "inputs", label: "Inputs", type: "long" },
+          { id: "cards", label: "Cards", type: "long" },
+          { id: "navigation", label: "Navigation", type: "long" },
+          {
+            id: "interactive-states",
+            label: "Interactive States",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "packaging-guidelines",
+        label: "Packaging Guidelines",
+        sections: [
+          { id: "label-design", label: "Label Design", type: "upload" },
+          {
+            id: "barcoding-legal",
+            label: "Barcoding & Legal Info",
+            type: "long"
+          },
+          {
+            id: "unboxing-experience",
+            label: "Unboxing Experience",
+            type: "long"
+          },
+          {
+            id: "sustainability-standards",
+            label: "Sustainability Standards",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "signage-print",
+        label: "Signage & Print",
+        sections: [
+          {
+            id: "outdoor-signage",
+            label: "Outdoor Signage",
+            type: "upload"
+          },
+          {
+            id: "retail-displays",
+            label: "Retail Displays",
+            type: "upload"
+          },
+          { id: "print-sizes", label: "Print Sizes", type: "table" },
+          {
+            id: "exhibition-booth",
+            label: "Exhibition Booth Branding",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "templates-assets",
+        label: "Templates & Assets",
+        sections: [
+          {
+            id: "business-cards",
+            label: "Business Cards",
+            type: "upload"
+          },
+          {
+            id: "letterhead-design",
+            label: "Letterhead Design",
+            type: "upload"
+          },
+          {
+            id: "email-signatures",
+            label: "Email Signatures",
+            type: "long"
+          },
+          {
+            id: "social-media-kits",
+            label: "Social Media Kits",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "usage-dos-donts",
+        label: "Usage Do’s & Don’ts",
+        sections: [
+          {
+            id: "color-misuse",
+            label: "Color Misuse",
+            type: "upload"
+          },
+          {
+            id: "typography-errors",
+            label: "Typography Errors",
+            type: "upload"
+          },
+          {
+            id: "messaging-misalignment",
+            label: "Messaging Misalignment",
+            type: "long"
+          },
+          {
+            id: "visual-mistakes",
+            label: "Visual Mistakes",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "co-branding-rules",
+        label: "Co-Branding Rules",
+        sections: [
+          { id: "co-brand-hierarchy", label: "Brand Hierarchy", type: "long" },
+          {
+            id: "co-brand-campaign-examples",
+            label: "Campaign Examples",
+            type: "upload"
+          },
+          {
+            id: "co-brand-dos-donts",
+            label: "Do’s & Don’ts",
+            type: "long"
+          },
+          {
+            id: "co-brand-terms",
+            label: "Co-brand Terms & Guidelines",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "legal-trademarks",
+        label: "Legal & Trademarks",
+        sections: [
+          {
+            id: "copyright-claims",
+            label: "Copyright Claims",
+            type: "long"
+          },
+          {
+            id: "licensing-terms",
+            label: "Licensing Terms",
+            type: "long"
+          },
+          { id: "disclaimers", label: "Disclaimers", type: "long" },
+          {
+            id: "brand-abuse-reporting",
+            label: "Brand Abuse Reporting",
+            type: "short"
+          }
+        ]
+      },
+      {
+        id: "industry-custom",
+        label: "Industry Custom Modules",
+        sections: [
+          {
+            id: "fashion-lookbooks",
+            label: "Fashion: Fabric Visuals, Lookbooks",
+            type: "upload"
+          },
+          {
+            id: "food-label-regs",
+            label: "Food: Label Regulations",
+            type: "long"
+          },
+          {
+            id: "finance-disclosures",
+            label: "Finance: Legal Disclosures",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "accessibility-standards",
+        label: "Accessibility Standards",
+        sections: [
+          {
+            id: "font-readability",
+            label: "Font Readability",
+            type: "long"
+          },
+          { id: "alt-text-rules", label: "Alt Text Rules", type: "long" },
+          {
+            id: "screen-reader-labels",
+            label: "Screen Reader Labels",
+            type: "long"
+          },
+          {
+            id: "wcag-ada-guidelines",
+            label: "WCAG/ADA Guidelines",
+            type: "long"
+          }
+        ]
+      }
+    ];
+
+    // ---------- STATE ----------
+    const completionState = {}; // { sectionId: true }
+    const totalSections = BRAND_STRUCTURE.reduce(
+      (sum, p) => sum + p.sections.length,
+      0
+    );
+
+    // ---------- DOM REFS ----------
+    const pillarListEl = document.getElementById("pillarList");
+    const formRoot = document.getElementById("formRoot");
+    const sectionTitleEl = document.getElementById("sectionTitle");
+    const sectionSubtitleEl = document.getElementById("sectionSubtitle");
+    const progressBarEl = document.getElementById("progressBar");
+    const progressTextEl = document.getElementById("progressText");
+
+    // ---------- RENDER SIDEBAR ----------
+    function renderSidebar() {
+      pillarListEl.innerHTML = "";
+      BRAND_STRUCTURE.forEach((pillar, idx) => {
+        const li = document.createElement("li");
+        li.className = "pillar-item";
+
+        const header = document.createElement("div");
+        header.className = "pillar-header" + (idx === 0 ? " active" : "");
+        header.dataset.pillarId = pillar.id;
+        header.innerHTML = `
+          <span>${pillar.label}</span>
+          <i class="fas fa-chevron-right"></i>
+        `;
+
+        const subList = document.createElement("ul");
+        subList.className = "sub-pillars" + (idx === 0 ? " show" : "");
+        pillar.sections.forEach((sec, sIdx) => {
+          const subLi = document.createElement("li");
+          subLi.className =
+            "sub-pillar" +
+            (idx === 0 && sIdx === 0 ? " active" : "");
+          subLi.dataset.sectionId = sec.id;
+          subLi.innerHTML = `
+            <div class="sub-pillar-left">
+              <i class="fas fa-circle-notch"></i>
+              <span>${sec.label}</span>
+            </div>
+            <span class="status-dot"></span>
+          `;
+          subList.appendChild(subLi);
         });
 
-        // Toggle sub-pillars when clicking on pillar headers
-        document.querySelectorAll('.pillar-header').forEach(header => {
-            header.addEventListener('click', () => {
-                // Close all other pillars
-                document.querySelectorAll('.pillar-header').forEach(h => {
-                    if (h !== header) {
-                        h.classList.remove('active');
-                        h.nextElementSibling.classList.remove('show');
-                    }
-                });
-                
-                // Toggle active class on clicked header
-                header.classList.toggle('active');
-                
-                // Toggle show class on sub-pillars
-                const subPillars = header.nextElementSibling;
-                subPillars.classList.toggle('show');
-            });
-        });
-        
-        // Handle sub-pillar selection
-        document.querySelectorAll('.sub-pillar').forEach(pillar => {
-            pillar.addEventListener('click', () => {
-                const sectionId = pillar.getAttribute('data-section');
-                setActiveSection(sectionId);
-            });
-        });
-        
-        // Function to set active section
-        function setActiveSection(sectionId) {
-            // Remove active class from all sub-pillars
-            document.querySelectorAll('.sub-pillar').forEach(p => {
-                p.classList.remove('active');
-            });
-            
-            // Add active class to clicked sub-pillar
-            const activePillar = document.querySelector(`[data-section="${sectionId}"]`);
-            if (activePillar) {
-                activePillar.classList.add('active');
-            }
-            
-            // Hide all form containers
-            document.querySelectorAll('.form-container').forEach(form => {
-                form.classList.remove('active');
-            });
-            
-            // Show the selected form container
-            const selectedForm = document.getElementById(sectionId);
-            if (selectedForm) {
-                selectedForm.classList.add('active');
-                // Update content header
-                document.querySelector('.content-header h2').textContent = 
-                    activePillar ? activePillar.textContent.trim() : 'Brand Book Section';
-            } else {
-                // Show empty state if form doesn't exist
-                document.getElementById('empty-state').classList.add('active');
-                document.querySelector('.content-header h2').textContent = 
-                    activePillar ? activePillar.textContent.trim() : 'Brand Book Section';
-            }
-        }
-        
-        // File upload interaction
-        document.querySelectorAll('.file-upload').forEach(upload => {
-            upload.addEventListener('click', () => {
-                // In a real application, this would trigger a file input
-                // For this demo, we'll just change the appearance
-                upload.style.borderColor = 'var(--accent)';
-                upload.style.backgroundColor = 'rgba(72, 149, 239, 0.1)';
-                upload.innerHTML = '<i class="fas fa-check"></i><p>File uploaded successfully!</p>';
-            });
-        });
-        
-        // Initialize multi-select functionality for USP
-        function initializeMultiSelect() {
-            const addButton = document.getElementById('add-differentiator');
-            const input = document.getElementById('newDifferentiator');
-            const container = document.getElementById('differentiators-container');
-            
-            // Pre-populate with some common differentiators
-            const defaultDifferentiators = ['Quality', 'Price', 'Customer Service'];
-            defaultDifferentiators.forEach(diff => {
-                addDifferentiator(diff);
-            });
-            
-            addButton.addEventListener('click', () => {
-                const value = input.value.trim();
-                if (value) {
-                    addDifferentiator(value);
-                    input.value = '';
+        li.appendChild(header);
+        li.appendChild(subList);
+        pillarListEl.appendChild(li);
+      });
+
+      bindSidebarEvents();
+    }
+
+    // ---------- BIND EVENTS ----------
+    function bindSidebarEvents() {
+      // pillar expand/collapse
+      document
+        .querySelectorAll(".pillar-header")
+        .forEach((header) => {
+          header.addEventListener("click", () => {
+            document
+              .querySelectorAll(".pillar-header")
+              .forEach((h) => {
+                if (h !== header) {
+                  h.classList.remove("active");
+                  h.nextElementSibling.classList.remove("show");
                 }
-            });
-            
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const value = input.value.trim();
-                    if (value) {
-                        addDifferentiator(value);
-                        input.value = '';
-                    }
-                }
-            });
+              });
+            header.classList.toggle("active");
+            header.nextElementSibling.classList.toggle("show");
+          });
+        });
+
+      // sub-pillar click
+      document.querySelectorAll(".sub-pillar").forEach((sub) => {
+        sub.addEventListener("click", () => {
+          const sectionId = sub.dataset.sectionId;
+          document
+            .querySelectorAll(".sub-pillar")
+            .forEach((s) => s.classList.remove("active"));
+          sub.classList.add("active");
+          const section = findSectionById(sectionId);
+          renderSectionForm(section);
+        });
+      });
+    }
+
+    function findSectionById(id) {
+      for (const pillar of BRAND_STRUCTURE) {
+        for (const sec of pillar.sections) {
+          if (sec.id === id) return { pillar, sec };
         }
-        
-        function addDifferentiator(value) {
-            const container = document.getElementById('differentiators-container');
-            const item = document.createElement('div');
-            item.className = 'multi-select-item';
-            item.innerHTML = `
-                ${value}
-                <i class="fas fa-times"></i>
-            `;
-            
-            item.querySelector('i').addEventListener('click', () => {
-                item.remove();
-            });
-            
-            container.appendChild(item);
-        }
-        
-        // Initialize repeater for strategic objectives
-        function initializeRepeater() {
-            const addButton = document.getElementById('add-objective');
-            const container = document.getElementById('objectives-container');
-            let objectiveCount = 1;
-            
-            addButton.addEventListener('click', () => {
-                objectiveCount++;
-                const item = document.createElement('div');
-                item.className = 'repeater-item';
-                item.innerHTML = `
-                    <div class="repeater-header">
-                        <div class="repeater-title">Objective #${objectiveCount}</div>
-                        <div class="repeater-actions">
-                            <button class="btn btn-danger btn-small"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Objective Title</label>
-                        <input type="text" placeholder="Enter objective title">
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea placeholder="Describe the objective"></textarea>
-                    </div>
-                `;
-                
-                item.querySelector('.btn-danger').addEventListener('click', () => {
-                    item.remove();
-                });
-                
-                container.appendChild(item);
-            });
-            
-            // Add event listener to existing delete button
-            document.querySelector('.btn-danger').addEventListener('click', function() {
-                this.closest('.repeater-item').remove();
-            });
-        }
-    </script>
+      }
+      return null;
+    }
+
+    // ---------- RENDER SECTION FORM ----------
+    function renderSectionForm({ pillar, sec }) {
+      sectionTitleEl.textContent = sec.label;
+      sectionSubtitleEl.textContent = pillar.label;
+
+      const container = document.createElement("div");
+      container.className = "form-container";
+
+      const header = document.createElement("div");
+      header.className = "form-header";
+      header.innerHTML = `
+        <h3>${sec.label}</h3>
+        <p>${sec.hint || "Fill the content for this brand book section."}</p>
+      `;
+      container.appendChild(header);
+
+      const formBody = document.createElement("div");
+
+      // choose form fields based on type
+      switch (sec.type) {
+        case "short":
+          formBody.appendChild(makeShortField(sec));
+          break;
+        case "upload":
+          formBody.appendChild(makeUploadField());
+          break;
+        case "table":
+          formBody.appendChild(makeTableField());
+          break;
+        case "swot":
+          formBody.appendChild(makeSwotField());
+          break;
+        case "color":
+          formBody.appendChild(makeColorField());
+          break;
+        case "long":
+        default:
+          formBody.appendChild(makeLongField(sec));
+          break;
+      }
+
+      container.appendChild(formBody);
+
+      const actions = document.createElement("div");
+      actions.className = "form-actions";
+      actions.innerHTML = `
+        <button class="btn btn-outline" type="button">
+          <i class="fas fa-rotate-left"></i> Reset
+        </button>
+        <button class="btn btn-primary" type="button">
+          Save Section <i class="fas fa-check"></i>
+        </button>
+      `;
+      const [resetBtn, saveBtn] = actions.querySelectorAll("button");
+
+      resetBtn.addEventListener("click", () => {
+        container.querySelectorAll("input, textarea").forEach((el) => {
+          if (el.type === "color") return;
+          el.value = "";
+        });
+      });
+
+      saveBtn.addEventListener("click", () => {
+        completionState[sec.id] = true;
+        updateCompletionUI();
+        markSidebarCompleted(sec.id);
+      });
+
+      container.appendChild(actions);
+
+      formRoot.innerHTML = "";
+      formRoot.appendChild(container);
+    }
+
+    // ---------- FIELD BUILDERS ----------
+    function makeShortField(sec) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>${sec.label}</label>
+        <input type="text" placeholder="Write a concise line here..." />
+      `;
+      return wrapper;
+    }
+
+    function makeLongField(sec) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>${sec.label}</label>
+        <textarea placeholder="Write detailed content for this section..."></textarea>
+        <div class="hint">Use paragraphs or bullet points as needed.</div>
+      `;
+      return wrapper;
+    }
+
+    function makeUploadField() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>Upload Asset</label>
+        <div class="file-upload">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Click to simulate uploading an image/file</p>
+        </div>
+        <div class="hint">In a real app this would open the file picker.</div>
+      `;
+      wrapper.querySelector(".file-upload").addEventListener("click", (e) => {
+        e.currentTarget.innerHTML =
+          '<i class="fas fa-check-circle"></i><p>File uploaded (demo)</p>';
+        e.currentTarget.style.borderColor = "var(--accent)";
+        e.currentTarget.style.backgroundColor = "rgba(72,149,239,0.08)";
+      });
+      return wrapper;
+    }
+
+    function makeTableField() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>Structured List</label>
+        <div class="swot-grid">
+          <div class="swot-box">
+            <h4>Item 1</h4>
+            <textarea placeholder="Describe item 1"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 2</h4>
+            <textarea placeholder="Describe item 2"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 3</h4>
+            <textarea placeholder="Describe item 3"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 4</h4>
+            <textarea placeholder="Describe item 4"></textarea>
+          </div>
+        </div>
+      `;
+      return wrapper;
+    }
+
+    function makeSwotField() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>SWOT Analysis</label>
+        <div class="swot-grid">
+          <div class="swot-box">
+            <h4>Strengths</h4>
+            <textarea placeholder="Internal positive attributes"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Weaknesses</h4>
+            <textarea placeholder="Internal negative attributes"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Opportunities</h4>
+            <textarea placeholder="External positive factors"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Threats</h4>
+            <textarea placeholder="External negative factors"></textarea>
+          </div>
+        </div>
+      `;
+      return wrapper;
+    }
+
+    function makeColorField() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>Primary Color</label>
+        <input type="color" value="#4361ee" />
+        <div class="hint">Pick your brand secondary or accent color.</div>
+      `;
+      return wrapper;
+    }
+
+    // ---------- COMPLETION ----------
+    function updateCompletionUI() {
+      const completed = Object.keys(completionState).length;
+      const percent = totalSections
+        ? Math.round((completed / totalSections) * 100)
+        : 0;
+      progressBarEl.style.width = percent + "%";
+      progressTextEl.textContent = `${percent}% Complete (${completed} / ${totalSections})`;
+    }
+
+    function markSidebarCompleted(sectionId) {
+      const node = document.querySelector(
+        `.sub-pillar[data-section-id="${sectionId}"]`
+      );
+      if (node) node.classList.add("completed");
+    }
+
+    // ---------- INIT ----------
+    renderSidebar();
+    updateCompletionUI();
+
+    // open first section by default
+    const firstPillar = BRAND_STRUCTURE[0];
+    if (firstPillar && firstPillar.sections[0]) {
+      const firstSec = firstPillar.sections[0];
+      const node = document.querySelector(
+        `.sub-pillar[data-section-id="${firstSec.id}"]`
+      );
+      if (node) node.classList.add("active");
+      renderSectionForm({ pillar: firstPillar, sec: firstSec });
+    }
+  </script>
 </body>
 </html>
