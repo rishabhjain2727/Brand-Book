@@ -86,6 +86,7 @@
             cursor: pointer;
             transition: var(--transition);
             font-weight: 600;
+            font-size: 14px;
         }
 
         .pillar-header:hover {
@@ -124,7 +125,7 @@
             margin: 5px 0;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
         }
@@ -403,6 +404,82 @@
             color: var(--light-gray);
         }
 
+        .repeater-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            border: 1px solid var(--light-gray);
+        }
+
+        .repeater-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .repeater-title {
+            font-weight: 600;
+        }
+
+        .repeater-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .multi-select-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .multi-select-item {
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .multi-select-item i {
+            cursor: pointer;
+        }
+
+        .table-input {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-input th, .table-input td {
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            text-align: left;
+        }
+
+        .table-input th {
+            background-color: var(--light);
+            font-weight: 600;
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
             .container {
@@ -443,6 +520,9 @@
                         <i class="fas fa-chevron-right"></i>
                     </div>
                     <ul class="sub-pillars show">
+                        <li class="sub-pillar active" data-section="founders-message">
+                            <i class="fas fa-comment-dots"></i>Founder's Message
+                        </li>
                         <li class="sub-pillar" data-section="brand-history">
                             <i class="fas fa-history"></i>Brand History
                         </li>
@@ -491,7 +571,7 @@
                             <i class="fas fa-handshake"></i>Values in Action
                         </li>
                         <li class="sub-pillar" data-section="internal-external">
-                            <i class="fas fa-exchange-alt"></i>Internal vs External Application
+                            <i class="fas fa-exchange-alt"></i>Internal vs External
                         </li>
                     </ul>
                 </li>
@@ -561,6 +641,52 @@
                         </li>
                     </ul>
                 </li>
+                
+                <!-- Competitive Landscape -->
+                <li class="pillar-item">
+                    <div class="pillar-header" data-pillar="competitive-landscape">
+                        <span>Competitive Landscape</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar" data-section="market-position">
+                            <i class="fas fa-map-marked-alt"></i>Market Position Map
+                        </li>
+                        <li class="sub-pillar" data-section="swot-analysis">
+                            <i class="fas fa-clipboard-list"></i>SWOT Analysis
+                        </li>
+                        <li class="sub-pillar" data-section="differentiation-factors">
+                            <i class="fas fa-chart-bar"></i>Differentiation Factors
+                        </li>
+                        <li class="sub-pillar" data-section="industry-benchmarks">
+                            <i class="fas fa-tachometer-alt"></i>Industry Benchmarks
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Brand Personality -->
+                <li class="pillar-item">
+                    <div class="pillar-header" data-pillar="brand-personality">
+                        <span>Brand Personality</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar" data-section="brand-archetype">
+                            <i class="fas fa-user-tie"></i>Brand Archetype
+                        </li>
+                        <li class="sub-pillar" data-section="voice-attributes">
+                            <i class="fas fa-comments"></i>Voice Attributes
+                        </li>
+                        <li class="sub-pillar" data-section="emotional-associations">
+                            <i class="fas fa-heart"></i>Emotional Associations
+                        </li>
+                        <li class="sub-pillar" data-section="personality-in-action">
+                            <i class="fas fa-play-circle"></i>Personality in Action
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Additional pillars would continue here -->
             </ul>
         </div>
         
@@ -576,6 +702,47 @@
                 </div>
             </div>
             
+            <!-- Founder's Message Form -->
+            <div class="form-container active" id="founders-message">
+                <div class="form-header">
+                    <h3>Founder's Message</h3>
+                    <p>Share the story and vision behind your brand directly from the founder's perspective.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="founderName">Founder's Name</label>
+                    <input type="text" id="founderName" placeholder="Enter founder's full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="founderTitle">Founder's Title</label>
+                    <input type="text" id="founderTitle" placeholder="CEO, Founder, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Founder's Message</label>
+                    <textarea id="message" placeholder="Write the founder's message here..."></textarea>
+                    <div class="hint">This should be an inspirational message that reflects the brand's values and mission.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="founderImage">Founder's Photo</label>
+                    <div class="file-upload" id="founderImageUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload founder's photo</p>
+                        <div class="hint">Recommended: Square image, minimum 500x500px</div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
             
             <!-- Brand History Form -->
             <div class="form-container" id="brand-history">
@@ -598,6 +765,84 @@
                     <label for="keyMilestones">Key Milestones</label>
                     <textarea id="keyMilestones" placeholder="List significant events, product launches, or achievements in chronological order"></textarea>
                     <div class="hint">Use bullet points or a timeline format</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Brand Purpose Form -->
+            <div class="form-container" id="brand-purpose">
+                <div class="form-header">
+                    <h3>Brand Purpose</h3>
+                    <p>A clear statement of why the brand exists beyond profit (e.g., social impact).</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purposeStatement">Purpose Statement</label>
+                    <input type="text" id="purposeStatement" placeholder="Enter your brand's purpose statement">
+                    <div class="hint">Keep it concise and impactful</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Company Snapshot Form -->
+            <div class="form-container" id="company-snapshot">
+                <div class="form-header">
+                    <h3>Company Snapshot</h3>
+                    <p>An overview of the company's current status (e.g., size, locations, key offerings).</p>
+                </div>
+                
+                <div class="input-grid">
+                    <div class="form-group">
+                        <label for="companySize">Company Size</label>
+                        <select id="companySize">
+                            <option value="">Select company size</option>
+                            <option value="1-10">1-10 employees</option>
+                            <option value="11-50">11-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="501+">501+ employees</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="foundingYearSnapshot">Founding Year</label>
+                        <input type="number" id="foundingYearSnapshot" placeholder="e.g., 2015">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="headquarters">Headquarters Location</label>
+                    <input type="text" id="headquarters" placeholder="City, Country">
+                </div>
+                
+                <div class="form-group">
+                    <label for="keyOfferings">Key Offerings</label>
+                    <textarea id="keyOfferings" placeholder="List your main products or services"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="companyLogo">Company Logo</label>
+                    <div class="file-upload" id="companyLogoUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload company logo</p>
+                        <div class="hint">Recommended: PNG or SVG format</div>
+                    </div>
                 </div>
                 
                 <div class="form-actions">
@@ -633,6 +878,69 @@
                         <option value="20">20+ years</option>
                     </select>
                 </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Purpose Summary Form -->
+            <div class="form-container" id="purpose-summary">
+                <div class="form-header">
+                    <h3>Purpose Summary</h3>
+                    <p>A concise explanation of the brand's core reason for being.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purposeSummary">Purpose Summary</label>
+                    <input type="text" id="purposeSummary" placeholder="Enter your brand's purpose summary">
+                    <div class="hint">Keep it concise and impactful</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Strategic Objectives Form -->
+            <div class="form-container" id="strategic-objectives">
+                <div class="form-header">
+                    <h3>Strategic Objectives</h3>
+                    <p>Specific, measurable goals the brand is pursuing.</p>
+                </div>
+                
+                <div id="objectives-container">
+                    <div class="repeater-item">
+                        <div class="repeater-header">
+                            <div class="repeater-title">Objective #1</div>
+                            <div class="repeater-actions">
+                                <button class="btn btn-danger btn-small"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Objective Title</label>
+                            <input type="text" placeholder="Enter objective title">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea placeholder="Describe the objective"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-success" id="add-objective">
+                    <i class="fas fa-plus"></i> Add Objective
+                </button>
                 
                 <div class="form-actions">
                     <button class="btn btn-outline">
@@ -681,6 +989,127 @@
                 </div>
             </div>
             
+            <!-- USP Form -->
+            <div class="form-container" id="usp">
+                <div class="form-header">
+                    <h3>Unique Selling Proposition (USP)</h3>
+                    <p>What distinguishes the brand from competitors.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="uspInput">Your Unique Selling Proposition</label>
+                    <textarea id="uspInput" placeholder="What makes your brand unique and different from competitors?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Select your key differentiators</label>
+                    <div class="multi-select-container" id="differentiators-container">
+                        <!-- Multi-select items will be added here -->
+                    </div>
+                    <div class="input-with-icon">
+                        <input type="text" id="newDifferentiator" placeholder="Add a new differentiator">
+                        <i class="fas fa-plus" id="add-differentiator"></i>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- SWOT Analysis Form -->
+            <div class="form-container" id="swot-analysis">
+                <div class="form-header">
+                    <h3>SWOT Analysis</h3>
+                    <p>Assessment of strengths, weaknesses, opportunities, and threats.</p>
+                </div>
+                
+                <div class="input-grid">
+                    <div class="form-group">
+                        <label for="strengths">Strengths</label>
+                        <textarea id="strengths" placeholder="Internal positive attributes"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="weaknesses">Weaknesses</label>
+                        <textarea id="weaknesses" placeholder="Internal negative attributes"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="opportunities">Opportunities</label>
+                        <textarea id="opportunities" placeholder="External positive factors"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="threats">Threats</label>
+                        <textarea id="threats" placeholder="External negative factors"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Brand Archetype Form -->
+            <div class="form-container" id="brand-archetype">
+                <div class="form-header">
+                    <h3>Brand Archetype</h3>
+                    <p>The character type the brand embodies (e.g., hero, explorer).</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archetypeSelect">Select Brand Archetype</label>
+                    <select id="archetypeSelect">
+                        <option value="">Select an archetype</option>
+                        <option value="hero">The Hero</option>
+                        <option value="explorer">The Explorer</option>
+                        <option value="sage">The Sage</option>
+                        <option value="innocent">The Innocent</option>
+                        <option value="outlaw">The Outlaw</option>
+                        <option value="magician">The Magician</option>
+                        <option value="regular">The Regular Guy/Gal</option>
+                        <option value="lover">The Lover</option>
+                        <option value="jester">The Jester</option>
+                        <option value="caregiver">The Caregiver</option>
+                        <option value="creator">The Creator</option>
+                        <option value="ruler">The Ruler</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archetypeDescription">Description</label>
+                    <textarea id="archetypeDescription" placeholder="Describe how this archetype manifests in your brand"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archetypeImage">Archetype Visual</label>
+                    <div class="file-upload" id="archetypeImageUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload an image representing your brand archetype</p>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
             <!-- Empty State for other sections -->
             <div class="form-container" id="empty-state">
                 <div class="empty-state">
@@ -700,6 +1129,12 @@
             
             // Set the first sub-pillar as active
             setActiveSection('founders-message');
+            
+            // Initialize multi-select for USP
+            initializeMultiSelect();
+            
+            // Initialize repeater for strategic objectives
+            initializeRepeater();
         });
 
         // Toggle sub-pillars when clicking on pillar headers
@@ -738,7 +1173,10 @@
             });
             
             // Add active class to clicked sub-pillar
-            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            const activePillar = document.querySelector(`[data-section="${sectionId}"]`);
+            if (activePillar) {
+                activePillar.classList.add('active');
+            }
             
             // Hide all form containers
             document.querySelectorAll('.form-container').forEach(form => {
@@ -751,12 +1189,12 @@
                 selectedForm.classList.add('active');
                 // Update content header
                 document.querySelector('.content-header h2').textContent = 
-                    document.querySelector(`[data-section="${sectionId}"]`).textContent.trim();
+                    activePillar ? activePillar.textContent.trim() : 'Brand Book Section';
             } else {
                 // Show empty state if form doesn't exist
                 document.getElementById('empty-state').classList.add('active');
                 document.querySelector('.content-header h2').textContent = 
-                    document.querySelector(`[data-section="${sectionId}"]`).textContent.trim();
+                    activePillar ? activePillar.textContent.trim() : 'Brand Book Section';
             }
         }
         
@@ -771,20 +1209,92 @@
             });
         });
         
-        // Copy color code functionality
-        document.querySelectorAll('.fa-copy').forEach(icon => {
-            icon.addEventListener('click', (e) => {
-                const colorCode = e.target.parentElement.querySelector('input').value;
-                navigator.clipboard.writeText(colorCode).then(() => {
-                    // Visual feedback that copy was successful
-                    const originalIcon = e.target.className;
-                    e.target.className = 'fas fa-check';
-                    setTimeout(() => {
-                        e.target.className = originalIcon;
-                    }, 1000);
-                });
+        // Initialize multi-select functionality for USP
+        function initializeMultiSelect() {
+            const addButton = document.getElementById('add-differentiator');
+            const input = document.getElementById('newDifferentiator');
+            const container = document.getElementById('differentiators-container');
+            
+            // Pre-populate with some common differentiators
+            const defaultDifferentiators = ['Quality', 'Price', 'Customer Service'];
+            defaultDifferentiators.forEach(diff => {
+                addDifferentiator(diff);
             });
-        });
+            
+            addButton.addEventListener('click', () => {
+                const value = input.value.trim();
+                if (value) {
+                    addDifferentiator(value);
+                    input.value = '';
+                }
+            });
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const value = input.value.trim();
+                    if (value) {
+                        addDifferentiator(value);
+                        input.value = '';
+                    }
+                }
+            });
+        }
+        
+        function addDifferentiator(value) {
+            const container = document.getElementById('differentiators-container');
+            const item = document.createElement('div');
+            item.className = 'multi-select-item';
+            item.innerHTML = `
+                ${value}
+                <i class="fas fa-times"></i>
+            `;
+            
+            item.querySelector('i').addEventListener('click', () => {
+                item.remove();
+            });
+            
+            container.appendChild(item);
+        }
+        
+        // Initialize repeater for strategic objectives
+        function initializeRepeater() {
+            const addButton = document.getElementById('add-objective');
+            const container = document.getElementById('objectives-container');
+            let objectiveCount = 1;
+            
+            addButton.addEventListener('click', () => {
+                objectiveCount++;
+                const item = document.createElement('div');
+                item.className = 'repeater-item';
+                item.innerHTML = `
+                    <div class="repeater-header">
+                        <div class="repeater-title">Objective #${objectiveCount}</div>
+                        <div class="repeater-actions">
+                            <button class="btn btn-danger btn-small"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Objective Title</label>
+                        <input type="text" placeholder="Enter objective title">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea placeholder="Describe the objective"></textarea>
+                    </div>
+                `;
+                
+                item.querySelector('.btn-danger').addEventListener('click', () => {
+                    item.remove();
+                });
+                
+                container.appendChild(item);
+            });
+            
+            // Add event listener to existing delete button
+            document.querySelector('.btn-danger').addEventListener('click', function() {
+                this.closest('.repeater-item').remove();
+            });
+        }
     </script>
 </body>
 </html>
