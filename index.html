@@ -31,6 +31,12 @@
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    html,
+    body {
+      height: 100%;
+      overflow: hidden; /* whole page doesn't scroll */
+    }
+
     body {
       background-color: #f5f7fb;
       color: var(--dark);
@@ -39,7 +45,7 @@
 
     .container {
       display: flex;
-      min-height: 100vh;
+      height: 100vh; /* full viewport */
     }
 
     /* Sidebar */
@@ -48,8 +54,8 @@
       background: white;
       box-shadow: var(--shadow);
       padding: 20px;
-      overflow-y: auto;
-      z-index: 10;
+      overflow-y: auto; /* sidebar has its own scroll */
+      flex-shrink: 0;
     }
 
     .logo {
@@ -182,7 +188,7 @@
     .main-content {
       flex: 1;
       padding: 30px;
-      overflow-y: auto;
+      overflow-y: auto; /* main content scrolls separately */
     }
 
     .content-header {
@@ -386,6 +392,59 @@
       color: var(--light-gray);
     }
 
+    /* Cohort chips (Target Audience) */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .chip-toggle {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--light-gray);
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chip-toggle.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .radio-row {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .radio-row label {
+      font-weight: 400;
+    }
+
+    .selected-tags {
+      min-height: 40px;
+      padding: 8px;
+      border-radius: var(--border-radius);
+      border: 1px dashed var(--light-gray);
+      font-size: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      padding: 4px 10px;
+      background: var(--light);
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
     @media (max-width: 992px) {
       .container {
         flex-direction: column;
@@ -458,19 +517,12 @@
 
   <script>
     // -------- CONFIG: ALL PILLARS & SUB-PILLARS --------
-    // type: 'short', 'long', 'upload', 'swot', 'color', 'table'
+    // type: 'short', 'long', 'upload', 'swot', 'color', 'table', 'cohort'
     const BRAND_STRUCTURE = [
       {
         id: "brand-overview",
         label: "Brand Overview",
         sections: [
-          {
-            id: "founders-message",
-            label: "Founder's Message",
-            type: "long",
-            hint:
-              "Inspiring note from the founder about why this brand exists."
-          },
           {
             id: "brand-history",
             label: "Brand History",
@@ -589,7 +641,12 @@
         id: "target-audience",
         label: "Target Audience",
         sections: [
-          { id: "demographics", label: "Demographics", type: "table" },
+          {
+            id: "demographics",
+            label: "Demographics",
+            type: "cohort", // special cohort UI
+            hint: "Define age, gender, income and location cohorts."
+          },
           {
             id: "psychographics",
             label: "Psychographics",
@@ -1128,27 +1185,20 @@
       bindSidebarEvents();
     }
 
-    // ---------- BIND EVENTS ----------
     function bindSidebarEvents() {
-      // pillar expand/collapse
-      document
-        .querySelectorAll(".pillar-header")
-        .forEach((header) => {
-          header.addEventListener("click", () => {
-            document
-              .querySelectorAll(".pillar-header")
-              .forEach((h) => {
-                if (h !== header) {
-                  h.classList.remove("active");
-                  h.nextElementSibling.classList.remove("show");
-                }
-              });
-            header.classList.toggle("active");
-            header.nextElementSibling.classList.toggle("show");
+      document.querySelectorAll(".pillar-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          document.querySelectorAll(".pillar-header").forEach((h) => {
+            if (h !== header) {
+              h.classList.remove("active");
+              h.nextElementSibling.classList.remove("show");
+            }
           });
+          header.classList.toggle("active");
+          header.nextElementSibling.classList.toggle("show");
         });
+      });
 
-      // sub-pillar click
       document.querySelectorAll(".sub-pillar").forEach((sub) => {
         sub.addEventListener("click", () => {
           const sectionId = sub.dataset.sectionId;
@@ -1189,7 +1239,6 @@
 
       const formBody = document.createElement("div");
 
-      // choose form fields based on type
       switch (sec.type) {
         case "short":
           formBody.appendChild(makeShortField(sec));
@@ -1205,6 +1254,9 @@
           break;
         case "color":
           formBody.appendChild(makeColorField());
+          break;
+        case "cohort":
+          formBody.appendChild(makeCohortField());
           break;
         case "long":
         default:
@@ -1229,8 +1281,12 @@
       resetBtn.addEventListener("click", () => {
         container.querySelectorAll("input, textarea").forEach((el) => {
           if (el.type === "color") return;
+          if (el.type === "radio") return;
           el.value = "";
         });
+        container
+          .querySelectorAll(".chip-toggle")
+          .forEach((c) => c.classList.remove("active"));
       });
 
       saveBtn.addEventListener("click", () => {
@@ -1243,6 +1299,13 @@
 
       formRoot.innerHTML = "";
       formRoot.appendChild(container);
+
+      // enable chip toggle behavior in cohort sections
+      container.addEventListener("click", (e) => {
+        if (e.target.classList.contains("chip-toggle")) {
+          e.target.classList.toggle("active");
+        }
+      });
     }
 
     // ---------- FIELD BUILDERS ----------
@@ -1352,6 +1415,94 @@
       return wrapper;
     }
 
+    // Cohort-style field for Target Audience → Demographics
+    function makeCohortField() {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = `
+        <div class="form-group">
+          <label>Audience Details</label>
+        </div>
+
+        <div class="form-group">
+          <label>Age</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">18–24 Years</button>
+            <button type="button" class="chip-toggle">25–34 Years</button>
+            <button type="button" class="chip-toggle">35–44 Years</button>
+            <button type="button" class="chip-toggle">45–54 Years</button>
+            <button type="button" class="chip-toggle">55–64 Years</button>
+            <button type="button" class="chip-toggle">65+ Years</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">Male</button>
+            <button type="button" class="chip-toggle">Female</button>
+            <button type="button" class="chip-toggle">Others</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Parental Status</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">Parent</button>
+            <button type="button" class="chip-toggle">Not a Parent</button>
+            <button type="button" class="chip-toggle">Unknown</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Household Income</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">CAT-A (0–5L)</button>
+            <button type="button" class="chip-toggle">CTA-B (5–10L)</button>
+            <button type="button" class="chip-toggle">MIG (10–20L)</button>
+            <button type="button" class="chip-toggle">HIG (20L+)</button>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--light-gray);margin:16px 0;">
+
+        <div class="form-group">
+          <label>Locations</label>
+          <div class="radio-row">
+            <label><input type="radio" name="locMode" checked /> India</label>
+            <label><input type="radio" name="locMode" /> Enter Another Location</label>
+          </div>
+          <input type="text" placeholder="Enter location to include or exclude">
+          <div class="hint">Add locations to define your audience for this survey.</div>
+        </div>
+
+        <div class="form-group">
+          <label>Location Type</label>
+          <div class="radio-row">
+            <label><input type="radio" name="locType" checked /> Presence or interest in your locations (recommended)</label>
+          </div>
+          <div class="radio-row">
+            <label><input type="radio" name="locType" /> Presence in or regularly in your locations</label>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--light-gray);margin:16px 0;">
+
+        <div class="form-group">
+          <label>Interest</label>
+          <input type="text" placeholder="e.g., Luxury Car">
+          <div class="hint">Type an interest to segment your audience further.</div>
+        </div>
+
+        <div class="form-group">
+          <label>Selected Interests</label>
+          <div class="selected-tags">
+            <span class="tag-pill">Luxury Car</span>
+          </div>
+        </div>
+      `;
+      return wrapper;
+    }
+
     // ---------- COMPLETION ----------
     function updateCompletionUI() {
       const completed = Object.keys(completionState).length;
@@ -1373,7 +1524,7 @@
     renderSidebar();
     updateCompletionUI();
 
-    // open first section by default
+    // open first section by default (Brand History)
     const firstPillar = BRAND_STRUCTURE[0];
     if (firstPillar && firstPillar.sections[0]) {
       const firstSec = firstPillar.sections[0];
