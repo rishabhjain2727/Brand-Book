@@ -1,969 +1,685 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Brand Book Input Architecture Demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
-      --bg: #0f172a;
-      --bg-elevated: #020617;
-      --card: #020617;
-      --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.08);
-      --border-subtle: rgba(148, 163, 184, 0.3);
-      --text-main: #e5e7eb;
-      --text-soft: #9ca3af;
-      --radius-lg: 14px;
-      --radius-xl: 18px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.8);
-      --shadow-subtle: 0 10px 30px rgba(15, 23, 42, 0.7);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #1f2937 0, #020617 45%);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .app-shell {
-      width: 100%;
-      max-width: 1200px;
-      background: linear-gradient(145deg, #020617, #020617);
-      border-radius: 24px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      display: grid;
-      grid-template-columns: minmax(260px, 320px) 1fr;
-      overflow: hidden;
-    }
-
-    /* Sidebar */
-
-    .sidebar {
-      background: radial-gradient(circle at top right, #111827 0, #020617 55%);
-      padding: 20px 18px 20px 20px;
-      border-right: 1px solid rgba(148, 163, 184, 0.25);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .logo-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
-
-    .logo-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      background: radial-gradient(circle at 20% 0%, #22c55e 0, #16a34a 35%, #22c55e 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #020617;
-      font-weight: 700;
-      font-size: 15px;
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.8),
-                  0 12px 30px rgba(22, 163, 74, 0.55);
-    }
-
-    .logo-title {
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      font-size: 15px;
-    }
-
-    .logo-sub {
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .hint {
-      font-size: 11px;
-      color: var(--text-soft);
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 12px;
-      padding: 8px 10px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-    }
-
-    .field-group {
-      margin-top: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .field-label {
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-    }
-
-    select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(71, 85, 105, 0.9);
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text-main);
-      font-size: 13px;
-      outline: none;
-      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s;
-    }
-
-    select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.6);
-      background: rgba(15, 23, 42, 1);
-    }
-
-    .pillars-list {
-      margin-top: 6px;
-      padding: 8px 10px;
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 16px;
-      border: 1px dashed rgba(75, 85, 99, 0.8);
-      max-height: 220px;
-      overflow: auto;
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .pillars-list span {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 8px;
-      margin: 3px 3px;
-      border-radius: 999px;
-      background: rgba(31, 41, 55, 0.9);
-      border: 1px solid rgba(75, 85, 99, 0.9);
-    }
-
-    .pillars-list span.active {
-      background: var(--accent-soft);
-      color: var(--accent);
-      border-color: rgba(34, 197, 94, 0.9);
-    }
-
-    /* Main content */
-
-    .main {
-      padding: 22px 22px 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .main-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 4px;
-    }
-
-    .title-block h1 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .title-badge {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      color: var(--text-soft);
-    }
-
-    .title-block p {
-      margin: 4px 0 0;
-      font-size: 12px;
-      color: var(--text-soft);
-    }
-
-    .meta-chip-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .meta-chip {
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .meta-chip strong {
-      color: var(--text-main);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(260px, 320px) 1fr;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .card {
-      background: radial-gradient(circle at top left, #020617 0, #020617 55%);
-      border-radius: var(--radius-xl);
-      padding: 14px 14px 14px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-subtle);
-    }
-
-    .card h2 {
-      margin: 0 0 8px;
-      font-size: 14px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-    }
-
-    .definition-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .definition-table tr td:first-child {
-      width: 110px;
-      color: var(--text-soft);
-      padding: 4px 6px;
-      vertical-align: top;
-    }
-
-    .definition-table tr td:last-child {
-      padding: 4px 6px;
-      color: var(--text-main);
-      background: rgba(15, 23, 42, 0.85);
-      border-radius: 8px;
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 4px;
-    }
-
-    .tag {
-      font-size: 11px;
-      padding: 3px 6px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-    }
-
-    .tag.green {
-      background: var(--accent-soft);
-      border-color: rgba(34, 197, 94, 0.9);
-      color: var(--accent);
-    }
-
-    /* Form preview */
-
-    .preview-form {
-      margin-top: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .preview-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 12px;
-    }
-
-    .preview-label {
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .preview-label span {
-      color: var(--accent);
-      font-size: 10px;
-      margin-left: 4px;
-    }
-
-    .preview-input,
-    .preview-textarea,
-    .preview-select {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text-main);
-      font-size: 13px;
-      padding: 8px 9px;
-      outline: none;
-      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s;
-      width: 100%;
-    }
-
-    .preview-input:focus,
-    .preview-textarea:focus,
-    .preview-select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.7);
-      background: rgba(15, 23, 42, 1);
-    }
-
-    .preview-textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
-    .preview-file {
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .hint-line {
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-top: -1px;
-    }
-
-    .cta-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 8px;
-    }
-
-    .cta-btn {
-      padding: 7px 14px;
-      font-size: 11px;
-      border-radius: 999px;
-      border: none;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #020617;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(22, 163, 74, 0.55);
-    }
-
-    .cta-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 7px 18px rgba(22, 163, 74, 0.6);
-    }
-
-    @media (max-width: 900px) {
-      body {
-        padding: 14px;
-      }
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        border-right: none;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-      }
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div>
-        <div class="logo-row">
-          <div class="logo-icon">B</div>
-          <div>
-            <div class="logo-title">Brand Book Builder</div>
-            <div class="logo-sub">Input Architecture Demo</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hint">
-        Select a <strong>Brand Pillar</strong> and <strong>Sub-section</strong> to
-        see what kind of input field will be generated in your tool.
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="pillarSelect">Pillar</label>
-        <select id="pillarSelect"></select>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="subSectionSelect">Sub-section</label>
-        <select id="subSectionSelect"></select>
-      </div>
-
-      <div class="field-group">
-        <div class="field-label">All Pillars in Demo</div>
-        <div id="pillarsList" class="pillars-list"></div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <header class="main-header">
-        <div class="title-block">
-          <h1>
-            Input Definition
-            <span class="title-badge">Live Preview</span>
-          </h1>
-          <p>
-            This simulates how your Brand Book tool will dynamically configure fields
-            based on the Pillar &amp; Sub-section selected.
-          </p>
-        </div>
-        <div class="meta-chip-row">
-          <div class="meta-chip"><strong>Mode:</strong>&nbsp;Demo</div>
-          <div class="meta-chip"><strong>Fields:</strong>&nbsp;Sample subset</div>
-        </div>
-      </header>
-
-      <section class="layout">
-        <section class="card">
-          <h2>Definition</h2>
-          <table class="definition-table">
-            <tbody>
-              <tr>
-                <td>Pillar</td>
-                <td id="infoPillar">–</td>
-              </tr>
-              <tr>
-                <td>Sub-section</td>
-                <td id="infoSub">–</td>
-              </tr>
-              <tr>
-                <td>Input type</td>
-                <td id="infoType">–</td>
-              </tr>
-              <tr>
-                <td>Structure</td>
-                <td id="infoStructure">–</td>
-              </tr>
-              <tr>
-                <td>Upload</td>
-                <td id="infoUpload">–</td>
-              </tr>
-              <tr>
-                <td>Preset values</td>
-                <td id="infoPreset">–</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="tag-row">
-            <div class="tag" id="tagInput">Input: –</div>
-            <div class="tag" id="tagUpload">Upload: –</div>
-            <div class="tag" id="tagPreset">Presets: –</div>
-          </div>
-
-          <p class="hint-line" id="infoNotes">
-            Select a sub-section from the left to see details here.
-          </p>
-        </section>
-
-        <section class="card">
-          <h2>Form Preview</h2>
-          <div id="previewForm" class="preview-form">
-            <!-- Dynamic form fields will render here -->
-            <p class="hint-line">
-              No sub-section selected yet. Choose a pillar & sub-section to see the
-              generated form control for that brand book field.
-            </p>
-          </div>
-          <div class="cta-row">
-            <button class="cta-btn" type="button">
-              This is how it will feel in your tool
-            </button>
-          </div>
-        </section>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    // Sample subset of your architecture.
-    // You can extend this array with ALL rows from your Excel/CSV later.
-    const definitions = [
-      {
-        pillar: "Brand Overview",
-        subSection: "Founder’s Message",
-        inputType: "Long Text Area",
-        fieldStructure: "Rich-text formatting",
-        uploadRequired: "Optional Founder Image",
-        predefinedValues: "None",
-        notes: "Min 100 chars"
-      },
-      {
-        pillar: "Brand Overview",
-        subSection: "Brand History",
-        inputType: "Long Text Area",
-        fieldStructure: "Timeline (Year + Event)",
-        uploadRequired: "Optional",
-        predefinedValues: "None",
-        notes: "Add-more timeline entries"
-      },
-      {
-        pillar: "Brand Overview",
-        subSection: "Brand Purpose",
-        inputType: "Short Text",
-        fieldStructure: "Single-line text",
-        uploadRequired: "None",
-        predefinedValues: "Optional: Purpose presets",
-        notes: "100–150 chars"
-      },
-      {
-        pillar: "Brand Overview",
-        subSection: "Company Snapshot",
-        inputType: "Structured Fields",
-        fieldStructure: "Year/Team/Location/Industry",
-        uploadRequired: "Yes Logo Upload",
-        predefinedValues: "Industry dropdown",
-        notes: "Multiple fields"
-      },
-      {
-        pillar: "Mission & Vision",
-        subSection: "Vision Statement",
-        inputType: "Long Text",
-        fieldStructure: "Single block",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: "AI suggestion optional"
-      },
-      {
-        pillar: "Mission & Vision",
-        subSection: "Strategic Objectives",
-        inputType: "Repeater Fields",
-        fieldStructure: "Objective Title + Description",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: "Add-more objectives"
-      },
-      {
-        pillar: "Core Values",
-        subSection: "Behavioral Examples",
-        inputType: "Repeater Fields",
-        fieldStructure: "Value Name + Behavior Text",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Core Values",
-        subSection: "Values in Action",
-        inputType: "Text Area + Image",
-        fieldStructure: "Paragraph + Example Upload",
-        uploadRequired: "Optional",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Brand Positioning",
-        subSection: "Brand Promise",
-        inputType: "Short Text",
-        fieldStructure: "Single-line",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Brand Positioning",
-        subSection: "USP",
-        inputType: "Multi-select",
-        fieldStructure: "List + Add New",
-        uploadRequired: "None",
-        predefinedValues: "USP presets",
-        notes: "Allow custom"
-      },
-      {
-        pillar: "Brand Positioning",
-        subSection: "Perception Mapping",
-        inputType: "Structured Fields",
-        fieldStructure: "Axis Labels + Competitor Positions",
-        uploadRequired: "Optional",
-        predefinedValues: "None",
-        notes: "Graph auto-generated"
-      },
-      {
-        pillar: "Target Audience",
-        subSection: "Demographics",
-        inputType: "Structured Fields",
-        fieldStructure: "Age/Gender/Location/Income",
-        uploadRequired: "None",
-        predefinedValues: "Gender & Income dropdowns",
-        notes: "Location multi-select"
-      },
-      {
-        pillar: "Target Audience",
-        subSection: "Pain Points",
-        inputType: "Repeater Fields",
-        fieldStructure: "Text List",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Competitive Landscape",
-        subSection: "SWOT Analysis",
-        inputType: "Four Fields",
-        fieldStructure: "S/W/O/T text blocks",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Brand Personality",
-        subSection: "Brand Archetype",
-        inputType: "Dropdown",
-        fieldStructure: "Single-select",
-        uploadRequired: "Optional Image Upload",
-        predefinedValues: "12 Jungian archetypes",
-        notes: ""
-      },
-      {
-        pillar: "Brand Personality",
-        subSection: "Voice Attributes",
-        inputType: "Multi-select",
-        fieldStructure: "Attributes list",
-        uploadRequired: "None",
-        predefinedValues: "Friendly, Bold, Minimal, etc.",
-        notes: ""
-      },
-      {
-        pillar: "Tone of Voice",
-        subSection: "Do’s & Don’ts",
-        inputType: "Two-column Repeater",
-        fieldStructure: "Do text + Don't text",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Messaging Pillars",
-        subSection: "Elevator Pitch",
-        inputType: "Short Text",
-        fieldStructure: "Single-line",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Logo Guidelines",
-        subSection: "Logo Variants",
-        inputType: "Image Upload",
-        fieldStructure: "Upload PNG/SVG/JPG",
-        uploadRequired: "Yes",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Brand Colors",
-        subSection: "Secondary Colors",
-        inputType: "Color Picker",
-        fieldStructure: "HEX picker + Add-more",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Typography",
-        subSection: "Supporting Fonts",
-        inputType: "File Upload",
-        fieldStructure: "TTF/OTF Upload",
-        uploadRequired: "Yes",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Imagery Style",
-        subSection: "Image Do’s & Don’ts",
-        inputType: "Two-column Upload",
-        fieldStructure: "Correct + Incorrect Images",
-        uploadRequired: "Yes",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Motion Guidelines",
-        subSection: "Motion Timing/Easing",
-        inputType: "Number Input + Dropdown",
-        fieldStructure: "Timing + Easing type",
-        uploadRequired: "None",
-        predefinedValues: "ease-in, ease-out, linear",
-        notes: ""
-      },
-      {
-        pillar: "Templates & Assets",
-        subSection: "Business Cards",
-        inputType: "Upload + Fields",
-        fieldStructure: "PSD/AI + Info Fields",
-        uploadRequired: "Yes",
-        predefinedValues: "None",
-        notes: ""
-      },
-      {
-        pillar: "Accessibility Standards",
-        subSection: "Alt Text Rules",
-        inputType: "Text Area",
-        fieldStructure: "Paragraph",
-        uploadRequired: "None",
-        predefinedValues: "None",
-        notes: ""
-      }
-    ];
-
-    const pillarSelect = document.getElementById("pillarSelect");
-    const subSectionSelect = document.getElementById("subSectionSelect");
-    const pillarsListEl = document.getElementById("pillarsList");
-
-    const infoPillar = document.getElementById("infoPillar");
-    const infoSub = document.getElementById("infoSub");
-    const infoType = document.getElementById("infoType");
-    const infoStructure = document.getElementById("infoStructure");
-    const infoUpload = document.getElementById("infoUpload");
-    const infoPreset = document.getElementById("infoPreset");
-    const infoNotes = document.getElementById("infoNotes");
-
-    const tagInput = document.getElementById("tagInput");
-    const tagUpload = document.getElementById("tagUpload");
-    const tagPreset = document.getElementById("tagPreset");
-    const previewForm = document.getElementById("previewForm");
-
-    function init() {
-      const pillars = [...new Set(definitions.map(d => d.pillar))].sort();
-      pillarSelect.innerHTML = pillars.map(p => `<option value="${p}">${p}</option>`).join("");
-
-      renderPillarsList(pillars);
-      updateSubSections();
-      updateView();
-    }
-
-    function renderPillarsList(pillars) {
-      const current = pillarSelect.value;
-      pillarsListEl.innerHTML = pillars
-        .map(p => `<span class="${p === current ? "active" : ""}">${p}</span>`)
-        .join("");
-    }
-
-    function updateSubSections() {
-      const pillar = pillarSelect.value;
-      const subs = definitions
-        .filter(d => d.pillar === pillar)
-        .map(d => d.subSection);
-
-      const uniqueSubs = [...new Set(subs)];
-      subSectionSelect.innerHTML = uniqueSubs
-        .map(s => `<option value="${s}">${s}</option>`)
-        .join("");
-
-      renderPillarsList([...new Set(definitions.map(d => d.pillar))].sort());
-    }
-
-    function updateView() {
-      const pillar = pillarSelect.value;
-      const sub = subSectionSelect.value;
-      const def = definitions.find(d => d.pillar === pillar && d.subSection === sub);
-
-      if (!def) {
-        infoPillar.textContent = pillar || "–";
-        infoSub.textContent = sub || "–";
-        infoType.textContent = "–";
-        infoStructure.textContent = "–";
-        infoUpload.textContent = "–";
-        infoPreset.textContent = "–";
-        infoNotes.textContent = "No definition found for this combination.";
-        tagInput.textContent = "Input: –";
-        tagUpload.textContent = "Upload: –";
-        tagPreset.textContent = "Presets: –";
-        previewForm.innerHTML =
-          '<p class="hint-line">No field definition available.</p>';
-        return;
-      }
-
-      infoPillar.textContent = def.pillar;
-      infoSub.textContent = def.subSection;
-      infoType.textContent = def.inputType;
-      infoStructure.textContent = def.fieldStructure || "–";
-      infoUpload.textContent = def.uploadRequired || "None";
-      infoPreset.textContent = def.predefinedValues || "None";
-      infoNotes.textContent = def.notes || "–";
-
-      tagInput.textContent = `Input: ${def.inputType}`;
-      tagUpload.textContent = `Upload: ${def.uploadRequired || "None"}`;
-      tagPreset.textContent = `Presets: ${def.predefinedValues || "None"}`;
-
-      renderPreviewForm(def);
-    }
-
-    function renderPreviewForm(def) {
-      previewForm.innerHTML = "";
-
-      const fieldWrapper = document.createElement("div");
-      fieldWrapper.className = "preview-field";
-
-      const label = document.createElement("label");
-      label.className = "preview-label";
-      label.textContent = def.subSection;
-
-      if (def.inputType.toLowerCase().includes("long text") ||
-          def.inputType.toLowerCase().includes("text area")) {
-        const span = document.createElement("span");
-        span.textContent = "Multi-line input";
-        label.appendChild(span);
-
-        const textarea = document.createElement("textarea");
-        textarea.className = "preview-textarea";
-        textarea.placeholder = "Type the brand content here...";
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(textarea);
-      } else if (def.inputType.toLowerCase().includes("short text")) {
-        const span = document.createElement("span");
-        span.textContent = "Single-line";
-        label.appendChild(span);
-
-        const input = document.createElement("input");
-        input.className = "preview-input";
-        input.type = "text";
-        input.placeholder = "Enter a concise sentence…";
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(input);
-      } else if (
-        def.inputType.toLowerCase().includes("dropdown") ||
-        def.inputType.toLowerCase().includes("select") ||
-        def.inputType.toLowerCase().includes("multi-select")
-      ) {
-        const span = document.createElement("span");
-        span.textContent = def.inputType.toLowerCase().includes("multi")
-          ? "Multi-select"
-          : "Dropdown";
-        label.appendChild(span);
-
-        const select = document.createElement("select");
-        select.className = "preview-select";
-        const hasPreset = def.predefinedValues && def.predefinedValues !== "None";
-
-        if (hasPreset) {
-          const opts = def.predefinedValues.split(",").map(v => v.trim());
-          select.innerHTML = opts.map(o => `<option>${o}</option>`).join("");
-        } else {
-          select.innerHTML = "<option>Option A</option><option>Option B</option>";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Book Creator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(select);
-      } else if (
-        def.inputType.toLowerCase().includes("file upload") ||
-        def.inputType.toLowerCase().includes("image upload") ||
-        def.fieldStructure.toLowerCase().includes("upload")
-      ) {
-        const span = document.createElement("span");
-        span.textContent = "Upload";
-        label.appendChild(span);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        const input = document.createElement("input");
-        input.className = "preview-input preview-file";
-        input.type = "file";
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
 
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(input);
-      } else if (
-        def.inputType.toLowerCase().includes("number") ||
-        def.inputType.toLowerCase().includes("slider")
-      ) {
-        const span = document.createElement("span");
-        span.textContent = "Numeric";
-        label.appendChild(span);
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
 
-        const input = document.createElement("input");
-        input.className = "preview-input";
-        input.type = "number";
-        input.placeholder = "Enter a value…";
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(input);
-      } else if (def.inputType.toLowerCase().includes("color picker")) {
-        const span = document.createElement("span");
-        span.textContent = "Color";
-        label.appendChild(span);
+        /* Sidebar Styles */
+        .sidebar {
+            width: 300px;
+            background: white;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 10;
+        }
 
-        const input = document.createElement("input");
-        input.type = "color";
-        input.className = "preview-input";
-        input.style.padding = "0";
-        input.style.height = "38px";
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
 
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(input);
-      } else {
-        // Fallback generic text area
-        const span = document.createElement("span");
-        span.textContent = "Generic";
-        label.appendChild(span);
+        .logo i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-right: 10px;
+        }
 
-        const textarea = document.createElement("textarea");
-        textarea.className = "preview-textarea";
-        textarea.placeholder = "Describe this item…";
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(textarea);
-      }
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
 
-      previewForm.appendChild(fieldWrapper);
+        .pillar-list {
+            list-style: none;
+        }
 
-      if (def.uploadRequired && def.uploadRequired.toLowerCase().includes("yes")) {
-        const uploadField = document.createElement("div");
-        uploadField.className = "preview-field";
-        const lbl = document.createElement("label");
-        lbl.className = "preview-label";
-        lbl.innerHTML = 'Asset Upload <span>Required</span>';
-        const input = document.createElement("input");
-        input.type = "file";
-        input.className = "preview-input preview-file";
-        uploadField.appendChild(lbl);
-        uploadField.appendChild(input);
-        previewForm.appendChild(uploadField);
-      }
+        .pillar-item {
+            margin-bottom: 5px;
+        }
 
-      if (def.notes) {
-        const note = document.createElement("p");
-        note.className = "hint-line";
-        note.textContent = "Note: " + def.notes;
-        previewForm.appendChild(note);
-      }
-    }
+        .pillar-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
 
-    pillarSelect.addEventListener("change", () => {
-      updateSubSections();
-      updateView();
-    });
+        .pillar-header:hover {
+            background-color: var(--light-gray);
+        }
 
-    subSectionSelect.addEventListener("change", updateView);
+        .pillar-header.active {
+            background-color: var(--primary);
+            color: white;
+        }
 
-    init();
-  </script>
+        .pillar-header i {
+            margin-right: 10px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .pillar-header.active i {
+            transform: rotate(90deg);
+        }
+
+        .sub-pillars {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+            padding-left: 20px;
+        }
+
+        .sub-pillars.show {
+            max-height: 500px;
+        }
+
+        .sub-pillar {
+            padding: 10px 15px;
+            border-left: 2px solid var(--light-gray);
+            margin: 5px 0;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .sub-pillar:hover {
+            border-left-color: var(--accent);
+            background-color: rgba(72, 149, 239, 0.1);
+        }
+
+        .sub-pillar.active {
+            border-left-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.1);
+            font-weight: 600;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .content-header h2 {
+            font-size: 24px;
+            color: var(--dark);
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--success);
+            width: 35%;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-header {
+            margin-bottom: 20px;
+        }
+
+        .form-header h3 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .form-header p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .color-picker-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--light-gray);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent);
+            background-color: rgba(72, 149, 239, 0.05);
+        }
+
+        .file-upload i {
+            font-size: 40px;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .do-dont-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .do-section, .dont-section {
+            padding: 15px;
+            border-radius: var(--border-radius);
+        }
+
+        .do-section {
+            border: 1px solid #d4edda;
+            background-color: #f8fff9;
+        }
+
+        .dont-section {
+            border: 1px solid #f8d7da;
+            background-color: #fff5f6;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .do-section .section-title {
+            color: #155724;
+        }
+
+        .dont-section .section-title {
+            color: #721c24;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 40vh;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation for form switching */
+        .form-container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar with Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-book"></i>
+                <h1>Brand Book Creator</h1>
+            </div>
+            
+            <ul class="pillar-list">
+                <!-- Brand Overview -->
+                <li class="pillar-item">
+                    <div class="pillar-header active">
+                        <i class="fas fa-chevron-right"></i>
+                        Brand Overview
+                    </div>
+                    <ul class="sub-pillars show">
+                        <li class="sub-pillar active">Founder's Message</li>
+                        <li class="sub-pillar">Brand History</li>
+                        <li class="sub-pillar">Brand Purpose</li>
+                        <li class="sub-pillar">Company Snapshot</li>
+                    </ul>
+                </li>
+                
+                <!-- Mission & Vision -->
+                <li class="pillar-item">
+                    <div class="pillar-header">
+                        <i class="fas fa-chevron-right"></i>
+                        Mission & Vision
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar">Vision Statement</li>
+                        <li class="sub-pillar">Purpose Summary</li>
+                        <li class="sub-pillar">Strategic Objectives</li>
+                        <li class="sub-pillar">Long-term Aspirations</li>
+                    </ul>
+                </li>
+                
+                <!-- Core Values -->
+                <li class="pillar-item">
+                    <div class="pillar-header">
+                        <i class="fas-chevron-right"></i>
+                        Core Values
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar">Behavioral Examples</li>
+                        <li class="sub-pillar">Values in Action</li>
+                        <li class="sub-pillar">Internal vs External Application</li>
+                    </ul>
+                </li>
+                
+                <!-- Brand Positioning -->
+                <li class="pillar-item">
+                    <div class="pillar-header">
+                        <i class="fas fa-chevron-right"></i>
+                        Brand Positioning
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar">Brand Promise</li>
+                        <li class="sub-pillar">Value Proposition</li>
+                        <li class="sub-pillar">USP</li>
+                        <li class="sub-pillar">Perception Mapping</li>
+                    </ul>
+                </li>
+                
+                <!-- Logo Guidelines -->
+                <li class="pillar-item">
+                    <div class="pillar-header">
+                        <i class="fas fa-chevron-right"></i>
+                        Logo Guidelines
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar">Logo Variants</li>
+                        <li class="sub-pillar">Clear Space & Sizing</li>
+                        <li class="sub-pillar">Incorrect Usage</li>
+                        <li class="sub-pillar">Logo File Downloads</li>
+                    </ul>
+                </li>
+                
+                <!-- Brand Colors -->
+                <li class="pillar-item">
+                    <div class="pillar-header">
+                        <i class="fas fa-chevron-right"></i>
+                        Brand Colors
+                    </div>
+                    <ul class="sub-pillars">
+                        <li class="sub-pillar">Primary Colors</li>
+                        <li class="sub-pillar">Secondary Colors</li>
+                        <li class="sub-pillar">Color Codes</li>
+                        <li class="sub-pillar">Accessibility Compliance</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="content-header">
+                <h2>Founder's Message</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <span class="progress-text">35% Complete</span>
+                </div>
+            </div>
+            
+            <div class="form-container">
+                <div class="form-header">
+                    <h3>Founder's Message</h3>
+                    <p>Share the story and vision behind your brand directly from the founder's perspective.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="founderName">Founder's Name</label>
+                    <input type="text" id="founderName" placeholder="Enter founder's full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="founderTitle">Founder's Title</label>
+                    <input type="text" id="founderTitle" placeholder="CEO, Founder, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Founder's Message</label>
+                    <textarea id="message" placeholder="Write the founder's message here..."></textarea>
+                    <div class="hint">This should be an inspirational message that reflects the brand's values and mission.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="founderImage">Founder's Photo</label>
+                    <div class="file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload founder's photo</p>
+                        <div class="hint">Recommended: Square image, minimum 500x500px</div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Example of a different form section (hidden by default) -->
+            <div class="form-container" style="display: none;">
+                <div class="form-header">
+                    <h3>Brand Colors</h3>
+                    <p>Define the color palette that represents your brand identity.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Primary Color</label>
+                    <div class="color-picker-container">
+                        <div class="color-preview" style="background-color: #4361ee;"></div>
+                        <div class="input-with-icon" style="flex: 1;">
+                            <input type="text" value="#4361ee">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                    </div>
+                    <div class="hint">This is your main brand color used for logos and key elements.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Secondary Colors</label>
+                    <div class="input-grid">
+                        <div class="color-picker-container">
+                            <div class="color-preview" style="background-color: #3f37c9;"></div>
+                            <div class="input-with-icon">
+                                <input type="text" value="#3f37c9">
+                                <i class="fas fa-copy"></i>
+                            </div>
+                        </div>
+                        <div class="color-picker-container">
+                            <div class="color-preview" style="background-color: #4895ef;"></div>
+                            <div class="input-with-icon">
+                                <input type="text" value="#4895ef">
+                                <i class="fas fa-copy"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Neutral Colors</label>
+                    <div class="input-grid">
+                        <div class="color-picker-container">
+                            <div class="color-preview" style="background-color: #212529;"></div>
+                            <div class="input-with-icon">
+                                <input type="text" value="#212529">
+                                <i class="fas fa-copy"></i>
+                            </div>
+                        </div>
+                        <div class="color-picker-container">
+                            <div class="color-preview" style="background-color: #6c757d;"></div>
+                            <div class="input-with-icon">
+                                <input type="text" value="#6c757d">
+                                <i class="fas fa-copy"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sub-pillars when clicking on pillar headers
+        document.querySelectorAll('.pillar-header').forEach(header => {
+            header.addEventListener('click', () => {
+                // Toggle active class on header
+                header.classList.toggle('active');
+                
+                // Toggle show class on sub-pillars
+                const subPillars = header.nextElementSibling;
+                subPillars.classList.toggle('show');
+                
+                // Rotate chevron icon
+                const icon = header.querySelector('i');
+                icon.style.transform = header.classList.contains('active') ? 'rotate(90deg)' : 'rotate(0)';
+            });
+        });
+        
+        // Handle sub-pillar selection
+        document.querySelectorAll('.sub-pillar').forEach(pillar => {
+            pillar.addEventListener('click', () => {
+                // Remove active class from all sub-pillars
+                document.querySelectorAll('.sub-pillar').forEach(p => {
+                    p.classList.remove('active');
+                });
+                
+                // Add active class to clicked sub-pillar
+                pillar.classList.add('active');
+                
+                // Update main content header
+                document.querySelector('.content-header h2').textContent = pillar.textContent;
+                
+                // In a real application, you would load the appropriate form here
+                // For this demo, we'll just show a simple alert
+                console.log(`Loading form for: ${pillar.textContent}`);
+            });
+        });
+        
+        // File upload interaction
+        document.querySelectorAll('.file-upload').forEach(upload => {
+            upload.addEventListener('click', () => {
+                // In a real application, this would trigger a file input
+                // For this demo, we'll just change the appearance
+                upload.style.borderColor = 'var(--accent)';
+                upload.style.backgroundColor = 'rgba(72, 149, 239, 0.1)';
+                upload.innerHTML = '<i class="fas fa-check"></i><p>File uploaded successfully!</p>';
+            });
+        });
+        
+        // Copy color code functionality
+        document.querySelectorAll('.fa-copy').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                const colorCode = e.target.parentElement.querySelector('input').value;
+                navigator.clipboard.writeText(colorCode).then(() => {
+                    // Visual feedback that copy was successful
+                    const originalIcon = e.target.className;
+                    e.target.className = 'fas fa-check';
+                    setTimeout(() => {
+                        e.target.className = originalIcon;
+                    }, 1000);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
