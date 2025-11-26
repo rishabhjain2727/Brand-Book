@@ -79,6 +79,7 @@
         .pillar-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 12px 15px;
             background-color: var(--light);
             border-radius: var(--border-radius);
@@ -97,7 +98,6 @@
         }
 
         .pillar-header i {
-            margin-right: 10px;
             font-size: 14px;
             transition: var(--transition);
         }
@@ -111,7 +111,7 @@
             max-height: 0;
             overflow: hidden;
             transition: var(--transition);
-            padding-left: 20px;
+            padding-left: 10px;
         }
 
         .sub-pillars.show {
@@ -125,6 +125,8 @@
             cursor: pointer;
             transition: var(--transition);
             font-size: 14px;
+            display: flex;
+            align-items: center;
         }
 
         .sub-pillar:hover {
@@ -136,6 +138,16 @@
             border-left-color: var(--primary);
             background-color: rgba(67, 97, 238, 0.1);
             font-weight: 600;
+        }
+
+        .sub-pillar i {
+            margin-right: 8px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .sub-pillar.active i {
+            color: var(--primary);
         }
 
         /* Main Content Styles */
@@ -192,6 +204,12 @@
             box-shadow: var(--shadow);
             padding: 30px;
             margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         .form-header {
@@ -256,6 +274,7 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
+            cursor: pointer;
         }
 
         .color-picker-container {
@@ -372,6 +391,18 @@
             color: #721c24;
         }
 
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: var(--light-gray);
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
             .container {
@@ -389,10 +420,6 @@
         }
 
         /* Animation for form switching */
-        .form-container {
-            animation: fadeIn 0.5s ease;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -411,84 +438,127 @@
             <ul class="pillar-list">
                 <!-- Brand Overview -->
                 <li class="pillar-item">
-                    <div class="pillar-header active">
+                    <div class="pillar-header active" data-pillar="brand-overview">
+                        <span>Brand Overview</span>
                         <i class="fas fa-chevron-right"></i>
-                        Brand Overview
                     </div>
                     <ul class="sub-pillars show">
-                        <li class="sub-pillar active">Founder's Message</li>
-                        <li class="sub-pillar">Brand History</li>
-                        <li class="sub-pillar">Brand Purpose</li>
-                        <li class="sub-pillar">Company Snapshot</li>
+                        <li class="sub-pillar" data-section="brand-history">
+                            <i class="fas fa-history"></i>Brand History
+                        </li>
+                        <li class="sub-pillar" data-section="brand-purpose">
+                            <i class="fas fa-bullseye"></i>Brand Purpose
+                        </li>
+                        <li class="sub-pillar" data-section="company-snapshot">
+                            <i class="fas fa-building"></i>Company Snapshot
+                        </li>
                     </ul>
                 </li>
                 
                 <!-- Mission & Vision -->
                 <li class="pillar-item">
-                    <div class="pillar-header">
+                    <div class="pillar-header" data-pillar="mission-vision">
+                        <span>Mission & Vision</span>
                         <i class="fas fa-chevron-right"></i>
-                        Mission & Vision
                     </div>
                     <ul class="sub-pillars">
-                        <li class="sub-pillar">Vision Statement</li>
-                        <li class="sub-pillar">Purpose Summary</li>
-                        <li class="sub-pillar">Strategic Objectives</li>
-                        <li class="sub-pillar">Long-term Aspirations</li>
+                        <li class="sub-pillar" data-section="vision-statement">
+                            <i class="fas fa-eye"></i>Vision Statement
+                        </li>
+                        <li class="sub-pillar" data-section="purpose-summary">
+                            <i class="fas fa-file-alt"></i>Purpose Summary
+                        </li>
+                        <li class="sub-pillar" data-section="strategic-objectives">
+                            <i class="fas fa-bullseye"></i>Strategic Objectives
+                        </li>
+                        <li class="sub-pillar" data-section="long-term-aspirations">
+                            <i class="fas fa-rocket"></i>Long-term Aspirations
+                        </li>
                     </ul>
                 </li>
                 
                 <!-- Core Values -->
                 <li class="pillar-item">
-                    <div class="pillar-header">
-                        <i class="fas-chevron-right"></i>
-                        Core Values
+                    <div class="pillar-header" data-pillar="core-values">
+                        <span>Core Values</span>
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                     <ul class="sub-pillars">
-                        <li class="sub-pillar">Behavioral Examples</li>
-                        <li class="sub-pillar">Values in Action</li>
-                        <li class="sub-pillar">Internal vs External Application</li>
+                        <li class="sub-pillar" data-section="behavioral-examples">
+                            <i class="fas fa-users"></i>Behavioral Examples
+                        </li>
+                        <li class="sub-pillar" data-section="values-in-action">
+                            <i class="fas fa-handshake"></i>Values in Action
+                        </li>
+                        <li class="sub-pillar" data-section="internal-external">
+                            <i class="fas fa-exchange-alt"></i>Internal vs External Application
+                        </li>
                     </ul>
                 </li>
                 
                 <!-- Brand Positioning -->
                 <li class="pillar-item">
-                    <div class="pillar-header">
+                    <div class="pillar-header" data-pillar="brand-positioning">
+                        <span>Brand Positioning</span>
                         <i class="fas fa-chevron-right"></i>
-                        Brand Positioning
                     </div>
                     <ul class="sub-pillars">
-                        <li class="sub-pillar">Brand Promise</li>
-                        <li class="sub-pillar">Value Proposition</li>
-                        <li class="sub-pillar">USP</li>
-                        <li class="sub-pillar">Perception Mapping</li>
+                        <li class="sub-pillar" data-section="brand-promise">
+                            <i class="fas fa-hand-holding-heart"></i>Brand Promise
+                        </li>
+                        <li class="sub-pillar" data-section="value-proposition">
+                            <i class="fas fa-chart-line"></i>Value Proposition
+                        </li>
+                        <li class="sub-pillar" data-section="usp">
+                            <i class="fas fa-star"></i>USP
+                        </li>
+                        <li class="sub-pillar" data-section="perception-mapping">
+                            <i class="fas fa-map"></i>Perception Mapping
+                        </li>
                     </ul>
                 </li>
                 
-                <!-- Logo Guidelines -->
+                <!-- Brand Architecture -->
                 <li class="pillar-item">
-                    <div class="pillar-header">
+                    <div class="pillar-header" data-pillar="brand-architecture">
+                        <span>Brand Architecture</span>
                         <i class="fas fa-chevron-right"></i>
-                        Logo Guidelines
                     </div>
                     <ul class="sub-pillars">
-                        <li class="sub-pillar">Logo Variants</li>
-                        <li class="sub-pillar">Clear Space & Sizing</li>
-                        <li class="sub-pillar">Incorrect Usage</li>
-                        <li class="sub-pillar">Logo File Downloads</li>
+                        <li class="sub-pillar" data-section="product-hierarchy">
+                            <i class="fas fa-sitemap"></i>Product/Service Hierarchy
+                        </li>
+                        <li class="sub-pillar" data-section="naming-conventions">
+                            <i class="fas fa-tag"></i>Naming Conventions
+                        </li>
+                        <li class="sub-pillar" data-section="brand-relationship">
+                            <i class="fas fa-project-diagram"></i>Brand Relationship Models
+                        </li>
+                        <li class="sub-pillar" data-section="brand-evolution">
+                            <i class="fas fa-seedling"></i>Brand Evolution
+                        </li>
                     </ul>
                 </li>
                 
-                <!-- Brand Colors -->
+                <!-- Target Audience -->
                 <li class="pillar-item">
-                    <div class="pillar-header">
+                    <div class="pillar-header" data-pillar="target-audience">
+                        <span>Target Audience</span>
                         <i class="fas fa-chevron-right"></i>
-                        Brand Colors
                     </div>
                     <ul class="sub-pillars">
-                        <li class="sub-pillar">Primary Colors</li>
-                        <li class="sub-pillar">Secondary Colors</li>
-                        <li class="sub-pillar">Color Codes</li>
-                        <li class="sub-pillar">Accessibility Compliance</li>
+                        <li class="sub-pillar" data-section="demographics">
+                            <i class="fas fa-user-friends"></i>Demographics
+                        </li>
+                        <li class="sub-pillar" data-section="psychographics">
+                            <i class="fas fa-brain"></i>Psychographics
+                        </li>
+                        <li class="sub-pillar" data-section="pain-points">
+                            <i class="fas fa-exclamation-triangle"></i>Pain Points
+                        </li>
+                        <li class="sub-pillar" data-section="buyer-journey">
+                            <i class="fas fa-road"></i>Buyer Journey Map
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -506,35 +576,28 @@
                 </div>
             </div>
             
-            <div class="form-container">
+            
+            <!-- Brand History Form -->
+            <div class="form-container" id="brand-history">
                 <div class="form-header">
-                    <h3>Founder's Message</h3>
-                    <p>Share the story and vision behind your brand directly from the founder's perspective.</p>
+                    <h3>Brand History</h3>
+                    <p>Document the journey of your brand from inception to the present day.</p>
                 </div>
                 
                 <div class="form-group">
-                    <label for="founderName">Founder's Name</label>
-                    <input type="text" id="founderName" placeholder="Enter founder's full name">
+                    <label for="foundingYear">Founding Year</label>
+                    <input type="number" id="foundingYear" placeholder="e.g., 2015">
                 </div>
                 
                 <div class="form-group">
-                    <label for="founderTitle">Founder's Title</label>
-                    <input type="text" id="founderTitle" placeholder="CEO, Founder, etc.">
+                    <label for="originStory">Origin Story</label>
+                    <textarea id="originStory" placeholder="How was the brand founded? What was the initial inspiration?"></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="message">Founder's Message</label>
-                    <textarea id="message" placeholder="Write the founder's message here..."></textarea>
-                    <div class="hint">This should be an inspirational message that reflects the brand's values and mission.</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="founderImage">Founder's Photo</label>
-                    <div class="file-upload">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Click to upload founder's photo</p>
-                        <div class="hint">Recommended: Square image, minimum 500x500px</div>
-                    </div>
+                    <label for="keyMilestones">Key Milestones</label>
+                    <textarea id="keyMilestones" placeholder="List significant events, product launches, or achievements in chronological order"></textarea>
+                    <div class="hint">Use bullet points or a timeline format</div>
                 </div>
                 
                 <div class="form-actions">
@@ -547,63 +610,28 @@
                 </div>
             </div>
             
-            <!-- Example of a different form section (hidden by default) -->
-            <div class="form-container" style="display: none;">
+            <!-- Vision Statement Form -->
+            <div class="form-container" id="vision-statement">
                 <div class="form-header">
-                    <h3>Brand Colors</h3>
-                    <p>Define the color palette that represents your brand identity.</p>
+                    <h3>Vision Statement</h3>
+                    <p>Define the future aspirations and long-term goals of your brand.</p>
                 </div>
                 
                 <div class="form-group">
-                    <label>Primary Color</label>
-                    <div class="color-picker-container">
-                        <div class="color-preview" style="background-color: #4361ee;"></div>
-                        <div class="input-with-icon" style="flex: 1;">
-                            <input type="text" value="#4361ee">
-                            <i class="fas fa-copy"></i>
-                        </div>
-                    </div>
-                    <div class="hint">This is your main brand color used for logos and key elements.</div>
+                    <label for="visionStatement">Vision Statement</label>
+                    <textarea id="visionStatement" placeholder="Describe the ideal future state your brand aims to create"></textarea>
+                    <div class="hint">This should be inspirational and forward-looking</div>
                 </div>
                 
                 <div class="form-group">
-                    <label>Secondary Colors</label>
-                    <div class="input-grid">
-                        <div class="color-picker-container">
-                            <div class="color-preview" style="background-color: #3f37c9;"></div>
-                            <div class="input-with-icon">
-                                <input type="text" value="#3f37c9">
-                                <i class="fas fa-copy"></i>
-                            </div>
-                        </div>
-                        <div class="color-picker-container">
-                            <div class="color-preview" style="background-color: #4895ef;"></div>
-                            <div class="input-with-icon">
-                                <input type="text" value="#4895ef">
-                                <i class="fas fa-copy"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Neutral Colors</label>
-                    <div class="input-grid">
-                        <div class="color-picker-container">
-                            <div class="color-preview" style="background-color: #212529;"></div>
-                            <div class="input-with-icon">
-                                <input type="text" value="#212529">
-                                <i class="fas fa-copy"></i>
-                            </div>
-                        </div>
-                        <div class="color-picker-container">
-                            <div class="color-preview" style="background-color: #6c757d;"></div>
-                            <div class="input-with-icon">
-                                <input type="text" value="#6c757d">
-                                <i class="fas fa-copy"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <label for="visionTimeframe">Timeframe</label>
+                    <select id="visionTimeframe">
+                        <option value="">Select a timeframe</option>
+                        <option value="5">5 years</option>
+                        <option value="10">10 years</option>
+                        <option value="15">15 years</option>
+                        <option value="20">20+ years</option>
+                    </select>
                 </div>
                 
                 <div class="form-actions">
@@ -615,45 +643,122 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Behavioral Examples Form -->
+            <div class="form-container" id="behavioral-examples">
+                <div class="form-header">
+                    <h3>Behavioral Examples</h3>
+                    <p>Provide concrete examples of how your core values translate into actions and behaviors.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="value1">Value 1</label>
+                    <input type="text" id="value1" placeholder="e.g., Integrity">
+                </div>
+                
+                <div class="form-group">
+                    <label for="value1Examples">Behavioral Examples for Value 1</label>
+                    <textarea id="value1Examples" placeholder="What does this value look like in practice?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="value2">Value 2</label>
+                    <input type="text" id="value2" placeholder="e.g., Innovation">
+                </div>
+                
+                <div class="form-group">
+                    <label for="value2Examples">Behavioral Examples for Value 2</label>
+                    <textarea id="value2Examples" placeholder="What does this value look like in practice?"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Previous Section
+                    </button>
+                    <button class="btn btn-primary">
+                        Save & Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Empty State for other sections -->
+            <div class="form-container" id="empty-state">
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>Select a Section</h3>
+                    <p>Choose a section from the sidebar to start editing your brand book content.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Initialize with empty state
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show empty state initially for sections without forms
+            document.getElementById('empty-state').classList.add('active');
+            
+            // Set the first sub-pillar as active
+            setActiveSection('founders-message');
+        });
+
         // Toggle sub-pillars when clicking on pillar headers
         document.querySelectorAll('.pillar-header').forEach(header => {
             header.addEventListener('click', () => {
-                // Toggle active class on header
+                // Close all other pillars
+                document.querySelectorAll('.pillar-header').forEach(h => {
+                    if (h !== header) {
+                        h.classList.remove('active');
+                        h.nextElementSibling.classList.remove('show');
+                    }
+                });
+                
+                // Toggle active class on clicked header
                 header.classList.toggle('active');
                 
                 // Toggle show class on sub-pillars
                 const subPillars = header.nextElementSibling;
                 subPillars.classList.toggle('show');
-                
-                // Rotate chevron icon
-                const icon = header.querySelector('i');
-                icon.style.transform = header.classList.contains('active') ? 'rotate(90deg)' : 'rotate(0)';
             });
         });
         
         // Handle sub-pillar selection
         document.querySelectorAll('.sub-pillar').forEach(pillar => {
             pillar.addEventListener('click', () => {
-                // Remove active class from all sub-pillars
-                document.querySelectorAll('.sub-pillar').forEach(p => {
-                    p.classList.remove('active');
-                });
-                
-                // Add active class to clicked sub-pillar
-                pillar.classList.add('active');
-                
-                // Update main content header
-                document.querySelector('.content-header h2').textContent = pillar.textContent;
-                
-                // In a real application, you would load the appropriate form here
-                // For this demo, we'll just show a simple alert
-                console.log(`Loading form for: ${pillar.textContent}`);
+                const sectionId = pillar.getAttribute('data-section');
+                setActiveSection(sectionId);
             });
         });
+        
+        // Function to set active section
+        function setActiveSection(sectionId) {
+            // Remove active class from all sub-pillars
+            document.querySelectorAll('.sub-pillar').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Add active class to clicked sub-pillar
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            
+            // Hide all form containers
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show the selected form container
+            const selectedForm = document.getElementById(sectionId);
+            if (selectedForm) {
+                selectedForm.classList.add('active');
+                // Update content header
+                document.querySelector('.content-header h2').textContent = 
+                    document.querySelector(`[data-section="${sectionId}"]`).textContent.trim();
+            } else {
+                // Show empty state if form doesn't exist
+                document.getElementById('empty-state').classList.add('active');
+                document.querySelector('.content-header h2').textContent = 
+                    document.querySelector(`[data-section="${sectionId}"]`).textContent.trim();
+            }
+        }
         
         // File upload interaction
         document.querySelectorAll('.file-upload').forEach(upload => {
