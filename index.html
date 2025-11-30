@@ -1,99 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Brand Book Creator — Segmented Donut Progress</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Book Creator — Completion Card</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
   <style>
     :root {
       --primary: #f37c21;
+      --secondary: #c65010;
       --accent: #4361ee;
-      --bg: #f5f7fb;
-      --card: #fff;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #10b981;
+      --warning: #f72585;
       --gray: #6c757d;
       --light-gray: #e9ecef;
-      --shadow: 0 6px 18px rgba(15,23,42,0.06);
-      --radius: 8px;
+      --border-radius: 8px;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
-    html, body { height: 100%; background: var(--bg); color: #222; }
-    .container { display: flex; height: 100vh; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-    /* SIDEBAR */
+    html,
+    body {
+      height: 100%;
+      overflow: hidden; /* keep original behaviour */
+      background-color: #f5f7fb;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh; /* full viewport */
+    }
+
+    /* Sidebar */
     .sidebar {
       width: 320px;
-      background: var(--card);
-      padding: 20px;
+      background: white;
       box-shadow: var(--shadow);
-      overflow-y: auto;
+      padding: 20px;
+      overflow-y: auto; /* sidebar has its own scroll */
       flex-shrink: 0;
     }
 
-    .logo { display: flex; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--light-gray); }
-    .logo i { font-size: 24px; color: var(--primary); margin-right: 10px; }
-    .logo h1 { font-size: 18px; font-weight: 700; }
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--light-gray);
+    }
 
-    .small-note { font-size: 12px; color: var(--gray); margin-bottom: 12px; }
+    .logo i {
+      font-size: 24px;
+      color: var(--primary);
+      margin-right: 10px;
+    }
 
-    .pillar-list { list-style: none; margin-top: 10px; padding-left: 0; }
-    .pillar-item { margin-bottom: 8px; }
+    .logo h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .small-note {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+
+    .pillar-list {
+      list-style: none;
+    }
+
+    .pillar-item {
+      margin-bottom: 5px;
+    }
+
     .pillar-header {
-      display:flex; justify-content:space-between; align-items:center;
-      padding:10px 12px; background:#f8fafc; border-radius:var(--radius); cursor:pointer; font-weight:600; font-size:14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 14px;
     }
-    .pillar-header.active { background: var(--primary); color: white; }
-    .sub-pillars { list-style:none; max-height:0; overflow:hidden; transition: all .28s ease; padding-left: 10px; margin-top:6px; }
-    .sub-pillars.show { max-height: 800px; }
+
+    .pillar-header:hover {
+      background-color: var(--light-gray);
+    }
+
+    .pillar-header.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .pillar-header i {
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .pillar-header.active i {
+      transform: rotate(90deg);
+    }
+
+    .sub-pillars {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: var(--transition);
+      padding-left: 10px;
+    }
+
+    .sub-pillars.show {
+      max-height: 600px;
+    }
+
     .sub-pillar {
-      display:flex; align-items:center; justify-content:space-between; gap:8px;
-      padding:8px 12px; border-left:3px solid var(--light-gray); cursor:pointer; font-size:13px; margin:4px 0; border-radius:6px;
+      padding: 8px 14px;
+      border-left: 2px solid var(--light-gray);
+      margin: 4px 0;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-radius: 6px;
     }
-    .sub-pillar:hover { background: rgba(67,97,238,0.04); }
-    .sub-pillar.active { background: rgba(67,97,238,0.08); border-left-color: var(--primary); font-weight:600; }
-    .sub-pillar .status-dot { width:8px; height:8px; border-radius:50%; background: var(--light-gray); display:inline-block; }
-    .sub-pillar.completed .status-dot { background: #10b981; }
 
-    /* MAIN */
-    .main-content { flex:1; padding:30px; overflow-y:auto; }
-    .content-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--light-gray); }
-    .content-header h2 { font-size:22px; }
-    .content-sub { font-size:13px; color:var(--gray); }
+    .sub-pillar:hover {
+      border-left-color: var(--accent);
+      background-color: rgba(72, 149, 239, 0.06);
+    }
 
-    /* Segmented donut */
-    .progress-wrapper { display:flex; gap:18px; align-items:center; }
-    .donut { width:130px; height:130px; position:relative; display:grid; place-items:center; }
-    .donut svg { width:100%; height:100%; display:block; transform: rotate(-90deg); }
-    .donut-center { position:absolute; text-align:center; transform: rotate(90deg); display:flex; flex-direction:column; align-items:center; gap:4px; pointer-events:none; }
-    .donut-center .big { font-size:34px; font-weight:800; color:#111; line-height:1; }
-    .donut-center .small { font-size:12px; color:var(--gray); }
-    .progress-meta { text-align:right; }
-    .progress-meta .percent { font-weight:700; font-size:14px; color:#111; }
-    .progress-meta .legend { font-size:12px; color:var(--gray); margin-top:6px; }
+    .sub-pillar.active {
+      border-left-color: var(--primary);
+      background-color: rgba(67, 97, 238, 0.08);
+      font-weight: 600;
+    }
 
-    /* arc transition */
-    .arc { transition: stroke 0.35s ease, opacity 0.35s ease; stroke-linecap: round; }
+    .sub-pillar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-    /* FORM */
-    .form-container { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom:20px; }
-    .form-header h3 { font-size:18px; color:var(--primary); margin-bottom:6px; }
-    .form-header p { font-size:13px; color:var(--gray); margin-bottom:12px; }
-    .form-group { margin-bottom:14px; }
-    .form-group label { display:block; margin-bottom:6px; font-weight:600; color:#222; }
-    input, textarea, select { width:100%; padding:10px 12px; border:1px solid var(--light-gray); border-radius:8px; font-size:14px; }
-    textarea { min-height:100px; resize:vertical; }
-    .file-upload { border:2px dashed var(--light-gray); padding:18px; border-radius:8px; text-align:center; cursor:pointer; }
-    .form-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:8px; }
-    .btn { padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:700; border:none; }
-    .btn-primary { background:var(--primary); color:white; }
-    .btn-outline { border:1px solid var(--primary); color:var(--primary); background:transparent; }
+    .sub-pillar i {
+      font-size: 11px;
+      color: var(--gray);
+    }
 
-    @media (max-width: 900px) {
-      .donut { width:100px; height:100px; }
-      .donut-center .big { font-size:26px; }
-      .sidebar { width:100%; max-height:36vh; }
-      .container { flex-direction:column; }
+    .sub-pillar.active i {
+      color: var(--primary);
+    }
+
+    .sub-pillar .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--light-gray);
+    }
+
+    .sub-pillar.completed .status-dot {
+      background: var(--success);
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto; /* main content scrolls separately */
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .content-header h2 {
+      font-size: 22px;
+      color: var(--dark);
+    }
+
+    .content-sub {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    /* ===== LPU-style completion card ===== */
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #f37021, #f9a826);
+      border-radius: 10px;
+      color: white;
+      box-shadow: var(--shadow);
+      min-width: 280px;
+    }
+
+    .progress-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      opacity: 0.95;
+      letter-spacing: 0.06em;
+    }
+
+    .progress-main-num {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+
+    .progress-bar {
+      width: 280px;
+      height: 14px;
+      background-color: rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #ffffff, #d2f5dd);
+      width: 0%;
+      border-radius: 14px;
+      transition: width 0.45s cubic-bezier(.2,.9,.2,1);
+    }
+
+    .progress-text {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* rest of form styles (kept from original) */
+    .form-container {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .form-header h3 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .form-group .hint {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(72, 149, 239, 0.2);
+    }
+
+    .file-upload {
+      border: 2px dashed var(--light-gray);
+      border-radius: var(--border-radius);
+      padding: 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .file-upload i {
+      font-size: 26px;
+      margin-bottom: 6px;
+      color: var(--gray);
+    }
+
+    .file-upload:hover {
+      border-color: var(--accent);
+      background-color: rgba(72, 149, 239, 0.05);
+    }
+
+    .swot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .swot-box {
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      padding: 10px;
+      background: var(--light);
+    }
+
+    .swot-box h4 {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--border-radius);
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.08);
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--gray);
+      padding: 60px 20px;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 12px;
+      color: var(--light-gray);
+    }
+
+    /* Cohort chips (Target Audience) */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .chip-toggle {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--light-gray);
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chip-toggle.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .radio-row {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .radio-row label {
+      font-weight: 400;
+    }
+
+    .selected-tags {
+      min-height: 40px;
+      padding: 8px;
+      border-radius: var(--border-radius);
+      border: 1px dashed var(--light-gray);
+      font-size: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      padding: 4px 10px;
+      background: var(--light);
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 992px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        max-height: 40vh;
+      }
+
+      .progress-bar {
+        width: 220px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -105,7 +499,10 @@
         <i class="fas fa-book"></i>
         <h1>Brand Book Creator</h1>
       </div>
-      <p class="small-note">Click a pillar → choose a sub-pillar → fill the section. Saved sections update the completion graph.</p>
+      <p class="small-note">
+        Click a pillar → choose a sub-pillar → fill the section. Saved sections
+        update the completion graph.
+      </p>
       <ul class="pillar-list" id="pillarList"></ul>
     </div>
 
@@ -114,32 +511,31 @@
       <div class="content-header">
         <div>
           <h2 id="sectionTitle">Select a section</h2>
-          <p id="sectionSubtitle" class="content-sub">Start by choosing a pillar and sub-pillar from the left.</p>
+          <p id="sectionSubtitle" class="content-sub">
+            Start by choosing a pillar and sub-pillar from the left.
+          </p>
         </div>
 
-        <!-- Segmented donut -->
-        <div class="progress-wrapper" aria-hidden="false">
-          <div class="donut" id="donutContainer" title="Completion">
-            <svg id="donutSvg" viewBox="0 0 100 100" role="img" aria-label="Completion progress"></svg>
-            <div class="donut-center" id="donutCenter">
-              <div class="big" id="donutNumber">0</div>
-              <div class="small">Total</div>
-            </div>
+        <!-- LPU-style completion card -->
+        <div class="progress-container" aria-hidden="false" id="completionCard">
+          <div class="progress-title">Brand Book Completion</div>
+          <div class="progress-main-num" id="progressPercent">0%</div>
+          <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
           </div>
-
-          <div class="progress-meta">
-            <div class="percent" id="percentText">0% Complete</div>
-            <div class="legend" id="legendText">0 / 0 sections</div>
-          </div>
+          <span class="progress-text" id="progressText">0% Complete (0 / 0)</span>
         </div>
       </div>
 
       <div id="formRoot">
         <div class="form-container">
-          <div style="text-align:center;color:var(--gray);padding:36px 10px">
-            <i class="fas fa-folder-open" style="font-size:44px;color:var(--light-gray);margin-bottom:12px;display:block"></i>
-            <h3 style="margin-bottom:6px">No section selected</h3>
-            <p>Pick any sub-pillar from the sidebar to start editing your brand book.</p>
+          <div class="empty-state">
+            <i class="fas fa-folder-open"></i>
+            <h3>No section selected</h3>
+            <p>
+              Pick any sub-pillar from the sidebar to start editing your brand
+              book.
+            </p>
           </div>
         </div>
       </div>
@@ -147,7 +543,8 @@
   </div>
 
   <script>
-    // ---------- FULL BRAND_STRUCTURE (unchanged content taken from your original file) ----------
+    // -------- CONFIG: ALL PILLARS & SUB-PILLARS (unchanged) --------
+    // type: 'short', 'long', 'upload', 'swot', 'color', 'table', 'cohort'
     const BRAND_STRUCTURE = [
       {
         id: "brand-overview",
@@ -761,58 +1158,46 @@
 
     // ---------- STATE ----------
     const completionState = {}; // { sectionId: true }
+    const totalSections = BRAND_STRUCTURE.reduce(
+      (sum, p) => sum + p.sections.length,
+      0
+    );
 
-    // Flatten sections into array to map to donut slices
-    const flatSections = [];
-    BRAND_STRUCTURE.forEach(p => p.sections.forEach(s => flatSections.push({ pillarId: p.id, pillarLabel: p.label, ...s })));
-    const totalSections = flatSections.length;
-
-    // Colors palette (cycles)
-    const colors = [
-      '#2DD4BF','#34D399','#60A5FA','#4C6EF5','#7C3AED','#D946EF',
-      '#FB7185','#F97316','#F59E0B','#F472B6','#06B6D4','#10B981'
-    ];
-
-    // DOM refs
-    const pillarListEl = document.getElementById('pillarList');
-    const formRoot = document.getElementById('formRoot');
-    const sectionTitleEl = document.getElementById('sectionTitle');
-    const sectionSubtitleEl = document.getElementById('sectionSubtitle');
-    const donutSvg = document.getElementById('donutSvg');
-    const donutNumber = document.getElementById('donutNumber');
-    const percentText = document.getElementById('percentText');
-    const legendText = document.getElementById('legendText');
-
-    // Visual params
-    const visualSegments = totalSections; // one slice per section
-    const strokeWidth = 12;              // thickness of ring
-    const gapDegrees = 2.2;              // visual gap between slices (deg)
-    const viewBoxSize = 100;             // SVG viewBox 0..100
-    const center = viewBoxSize / 2;
-    const radius = 36;                   // circle radius within viewBox
-    const circumference = 2 * Math.PI * radius;
+    // ---------- DOM REFS ----------
+    const pillarListEl = document.getElementById("pillarList");
+    const formRoot = document.getElementById("formRoot");
+    const sectionTitleEl = document.getElementById("sectionTitle");
+    const sectionSubtitleEl = document.getElementById("sectionSubtitle");
+    const progressBarEl = document.getElementById("progressBar");
+    const progressTextEl = document.getElementById("progressText");
+    const progressPercentEl = document.getElementById("progressPercent");
 
     // ---------- RENDER SIDEBAR ----------
     function renderSidebar() {
-      pillarListEl.innerHTML = '';
-      BRAND_STRUCTURE.forEach((pillar, pIdx) => {
-        const li = document.createElement('li');
-        li.className = 'pillar-item';
+      pillarListEl.innerHTML = "";
+      BRAND_STRUCTURE.forEach((pillar, idx) => {
+        const li = document.createElement("li");
+        li.className = "pillar-item";
 
-        const header = document.createElement('div');
-        header.className = 'pillar-header' + (pIdx === 0 ? ' active' : '');
+        const header = document.createElement("div");
+        header.className = "pillar-header" + (idx === 0 ? " active" : "");
         header.dataset.pillarId = pillar.id;
-        header.innerHTML = `<span>${pillar.label}</span><i class="fas fa-chevron-right"></i>`;
+        header.innerHTML = `
+          <span>${pillar.label}</span>
+          <i class="fas fa-chevron-right"></i>
+        `;
 
-        const subList = document.createElement('ul');
-        subList.className = 'sub-pillars' + (pIdx === 0 ? ' show' : '');
+        const subList = document.createElement("ul");
+        subList.className = "sub-pillars" + (idx === 0 ? " show" : "");
         pillar.sections.forEach((sec, sIdx) => {
-          const subLi = document.createElement('li');
-          subLi.className = 'sub-pillar' + (pIdx === 0 && sIdx === 0 ? ' active' : '');
+          const subLi = document.createElement("li");
+          subLi.className =
+            "sub-pillar" +
+            (idx === 0 && sIdx === 0 ? " active" : "");
           subLi.dataset.sectionId = sec.id;
           subLi.innerHTML = `
-            <div style="display:flex;align-items:center;gap:8px">
-              <i class="fas fa-circle-notch" style="font-size:11px;color:var(--gray)"></i>
+            <div class="sub-pillar-left">
+              <i class="fas fa-circle-notch"></i>
               <span>${sec.label}</span>
             </div>
             <span class="status-dot"></span>
@@ -829,24 +1214,26 @@
     }
 
     function bindSidebarEvents() {
-      document.querySelectorAll('.pillar-header').forEach((header) => {
-        header.addEventListener('click', () => {
-          document.querySelectorAll('.pillar-header').forEach((h) => {
+      document.querySelectorAll(".pillar-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          document.querySelectorAll(".pillar-header").forEach((h) => {
             if (h !== header) {
-              h.classList.remove('active');
-              h.nextElementSibling.classList.remove('show');
+              h.classList.remove("active");
+              h.nextElementSibling.classList.remove("show");
             }
           });
-          header.classList.toggle('active');
-          header.nextElementSibling.classList.toggle('show');
+          header.classList.toggle("active");
+          header.nextElementSibling.classList.toggle("show");
         });
       });
 
-      document.querySelectorAll('.sub-pillar').forEach((sub) => {
-        sub.addEventListener('click', () => {
+      document.querySelectorAll(".sub-pillar").forEach((sub) => {
+        sub.addEventListener("click", () => {
           const sectionId = sub.dataset.sectionId;
-          document.querySelectorAll('.sub-pillar').forEach((s) => s.classList.remove('active'));
-          sub.classList.add('active');
+          document
+            .querySelectorAll(".sub-pillar")
+            .forEach((s) => s.classList.remove("active"));
+          sub.classList.add("active");
           const section = findSectionById(sectionId);
           renderSectionForm(section);
         });
@@ -862,100 +1249,44 @@
       return null;
     }
 
-    // ---------- DONUT RENDER ----------
-    function renderDonut() {
-      donutSvg.innerHTML = ''; // clear previous arcs
-
-      // compute how many segments are completed in index order of flatSections
-      const completedIds = Object.keys(completionState);
-      // find mapping index -> completed boolean
-      const completedIndexSet = new Set(flatSections.map((s, idx) => completedIds.includes(s.id) ? idx : -1).filter(i => i >=0));
-      // But we need a simple approach: mark segments as completed if their corresponding sectionId is in completionState
-      // We'll loop by segment and determine color by flatSections[i].id presence in completionState.
-
-      // compute arc lengths
-      const sliceAngle = 360 / visualSegments;
-      const drawAngle = sliceAngle - gapDegrees;
-
-      const r = radius;
-      const circ = circumference;
-      const portion = (drawAngle / 360) * circ;
-      const rest = circ - portion;
-
-      for (let i = 0; i < visualSegments; i++) {
-        const sec = flatSections[i];
-        const isCompleted = sec && completionState[sec.id];
-
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        const startAngle = i * sliceAngle + gapDegrees / 2; // rotate group to put the visible arc in its slot
-        g.setAttribute('transform', `rotate(${startAngle} ${center} ${center})`);
-
-        const circEl = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circEl.setAttribute('cx', center);
-        circEl.setAttribute('cy', center);
-        circEl.setAttribute('r', r);
-        circEl.setAttribute('fill', 'none');
-        circEl.setAttribute('stroke-width', strokeWidth);
-        circEl.setAttribute('class', 'arc');
-
-        // stroke-dasharray shows portion then the rest
-        circEl.setAttribute('stroke-dasharray', `${portion} ${rest}`);
-
-        // color: completed -> palette; else pending muted
-        const strokeColor = isCompleted ? colors[i % colors.length] : '#e6eef3';
-        circEl.setAttribute('stroke', strokeColor);
-
-        // append
-        g.appendChild(circEl);
-        donutSvg.appendChild(g);
-      }
-
-      // update numbers/text
-      const completedCount = Object.keys(completionState).length;
-      const percent = totalSections ? Math.round((completedCount / totalSections) * 100) : 0;
-      donutNumber.textContent = completedCount;
-      percentText.textContent = `${percent}% Complete`;
-      legendText.textContent = `${completedCount} / ${totalSections} sections`;
-    }
-
-    // ---------- FORM rendering logic (keeps original field types) ----------
+    // ---------- RENDER SECTION FORM ----------
     function renderSectionForm({ pillar, sec }) {
       sectionTitleEl.textContent = sec.label;
       sectionSubtitleEl.textContent = pillar.label;
 
-      const container = document.createElement('div');
-      container.className = 'form-container';
+      const container = document.createElement("div");
+      container.className = "form-container";
 
-      const header = document.createElement('div');
-      header.className = 'form-header';
+      const header = document.createElement("div");
+      header.className = "form-header";
       header.innerHTML = `
         <h3>${sec.label}</h3>
-        <p>${sec.hint || 'Fill the content for this brand book section.'}</p>
+        <p>${sec.hint || "Fill the content for this brand book section."}</p>
       `;
       container.appendChild(header);
 
-      const formBody = document.createElement('div');
+      const formBody = document.createElement("div");
 
       switch (sec.type) {
-        case 'short':
+        case "short":
           formBody.appendChild(makeShortField(sec));
           break;
-        case 'upload':
+        case "upload":
           formBody.appendChild(makeUploadField());
           break;
-        case 'table':
+        case "table":
           formBody.appendChild(makeTableField());
           break;
-        case 'swot':
+        case "swot":
           formBody.appendChild(makeSwotField());
           break;
-        case 'color':
+        case "color":
           formBody.appendChild(makeColorField());
           break;
-        case 'cohort':
+        case "cohort":
           formBody.appendChild(makeCohortField());
           break;
-        case 'long':
+        case "long":
         default:
           formBody.appendChild(makeLongField(sec));
           break;
@@ -963,46 +1294,52 @@
 
       container.appendChild(formBody);
 
-      const actions = document.createElement('div');
-      actions.className = 'form-actions';
+      const actions = document.createElement("div");
+      actions.className = "form-actions";
       actions.innerHTML = `
-        <button class="btn btn-outline" type="button">Reset</button>
-        <button class="btn btn-primary" type="button">Save Section <i class="fas fa-check" style="margin-left:8px"></i></button>
+        <button class="btn btn-outline" type="button">
+          <i class="fas fa-rotate-left"></i> Reset
+        </button>
+        <button class="btn btn-primary" type="button">
+          Save Section <i class="fas fa-check"></i>
+        </button>
       `;
-      const [resetBtn, saveBtn] = actions.querySelectorAll('button');
+      const [resetBtn, saveBtn] = actions.querySelectorAll("button");
 
-      resetBtn.addEventListener('click', () => {
-        container.querySelectorAll('input, textarea').forEach((el) => {
-          if (el.type === 'color') return;
-          if (el.type === 'radio') return;
-          el.value = '';
+      resetBtn.addEventListener("click", () => {
+        container.querySelectorAll("input, textarea").forEach((el) => {
+          if (el.type === "color") return;
+          if (el.type === "radio") return;
+          el.value = "";
         });
-        container.querySelectorAll('.chip-toggle').forEach((c) => c.classList.remove('active'));
+        container
+          .querySelectorAll(".chip-toggle")
+          .forEach((c) => c.classList.remove("active"));
       });
 
-      saveBtn.addEventListener('click', () => {
-        // mark completed
+      saveBtn.addEventListener("click", () => {
         completionState[sec.id] = true;
-        // update sidebar visual completed dot
-        markSidebarCompleted(sec.id);
         updateCompletionUI();
+        markSidebarCompleted(sec.id);
       });
 
       container.appendChild(actions);
 
-      formRoot.innerHTML = '';
+      formRoot.innerHTML = "";
       formRoot.appendChild(container);
 
-      // enable chip toggle for cohort UI
-      container.addEventListener('click', (e) => {
-        if (e.target.classList.contains('chip-toggle')) e.target.classList.toggle('active');
+      // enable chip toggle behavior in cohort sections
+      container.addEventListener("click", (e) => {
+        if (e.target.classList.contains("chip-toggle")) {
+          e.target.classList.toggle("active");
+        }
       });
     }
 
     // ---------- FIELD BUILDERS ----------
     function makeShortField(sec) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>${sec.label}</label>
         <input type="text" placeholder="Write a concise line here..." />
@@ -1011,176 +1348,219 @@
     }
 
     function makeLongField(sec) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>${sec.label}</label>
         <textarea placeholder="Write detailed content for this section..."></textarea>
-        <div class="hint" style="font-size:12px;color:var(--gray);margin-top:6px">Use paragraphs or bullet points as needed.</div>
+        <div class="hint">Use paragraphs or bullet points as needed.</div>
       `;
       return wrapper;
     }
 
     function makeUploadField() {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>Upload Asset</label>
         <div class="file-upload">
-          <i class="fas fa-cloud-upload-alt" style="font-size:22px;color:var(--gray);display:block;margin-bottom:8px"></i>
-          <p style="color:var(--gray);font-size:13px;margin:0">Click to simulate uploading an image/file</p>
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Click to simulate uploading an image/file</p>
         </div>
-        <div class="hint" style="font-size:12px;color:var(--gray);margin-top:8px">In a real app this would open the file picker.</div>
+        <div class="hint">In a real app this would open the file picker.</div>
       `;
-      wrapper.querySelector('.file-upload').addEventListener('click', (e) => {
-        e.currentTarget.innerHTML = '<i class="fas fa-check-circle" style="font-size:22px;color:#10b981;display:block;margin-bottom:8px"></i><p style="color:#10b981;margin:0">File uploaded (demo)</p>';
-        e.currentTarget.style.borderColor = '#a5d8ff';
-        e.currentTarget.style.backgroundColor = 'rgba(67,97,238,0.04)';
+      wrapper.querySelector(".file-upload").addEventListener("click", (e) => {
+        e.currentTarget.innerHTML =
+          '<i class="fas fa-check-circle"></i><p>File uploaded (demo)</p>';
+        e.currentTarget.style.borderColor = "var(--accent)";
+        e.currentTarget.style.backgroundColor = "rgba(72,149,239,0.08)";
       });
       return wrapper;
     }
 
     function makeTableField() {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>Structured List</label>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Item 1</h4><textarea placeholder="Describe item 1"></textarea></div>
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Item 2</h4><textarea placeholder="Describe item 2"></textarea></div>
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Item 3</h4><textarea placeholder="Describe item 3"></textarea></div>
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Item 4</h4><textarea placeholder="Describe item 4"></textarea></div>
+        <div class="swot-grid">
+          <div class="swot-box">
+            <h4>Item 1</h4>
+            <textarea placeholder="Describe item 1"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 2</h4>
+            <textarea placeholder="Describe item 2"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 3</h4>
+            <textarea placeholder="Describe item 3"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 4</h4>
+            <textarea placeholder="Describe item 4"></textarea>
+          </div>
         </div>
       `;
       return wrapper;
     }
 
     function makeSwotField() {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>SWOT Analysis</label>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Strengths</h4><textarea placeholder="Internal positive attributes"></textarea></div>
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Weaknesses</h4><textarea placeholder="Internal negative attributes"></textarea></div>
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Opportunities</h4><textarea placeholder="External positive factors"></textarea></div>
-          <div style="background:#f8fafc;padding:10px;border-radius:8px"><h4 style="margin:0 0 6px 0;font-size:13px">Threats</h4><textarea placeholder="External negative factors"></textarea></div>
+        <div class="swot-grid">
+          <div class="swot-box">
+            <h4>Strengths</h4>
+            <textarea placeholder="Internal positive attributes"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Weaknesses</h4>
+            <textarea placeholder="Internal negative attributes"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Opportunities</h4>
+            <textarea placeholder="External positive factors"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Threats</h4>
+            <textarea placeholder="External negative factors"></textarea>
+          </div>
         </div>
       `;
       return wrapper;
     }
 
     function makeColorField() {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>Primary Color</label>
         <input type="color" value="#4361ee" />
-        <div class="hint" style="font-size:12px;color:var(--gray);margin-top:8px">Pick your brand secondary or accent color.</div>
+        <div class="hint">Pick your brand secondary or accent color.</div>
       `;
       return wrapper;
     }
 
     function makeCohortField() {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-group';
+      const wrapper = document.createElement("div");
       wrapper.innerHTML = `
-        <label>Audience Details</label>
+        <div class="form-group">
+          <label>Audience Details</label>
+        </div>
 
-        <div style="margin-top:10px"><label style="display:block;margin-bottom:6px">Age</label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">18–24 Years</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">25–34 Years</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">35–44 Years</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">45–54 Years</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">55–64 Years</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">65+ Years</button>
+        <div class="form-group">
+          <label>Age</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">18–24 Years</button>
+            <button type="button" class="chip-toggle">25–34 Years</button>
+            <button type="button" class="chip-toggle">35–44 Years</button>
+            <button type="button" class="chip-toggle">45–54 Years</button>
+            <button type="button" class="chip-toggle">55–64 Years</button>
+            <button type="button" class="chip-toggle">65+ Years</button>
           </div>
         </div>
 
-        <div style="margin-top:12px"><label style="display:block;margin-bottom:6px">Gender</label>
-          <div style="display:flex;gap:8px">
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">Male</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">Female</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">Others</button>
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">Male</button>
+            <button type="button" class="chip-toggle">Female</button>
+            <button type="button" class="chip-toggle">Others</button>
           </div>
         </div>
 
-        <div style="margin-top:12px"><label style="display:block;margin-bottom:6px">Household Income</label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">CAT-A (0–5L)</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">CTA-B (5–10L)</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">MIG (10–20L)</button>
-            <button type="button" class="chip-toggle" style="padding:6px 10px;border-radius:999px;border:1px solid var(--light-gray)">HIG (20L+)</button>
+        <div class="form-group">
+          <label>Parental Status</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">Parent</button>
+            <button type="button" class="chip-toggle">Not a Parent</button>
+            <button type="button" class="chip-toggle">Unknown</button>
           </div>
         </div>
 
-        <div style="margin-top:12px">
-          <hr style="border:none;border-top:1px solid var(--light-gray);margin:12px 0">
-          <label style="display:block;margin-bottom:6px">Locations</label>
-          <div style="display:flex;gap:12px;margin-bottom:8px">
-            <label style="font-size:13px"><input type="radio" name="locMode" checked /> India</label>
-            <label style="font-size:13px"><input type="radio" name="locMode" /> Enter Another Location</label>
+        <div class="form-group">
+          <label>Household Income</label>
+          <div class="chip-row">
+            <button type="button" class="chip-toggle">CAT-A (0–5L)</button>
+            <button type="button" class="chip-toggle">CTA-B (5–10L)</button>
+            <button type="button" class="chip-toggle">MIG (10–20L)</button>
+            <button type="button" class="chip-toggle">HIG (20L+)</button>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--light-gray);margin:16px 0;">
+
+        <div class="form-group">
+          <label>Locations</label>
+          <div class="radio-row">
+            <label><input type="radio" name="locMode" checked /> India</label>
+            <label><input type="radio" name="locMode" /> Enter Another Location</label>
           </div>
           <input type="text" placeholder="Enter location to include or exclude">
-          <div style="font-size:12px;color:var(--gray);margin-top:6px">Add locations to define your audience for this survey.</div>
+          <div class="hint">Add locations to define your audience for this survey.</div>
         </div>
 
-        <div style="margin-top:12px">
-          <label style="display:block;margin-bottom:6px">Interest</label>
+        <div class="form-group">
+          <label>Location Type</label>
+          <div class="radio-row">
+            <label><input type="radio" name="locType" checked /> Presence or interest in your locations (recommended)</label>
+          </div>
+          <div class="radio-row">
+            <label><input type="radio" name="locType" /> Presence in or regularly in your locations</label>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--light-gray);margin:16px 0;">
+
+        <div class="form-group">
+          <label>Interest</label>
           <input type="text" placeholder="e.g., Luxury Car">
-          <div style="font-size:12px;color:var(--gray);margin-top:6px">Type an interest to segment your audience further.</div>
+          <div class="hint">Type an interest to segment your audience further.</div>
         </div>
 
-        <div style="margin-top:12px">
-          <label style="display:block;margin-bottom:6px">Selected Interests</label>
-          <div style="min-height:40px;padding:8px;border-radius:8px;border:1px dashed var(--light-gray);display:flex;gap:8px;flex-wrap:wrap">
-            <span style="padding:4px 10px;background:#f8fafc;border-radius:999px;font-size:12px">Luxury Car</span>
+        <div class="form-group">
+          <label>Selected Interests</label>
+          <div class="selected-tags">
+            <span class="tag-pill">Luxury Car</span>
           </div>
         </div>
       `;
       return wrapper;
     }
 
-    // ---------- COMPLETION UI ----------
+    // ---------- COMPLETION ----------
+
     function updateCompletionUI() {
-      // re-render donut
-      renderDonut();
+      const completed = Object.keys(completionState).length;
+      const percent = totalSections ? Math.round((completed / totalSections) * 100) : 0;
+      progressBarEl.style.width = percent + "%";
+      progressPercentEl.textContent = `${percent}%`;
+      progressTextEl.textContent = `${percent}% Complete (${completed} / ${totalSections})`;
     }
 
     function markSidebarCompleted(sectionId) {
-      const node = document.querySelector(`.sub-pillar[data-section-id="${sectionId}"]`);
-      if (node) node.classList.add('completed');
+      const node = document.querySelector(
+        `.sub-pillar[data-section-id="${sectionId}"]`
+      );
+      if (node) node.classList.add("completed");
     }
 
     // ---------- INIT ----------
     renderSidebar();
     updateCompletionUI();
 
-    // open first section by default
+    // open first section by default (Brand History)
     const firstPillar = BRAND_STRUCTURE[0];
     if (firstPillar && firstPillar.sections[0]) {
       const firstSec = firstPillar.sections[0];
-      const node = document.querySelector(`.sub-pillar[data-section-id="${firstSec.id}"]`);
-      if (node) node.classList.add('active');
+      const node = document.querySelector(
+        `.sub-pillar[data-section-id="${firstSec.id}"]`
+      );
+      if (node) node.classList.add("active");
       renderSectionForm({ pillar: firstPillar, sec: firstSec });
     }
-
-    // Ensure clicking chip toggles visually (global capture for dynamically created chips)
-    document.body.addEventListener('click', (e) => {
-      if (e.target.classList && e.target.classList.contains('chip-toggle')) {
-        e.target.classList.toggle('active');
-        if (e.target.classList.contains('active')) {
-          e.target.style.background = 'var(--primary)';
-          e.target.style.color = '#fff';
-          e.target.style.borderColor = 'var(--primary)';
-        } else {
-          e.target.style.background = '#fff';
-          e.target.style.color = '#222';
-          e.target.style.borderColor = 'var(--light-gray)';
-        }
-      }
-    });
   </script>
 </body>
 </html>
