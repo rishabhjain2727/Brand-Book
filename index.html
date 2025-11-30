@@ -10,7 +10,7 @@
   />
   <style>
     :root {
-      --primary: #f37c21;        
+      --primary: #f37c21;
       --secondary: #c65010;
       --accent: #4361ee;
       --light: #f8f9fa;
@@ -21,7 +21,7 @@
       --light-gray: #e9ecef;
       --border-radius: 8px;
       --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --transition: all 0.3s ease;
+      --transition: all 0.35s cubic-bezier(.2,.9,.2,1);
     }
 
     * {
@@ -210,34 +210,83 @@
       color: var(--gray);
     }
 
+    /* ----- NEW: Circular progress styles ----- */
     .progress-container {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
+      align-items: center;
+      gap: 14px;
     }
 
-    .progress-bar {
-      width: 220px;
-      height: 10px;
-      background-color: var(--light-gray);
-      border-radius: 10px;
-      overflow: hidden;
+    .progress-circle {
+      width: 64px;
+      height: 64px;
+      position: relative;
+      flex: 0 0 64px;
     }
 
-    .progress {
-      height: 100%;
-      background-color: var(--success);
-      width: 0%;
-      border-radius: 10px;
-      transition: var(--transition);
+    .progress-circle svg {
+      transform: rotate(-90deg);
+      width: 64px;
+      height: 64px;
+      display: block;
     }
 
-    .progress-text {
+    .progress-bg {
+      stroke: var(--light-gray);
+      stroke-width: 8;
+      fill: none;
+    }
+
+    .progress-fg {
+      stroke: var(--primary);
+      stroke-linecap: round;
+      stroke-width: 8;
+      fill: none;
+      transition: stroke-dashoffset 0.6s cubic-bezier(.2,.9,.2,1), stroke 0.3s;
+    }
+
+    .progress-inner {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      pointer-events: none;
+    }
+
+    .progress-meta {
+      text-align: right;
+    }
+
+    .progress-meta .progress-text {
+      display: block;
       font-size: 13px;
       color: var(--gray);
     }
 
+    .progress-meta .progress-small {
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .progress-legend {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    .progress-fg.low { stroke: #f72585; } /* low completion color */
+    .progress-fg.medium { stroke: #f37c21; } /* mid */
+    .progress-fg.high { stroke: var(--success); } /* high */
+
+    /* rest of form styles (kept as before) */
     .form-container {
       background: white;
       border-radius: var(--border-radius);
@@ -492,11 +541,28 @@
             Start by choosing a pillar and sub-pillar from the left.
           </p>
         </div>
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div class="progress" id="progressBar"></div>
+
+        <!-- NEW: Circular progress container -->
+        <div class="progress-container" aria-hidden="false">
+          <div class="progress-circle" title="Completion">
+            <svg viewBox="0 0 36 36" role="img" aria-labelledby="progressTitle">
+              <title id="progressTitle">Completion progress</title>
+              <!-- background circle -->
+              <path class="progress-bg" d="M18 2.0845
+                   a 15.9155 15.9155 0 0 1 0 31.831
+                   a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              <!-- foreground (stroke-dashoffset controlled by JS) -->
+              <path class="progress-fg" id="progressFg" d="M18 2.0845
+                   a 15.9155 15.9155 0 0 1 0 31.831
+                   a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            </svg>
+            <div class="progress-inner" id="progressInner">0%</div>
           </div>
-          <span class="progress-text" id="progressText">0% Complete (0 / 0)</span>
+
+          <div class="progress-meta">
+            <div class="progress-small" id="progressSmall">0% Complete</div>
+            <div class="progress-legend" id="progressLegend">0 / 0 sections</div>
+          </div>
         </div>
       </div>
 
@@ -516,80 +582,36 @@
   </div>
 
   <script>
-    // -------- CONFIG: ALL PILLARS & SUB-PILLARS --------
-    // type: 'short', 'long', 'upload', 'swot', 'color', 'table', 'cohort'
+    // -------- CONFIG: ALL PILLARS & SUB-PILLARS (unchanged) --------
     const BRAND_STRUCTURE = [
       {
         id: "brand-overview",
         label: "Brand Overview",
         sections: [
-          {
-            id: "brand-history",
-            label: "Brand History",
-            type: "long",
-            hint: "Timeline or story of how the brand evolved over time."
-          },
-          {
-            id: "brand-purpose",
-            label: "Brand Purpose",
-            type: "short",
-            hint: "One clear line on why the brand exists beyond profit."
-          },
-          {
-            id: "company-snapshot",
-            label: "Company Snapshot",
-            type: "table",
-            hint: "Current overview: size, locations, key facts."
-          }
+          { id: "brand-history", label: "Brand History", type: "long", hint: "Timeline or story of how the brand evolved over time." },
+          { id: "brand-purpose", label: "Brand Purpose", type: "short", hint: "One clear line on why the brand exists beyond profit." },
+          { id: "company-snapshot", label: "Company Snapshot", type: "table", hint: "Current overview: size, locations, key facts." }
         ]
       },
+      // ... rest of structure omitted in this snippet for brevity but present in original file
+      // To keep this example concise I will include everything below in the real file (same as your original).
       {
         id: "mission-vision",
         label: "Mission & Vision",
         sections: [
-          {
-            id: "vision-statement",
-            label: "Vision Statement",
-            type: "long",
-            hint: "Future state you want to create."
-          },
-          {
-            id: "purpose-summary",
-            label: "Purpose Summary",
-            type: "short"
-          },
-          {
-            id: "strategic-objectives",
-            label: "Strategic Objectives",
-            type: "table",
-            hint: "List 3–5 key objectives."
-          },
-          {
-            id: "long-term-aspirations",
-            label: "Long-term Aspirations",
-            type: "long"
-          }
+          { id: "vision-statement", label: "Vision Statement", type: "long", hint: "Future state you want to create." },
+          { id: "purpose-summary", label: "Purpose Summary", type: "short" },
+          { id: "strategic-objectives", label: "Strategic Objectives", type: "table", hint: "List 3–5 key objectives." },
+          { id: "long-term-aspirations", label: "Long-term Aspirations", type: "long" }
         ]
       },
       {
         id: "core-values",
         label: "Core Values",
         sections: [
-          {
-            id: "behavioral-examples",
-            label: "Behavioral Examples",
-            type: "long"
-          },
-          {
-            id: "values-in-action",
-            label: "Values in Action",
-            type: "long"
-          },
-          {
-            id: "internal-vs-external",
-            label: "Internal vs External Application",
-            type: "table"
-          }
+          { id: "behavioral-examples", label: "Behavioral Examples", type: "long" },
+          { id: "values-in-action", label: "Values in Action", type: "long" },
+          { id: "internal-vs-external", label: "Internal vs External Application", type: "table" }
         ]
       },
       {
@@ -597,119 +619,49 @@
         label: "Brand Positioning",
         sections: [
           { id: "brand-promise", label: "Brand Promise", type: "short" },
-          {
-            id: "value-proposition",
-            label: "Value Proposition",
-            type: "long"
-          },
+          { id: "value-proposition", label: "Value Proposition", type: "long" },
           { id: "usp", label: "USP", type: "long" },
-          {
-            id: "perception-mapping",
-            label: "Perception Mapping",
-            type: "long",
-            hint: "Describe axes & where you/competitors sit."
-          }
+          { id: "perception-mapping", label: "Perception Mapping", type: "long", hint: "Describe axes & where you/competitors sit." }
         ]
       },
       {
         id: "brand-architecture",
         label: "Brand Architecture",
         sections: [
-          {
-            id: "product-hierarchy",
-            label: "Product/Service Hierarchy",
-            type: "table"
-          },
-          {
-            id: "naming-conventions",
-            label: "Naming Conventions",
-            type: "long"
-          },
-          {
-            id: "brand-relationship-models",
-            label: "Brand Relationship Models",
-            type: "long"
-          },
-          {
-            id: "brand-evolution",
-            label: "Brand Evolution",
-            type: "long"
-          }
+          { id: "product-hierarchy", label: "Product/Service Hierarchy", type: "table" },
+          { id: "naming-conventions", label: "Naming Conventions", type: "long" },
+          { id: "brand-relationship-models", label: "Brand Relationship Models", type: "long" },
+          { id: "brand-evolution", label: "Brand Evolution", type: "long" }
         ]
       },
       {
         id: "target-audience",
         label: "Target Audience",
         sections: [
-          {
-            id: "demographics",
-            label: "Demographics",
-            type: "cohort", // special cohort UI
-            hint: "Define age, gender, income and location cohorts."
-          },
-          {
-            id: "psychographics",
-            label: "Psychographics",
-            type: "long"
-          },
+          { id: "demographics", label: "Demographics", type: "cohort", hint: "Define age, gender, income and location cohorts." },
+          { id: "psychographics", label: "Psychographics", type: "long" },
           { id: "pain-points", label: "Pain Points", type: "long" },
-          {
-            id: "buyer-journey-map",
-            label: "Buyer Journey Map",
-            type: "long"
-          }
+          { id: "buyer-journey-map", label: "Buyer Journey Map", type: "long" }
         ]
       },
       {
         id: "competitive-landscape",
         label: "Competitive Landscape",
         sections: [
-          {
-            id: "market-position-map",
-            label: "Market Position Map",
-            type: "upload"
-          },
-          {
-            id: "swot-analysis",
-            label: "SWOT Analysis",
-            type: "swot"
-          },
-          {
-            id: "differentiation-factors",
-            label: "Differentiation Factors",
-            type: "long"
-          },
-          {
-            id: "industry-benchmarks",
-            label: "Industry Benchmarks",
-            type: "table"
-          }
+          { id: "market-position-map", label: "Market Position Map", type: "upload" },
+          { id: "swot-analysis", label: "SWOT Analysis", type: "swot" },
+          { id: "differentiation-factors", label: "Differentiation Factors", type: "long" },
+          { id: "industry-benchmarks", label: "Industry Benchmarks", type: "table" }
         ]
       },
       {
         id: "brand-personality",
         label: "Brand Personality",
         sections: [
-          {
-            id: "brand-archetype",
-            label: "Brand Archetype",
-            type: "short"
-          },
-          {
-            id: "voice-attributes",
-            label: "Voice Attributes",
-            type: "long"
-          },
-          {
-            id: "emotional-associations",
-            label: "Emotional Associations",
-            type: "long"
-          },
-          {
-            id: "personality-in-action",
-            label: "Personality in Action",
-            type: "long"
-          }
+          { id: "brand-archetype", label: "Brand Archetype", type: "short" },
+          { id: "voice-attributes", label: "Voice Attributes", type: "long" },
+          { id: "emotional-associations", label: "Emotional Associations", type: "long" },
+          { id: "personality-in-action", label: "Personality in Action", type: "long" }
         ]
       },
       {
@@ -717,47 +669,19 @@
         label: "Tone of Voice",
         sections: [
           { id: "dos-donts", label: "Do’s & Don’ts", type: "table" },
-          {
-            id: "communication-styles",
-            label: "Communication Styles",
-            type: "long"
-          },
-          {
-            id: "medium-examples",
-            label: "Medium-based Examples",
-            type: "long"
-          },
-          {
-            id: "crisis-tone",
-            label: "Crisis Tone Guidelines",
-            type: "long"
-          }
+          { id: "communication-styles", label: "Communication Styles", type: "long" },
+          { id: "medium-examples", label: "Medium-based Examples", type: "long" },
+          { id: "crisis-tone", label: "Crisis Tone Guidelines", type: "long" }
         ]
       },
       {
         id: "messaging-pillars",
         label: "Messaging Pillars",
         sections: [
-          {
-            id: "messaging-framework",
-            label: "Messaging Framework",
-            type: "table"
-          },
-          {
-            id: "taglines-slogans",
-            label: "Taglines & Slogans",
-            type: "long"
-          },
-          {
-            id: "elevator-pitch",
-            label: "Elevator Pitch",
-            type: "short"
-          },
-          {
-            id: "copy-style-guide",
-            label: "Copywriting Style Guide",
-            type: "long"
-          }
+          { id: "messaging-framework", label: "Messaging Framework", type: "table" },
+          { id: "taglines-slogans", label: "Taglines & Slogans", type: "long" },
+          { id: "elevator-pitch", label: "Elevator Pitch", type: "short" },
+          { id: "copy-style-guide", label: "Copywriting Style Guide", type: "long" }
         ]
       },
       {
@@ -765,169 +689,69 @@
         label: "Logo Guidelines",
         sections: [
           { id: "logo-variants", label: "Logo Variants", type: "upload" },
-          {
-            id: "clear-space-sizing",
-            label: "Clear Space & Sizing",
-            type: "long"
-          },
-          {
-            id: "incorrect-usage",
-            label: "Incorrect Usage",
-            type: "upload"
-          },
-          {
-            id: "logo-downloads",
-            label: "Logo File Downloads",
-            type: "upload"
-          }
+          { id: "clear-space-sizing", label: "Clear Space & Sizing", type: "long" },
+          { id: "incorrect-usage", label: "Incorrect Usage", type: "upload" },
+          { id: "logo-downloads", label: "Logo File Downloads", type: "upload" }
         ]
       },
       {
         id: "brand-colors",
         label: "Brand Colors",
         sections: [
-          {
-            id: "secondary-colors",
-            label: "Secondary Colors",
-            type: "color"
-          },
-          {
-            id: "color-codes",
-            label: "Color Codes (HEX, RGB, CMYK, Pantone)",
-            type: "table"
-          },
-          {
-            id: "color-usage-guidelines",
-            label: "Usage Guidelines",
-            type: "long"
-          },
-          {
-            id: "accessibility-compliance",
-            label: "Accessibility Compliance",
-            type: "long"
-          }
+          { id: "secondary-colors", label: "Secondary Colors", type: "color" },
+          { id: "color-codes", label: "Color Codes (HEX, RGB, CMYK, Pantone)", type: "table" },
+          { id: "color-usage-guidelines", label: "Usage Guidelines", type: "long" },
+          { id: "accessibility-compliance", label: "Accessibility Compliance", type: "long" }
         ]
       },
       {
         id: "typography",
         label: "Typography",
         sections: [
-          {
-            id: "supporting-fonts",
-            label: "Supporting Fonts",
-            type: "upload"
-          },
-          {
-            id: "font-hierarchy",
-            label: "Font Hierarchy",
-            type: "table"
-          },
-          {
-            id: "web-print-rules",
-            label: "Web & Print Rules",
-            type: "long"
-          },
-          {
-            id: "line-height-kerning",
-            label: "Line Height & Kerning",
-            type: "long"
-          }
+          { id: "supporting-fonts", label: "Supporting Fonts", type: "upload" },
+          { id: "font-hierarchy", label: "Font Hierarchy", type: "table" },
+          { id: "web-print-rules", label: "Web & Print Rules", type: "long" },
+          { id: "line-height-kerning", label: "Line Height & Kerning", type: "long" }
         ]
       },
       {
         id: "imagery-style",
         label: "Imagery Style",
         sections: [
-          {
-            id: "filters-treatments",
-            label: "Filters & Treatments",
-            type: "long"
-          },
-          {
-            id: "composition",
-            label: "Composition",
-            type: "long"
-          },
-          {
-            id: "subject-guidelines",
-            label: "Subject Guidelines",
-            type: "long"
-          },
-          {
-            id: "image-dos-donts",
-            label: "Image Do’s & Don’ts",
-            type: "upload"
-          }
+          { id: "filters-treatments", label: "Filters & Treatments", type: "long" },
+          { id: "composition", label: "Composition", type: "long" },
+          { id: "subject-guidelines", label: "Subject Guidelines", type: "long" },
+          { id: "image-dos-donts", label: "Image Do’s & Don’ts", type: "upload" }
         ]
       },
       {
         id: "iconography",
         label: "Iconography",
         sections: [
-          {
-            id: "grid-spacing-rules",
-            label: "Grid/Spacing Rules",
-            type: "long"
-          },
-          {
-            id: "icon-color-usage",
-            label: "Icon Color Usage",
-            type: "color"
-          },
+          { id: "grid-spacing-rules", label: "Grid/Spacing Rules", type: "long" },
+          { id: "icon-color-usage", label: "Icon Color Usage", type: "color" },
           { id: "icon-dos-donts", label: "Do’s & Don’ts", type: "upload" },
-          {
-            id: "icon-download-pack",
-            label: "Download Pack",
-            type: "upload"
-          }
+          { id: "icon-download-pack", label: "Download Pack", type: "upload" }
         ]
       },
       {
         id: "graphic-elements",
         label: "Graphic Elements",
         sections: [
-          {
-            id: "decorative-shapes",
-            label: "Decorative Shapes",
-            type: "upload"
-          },
-          {
-            id: "illustrations",
-            label: "Illustrations",
-            type: "upload"
-          },
-          {
-            id: "backgrounds",
-            label: "Backgrounds",
-            type: "upload"
-          },
-          {
-            id: "layering-rules",
-            label: "Layering Rules",
-            type: "long"
-          }
+          { id: "decorative-shapes", label: "Decorative Shapes", type: "upload" },
+          { id: "illustrations", label: "Illustrations", type: "upload" },
+          { id: "backgrounds", label: "Backgrounds", type: "upload" },
+          { id: "layering-rules", label: "Layering Rules", type: "long" }
         ]
       },
       {
         id: "motion-guidelines",
         label: "Motion Guidelines",
         sections: [
-          {
-            id: "motion-timing-easing",
-            label: "Motion Timing/Easing",
-            type: "long"
-          },
+          { id: "motion-timing-easing", label: "Motion Timing/Easing", type: "long" },
           { id: "motion-use-cases", label: "Use Cases", type: "long" },
-          {
-            id: "inappropriate-motion",
-            label: "Inappropriate Motion",
-            type: "long"
-          },
-          {
-            id: "export-specs",
-            label: "Export Specs",
-            type: "long"
-          }
+          { id: "inappropriate-motion", label: "Inappropriate Motion", type: "long" },
+          { id: "export-specs", label: "Export Specs", type: "long" }
         ]
       },
       {
@@ -937,11 +761,7 @@
           { id: "inputs", label: "Inputs", type: "long" },
           { id: "cards", label: "Cards", type: "long" },
           { id: "navigation", label: "Navigation", type: "long" },
-          {
-            id: "interactive-states",
-            label: "Interactive States",
-            type: "upload"
-          }
+          { id: "interactive-states", label: "Interactive States", type: "upload" }
         ]
       },
       {
@@ -949,95 +769,39 @@
         label: "Packaging Guidelines",
         sections: [
           { id: "label-design", label: "Label Design", type: "upload" },
-          {
-            id: "barcoding-legal",
-            label: "Barcoding & Legal Info",
-            type: "long"
-          },
-          {
-            id: "unboxing-experience",
-            label: "Unboxing Experience",
-            type: "long"
-          },
-          {
-            id: "sustainability-standards",
-            label: "Sustainability Standards",
-            type: "long"
-          }
+          { id: "barcoding-legal", label: "Barcoding & Legal Info", type: "long" },
+          { id: "unboxing-experience", label: "Unboxing Experience", type: "long" },
+          { id: "sustainability-standards", label: "Sustainability Standards", type: "long" }
         ]
       },
       {
         id: "signage-print",
         label: "Signage & Print",
         sections: [
-          {
-            id: "outdoor-signage",
-            label: "Outdoor Signage",
-            type: "upload"
-          },
-          {
-            id: "retail-displays",
-            label: "Retail Displays",
-            type: "upload"
-          },
+          { id: "outdoor-signage", label: "Outdoor Signage", type: "upload" },
+          { id: "retail-displays", label: "Retail Displays", type: "upload" },
           { id: "print-sizes", label: "Print Sizes", type: "table" },
-          {
-            id: "exhibition-booth",
-            label: "Exhibition Booth Branding",
-            type: "upload"
-          }
+          { id: "exhibition-booth", label: "Exhibition Booth Branding", type: "upload" }
         ]
       },
       {
         id: "templates-assets",
         label: "Templates & Assets",
         sections: [
-          {
-            id: "business-cards",
-            label: "Business Cards",
-            type: "upload"
-          },
-          {
-            id: "letterhead-design",
-            label: "Letterhead Design",
-            type: "upload"
-          },
-          {
-            id: "email-signatures",
-            label: "Email Signatures",
-            type: "long"
-          },
-          {
-            id: "social-media-kits",
-            label: "Social Media Kits",
-            type: "upload"
-          }
+          { id: "business-cards", label: "Business Cards", type: "upload" },
+          { id: "letterhead-design", label: "Letterhead Design", type: "upload" },
+          { id: "email-signatures", label: "Email Signatures", type: "long" },
+          { id: "social-media-kits", label: "Social Media Kits", type: "upload" }
         ]
       },
       {
         id: "usage-dos-donts",
         label: "Usage Do’s & Don’ts",
         sections: [
-          {
-            id: "color-misuse",
-            label: "Color Misuse",
-            type: "upload"
-          },
-          {
-            id: "typography-errors",
-            label: "Typography Errors",
-            type: "upload"
-          },
-          {
-            id: "messaging-misalignment",
-            label: "Messaging Misalignment",
-            type: "long"
-          },
-          {
-            id: "visual-mistakes",
-            label: "Visual Mistakes",
-            type: "upload"
-          }
+          { id: "color-misuse", label: "Color Misuse", type: "upload" },
+          { id: "typography-errors", label: "Typography Errors", type: "upload" },
+          { id: "messaging-misalignment", label: "Messaging Misalignment", type: "long" },
+          { id: "visual-mistakes", label: "Visual Mistakes", type: "upload" }
         ]
       },
       {
@@ -1045,104 +809,61 @@
         label: "Co-Branding Rules",
         sections: [
           { id: "co-brand-hierarchy", label: "Brand Hierarchy", type: "long" },
-          {
-            id: "co-brand-campaign-examples",
-            label: "Campaign Examples",
-            type: "upload"
-          },
-          {
-            id: "co-brand-dos-donts",
-            label: "Do’s & Don’ts",
-            type: "long"
-          },
-          {
-            id: "co-brand-terms",
-            label: "Co-brand Terms & Guidelines",
-            type: "long"
-          }
+          { id: "co-brand-campaign-examples", label: "Campaign Examples", type: "upload" },
+          { id: "co-brand-dos-donts", label: "Do’s & Don’ts", type: "long" },
+          { id: "co-brand-terms", label: "Co-brand Terms & Guidelines", type: "long" }
         ]
       },
       {
         id: "legal-trademarks",
         label: "Legal & Trademarks",
         sections: [
-          {
-            id: "copyright-claims",
-            label: "Copyright Claims",
-            type: "long"
-          },
-          {
-            id: "licensing-terms",
-            label: "Licensing Terms",
-            type: "long"
-          },
+          { id: "copyright-claims", label: "Copyright Claims", type: "long" },
+          { id: "licensing-terms", label: "Licensing Terms", type: "long" },
           { id: "disclaimers", label: "Disclaimers", type: "long" },
-          {
-            id: "brand-abuse-reporting",
-            label: "Brand Abuse Reporting",
-            type: "short"
-          }
+          { id: "brand-abuse-reporting", label: "Brand Abuse Reporting", type: "short" }
         ]
       },
       {
         id: "industry-custom",
         label: "Industry Custom Modules",
         sections: [
-          {
-            id: "fashion-lookbooks",
-            label: "Fashion: Fabric Visuals, Lookbooks",
-            type: "upload"
-          },
-          {
-            id: "food-label-regs",
-            label: "Food: Label Regulations",
-            type: "long"
-          },
-          {
-            id: "finance-disclosures",
-            label: "Finance: Legal Disclosures",
-            type: "long"
-          }
+          { id: "fashion-lookbooks", label: "Fashion: Fabric Visuals, Lookbooks", type: "upload" },
+          { id: "food-label-regs", label: "Food: Label Regulations", type: "long" },
+          { id: "finance-disclosures", label: "Finance: Legal Disclosures", type: "long" }
         ]
       },
       {
         id: "accessibility-standards",
         label: "Accessibility Standards",
         sections: [
-          {
-            id: "font-readability",
-            label: "Font Readability",
-            type: "long"
-          },
+          { id: "font-readability", label: "Font Readability", type: "long" },
           { id: "alt-text-rules", label: "Alt Text Rules", type: "long" },
-          {
-            id: "screen-reader-labels",
-            label: "Screen Reader Labels",
-            type: "long"
-          },
-          {
-            id: "wcag-ada-guidelines",
-            label: "WCAG/ADA Guidelines",
-            type: "long"
-          }
+          { id: "screen-reader-labels", label: "Screen Reader Labels", type: "long" },
+          { id: "wcag-ada-guidelines", label: "WCAG/ADA Guidelines", type: "long" }
         ]
       }
     ];
 
     // ---------- STATE ----------
     const completionState = {}; // { sectionId: true }
-    const totalSections = BRAND_STRUCTURE.reduce(
-      (sum, p) => sum + p.sections.length,
-      0
-    );
+    const totalSections = BRAND_STRUCTURE.reduce((sum, p) => sum + p.sections.length, 0);
 
     // ---------- DOM REFS ----------
     const pillarListEl = document.getElementById("pillarList");
     const formRoot = document.getElementById("formRoot");
     const sectionTitleEl = document.getElementById("sectionTitle");
     const sectionSubtitleEl = document.getElementById("sectionSubtitle");
-    const progressBarEl = document.getElementById("progressBar");
-    const progressTextEl = document.getElementById("progressText");
+    const progressFg = document.getElementById("progressFg");
+    const progressInner = document.getElementById("progressInner");
+    const progressSmall = document.getElementById("progressSmall");
+    const progressLegend = document.getElementById("progressLegend");
+
+    // pre-calc circle length for the SVG path (approx for that path)
+    // We'll use circumference of circle radius ~15.9155 used in path
+    const R = 15.9155;
+    const CIRC = 2 * Math.PI * R;
+    progressFg.style.strokeDasharray = String(CIRC);
 
     // ---------- RENDER SIDEBAR ----------
     function renderSidebar() {
@@ -1506,17 +1227,28 @@
     // ---------- COMPLETION ----------
     function updateCompletionUI() {
       const completed = Object.keys(completionState).length;
-      const percent = totalSections
-        ? Math.round((completed / totalSections) * 100)
-        : 0;
-      progressBarEl.style.width = percent + "%";
-      progressTextEl.textContent = `${percent}% Complete (${completed} / ${totalSections})`;
+      const percent = totalSections ? Math.round((completed / totalSections) * 100) : 0;
+
+      // Update circular progress stroke-dashoffset
+      // dashoffset = circumference * (1 - percent/100)
+      const offset = CIRC * (1 - percent / 100);
+      // apply offset with transform animation
+      progressFg.style.strokeDashoffset = String(offset);
+
+      // change progress color based on level
+      progressFg.classList.remove("low", "medium", "high");
+      if (percent < 35) progressFg.classList.add("low");
+      else if (percent < 75) progressFg.classList.add("medium");
+      else progressFg.classList.add("high");
+
+      // update textual elements
+      progressInner.textContent = percent + "%";
+      progressSmall.textContent = `${percent}% Complete`;
+      progressLegend.textContent = `${completed} / ${totalSections} sections`;
     }
 
     function markSidebarCompleted(sectionId) {
-      const node = document.querySelector(
-        `.sub-pillar[data-section-id="${sectionId}"]`
-      );
+      const node = document.querySelector(`.sub-pillar[data-section-id="${sectionId}"]`);
       if (node) node.classList.add("completed");
     }
 
@@ -1528,9 +1260,7 @@
     const firstPillar = BRAND_STRUCTURE[0];
     if (firstPillar && firstPillar.sections[0]) {
       const firstSec = firstPillar.sections[0];
-      const node = document.querySelector(
-        `.sub-pillar[data-section-id="${firstSec.id}"]`
-      );
+      const node = document.querySelector(`.sub-pillar[data-section-id="${firstSec.id}"]`);
       if (node) node.classList.add("active");
       renderSectionForm({ pillar: firstPillar, sec: firstSec });
     }
