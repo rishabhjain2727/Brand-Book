@@ -3,141 +3,599 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LPU Brand Book – With Multi-Audience Cohorts</title>
+  <title>Brand Book Creator — Completion Card</title>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
   <style>
     :root {
-      --primary: #f37021;
+      --primary: #f37c21;
       --secondary: #c65010;
       --accent: #4361ee;
       --light: #f8f9fa;
       --dark: #212529;
-      --success: #4caf50;
+      --success: #10b981;
       --warning: #f72585;
       --gray: #6c757d;
       --light-gray: #e9ecef;
       --border-radius: 8px;
-      --shadow: 0 6px 18px rgba(0,0,0,0.06);
-      --transition: all 0.28s ease;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
     }
 
-    * { box-sizing: border-box; margin:0; padding:0; font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
-    html, body { height:100%; background:#f5f7fb; color:var(--dark); }
-    .container { display:flex; height:100vh; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden; /* keep original behaviour */
+      background-color: #f5f7fb;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh; /* full viewport */
+    }
 
     /* Sidebar */
     .sidebar {
-      width:320px; background:white; box-shadow:var(--shadow); padding:20px; overflow-y:auto; flex-shrink:0;
+      width: 320px;
+      background: white;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      overflow-y: auto; /* sidebar has its own scroll */
+      flex-shrink: 0;
     }
-    .logo { display:flex; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--light-gray); }
-    .logo i { font-size:24px; color:var(--primary); margin-right:10px; }
-    .logo h1 { font-size:20px; font-weight:700; }
 
-    .small-note { font-size:12px; color:var(--gray); margin-bottom:15px; }
-    .pillar-list { list-style:none; padding-left:0; }
-    .pillar-item { margin-bottom:6px; }
-    .pillar-header { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background-color:var(--light); border-radius:var(--border-radius); cursor:pointer; transition:var(--transition); font-weight:600; font-size:14px; }
-    .pillar-header:hover { background-color:var(--light-gray); }
-    .pillar-header.active { background-color:var(--primary); color:white; }
-    .pillar-header i { font-size:14px; transition:var(--transition); }
-    .pillar-header.active i { transform:rotate(90deg); }
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--light-gray);
+    }
 
-    .sub-pillars { list-style:none; max-height:0; overflow:hidden; transition:var(--transition); padding-left:10px; }
-    .sub-pillars.show { max-height:900px; }
+    .logo i {
+      font-size: 24px;
+      color: var(--primary);
+      margin-right: 10px;
+    }
 
-    .sub-pillar { margin:6px 0; padding:8px 12px; border-left:2px solid var(--light-gray); cursor:pointer; transition:var(--transition); font-size:13px; display:flex; flex-direction:column; gap:6px; border-radius:6px; background:transparent; }
-    .sub-pillar:hover { border-left-color:var(--accent); background:rgba(72,149,239,0.03); }
-    .sub-pillar.active { border-left-color:var(--primary); background:rgba(243,112,33,0.06); font-weight:600; }
-    .sub-pillar-main { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-    .sub-pillar-left { display:flex; align-items:center; gap:8px; }
-    .sub-pillar-summary { font-size:12px; color:var(--gray); padding-left:18px; }
+    .logo h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
 
-    .status-dot { width:8px; height:8px; border-radius:50%; background:var(--light-gray); }
-    .sub-pillar.completed .status-dot { background:var(--success); }
+    .small-note {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+
+    .pillar-list {
+      list-style: none;
+    }
+
+    .pillar-item {
+      margin-bottom: 5px;
+    }
+
+    .pillar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .pillar-header:hover {
+      background-color: var(--light-gray);
+    }
+
+    .pillar-header.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .pillar-header i {
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .pillar-header.active i {
+      transform: rotate(90deg);
+    }
+
+    .sub-pillars {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: var(--transition);
+      padding-left: 10px;
+    }
+
+    .sub-pillars.show {
+      max-height: 600px;
+    }
+
+    .sub-pillar {
+      padding: 8px 14px;
+      border-left: 2px solid var(--light-gray);
+      margin: 4px 0;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-radius: 6px;
+    }
+
+    .sub-pillar:hover {
+      border-left-color: var(--accent);
+      background-color: rgba(72, 149, 239, 0.06);
+    }
+
+    .sub-pillar.active {
+      border-left-color: var(--primary);
+      background-color: rgba(67, 97, 238, 0.08);
+      font-weight: 600;
+    }
+
+    .sub-pillar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-pillar i {
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    .sub-pillar.active i {
+      color: var(--primary);
+    }
+
+    .sub-pillar .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--light-gray);
+    }
+
+    .sub-pillar.completed .status-dot {
+      background: var(--success);
+    }
 
     /* Main content */
-    .main-content { flex:1; padding:20px 28px; overflow-y:auto; }
-    .content-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid var(--light-gray); }
-    .content-header h2 { font-size:22px; color:var(--dark); }
-    .content-sub { font-size:13px; color:var(--gray); }
-
-    .progress-container { display:flex; flex-direction:column; align-items:flex-end; gap:4px; padding:10px 14px; background:linear-gradient(135deg,#f37021,#f9a826); border-radius:10px; color:white; box-shadow:var(--shadow); min-width:260px; }
-    .progress-title { font-size:12px; text-transform:uppercase; opacity:0.9; letter-spacing:0.06em; }
-    .progress-main-num { font-size:26px; font-weight:700; line-height:1.1; }
-    .progress-bar { width:280px; height:14px; background-color:rgba(255,255,255,0.25); border-radius:14px; overflow:hidden; }
-    .progress { height:100%; background:linear-gradient(90deg,#ffffff,#d2f5dd); width:0%; border-radius:14px; transition:var(--transition); }
-    .progress-text { font-size:12px; font-weight:500; }
-
-    .form-container { background:white; border-radius:var(--border-radius); box-shadow:var(--shadow); padding:20px 22px; margin-bottom:18px; animation:fadeIn 0.3s ease; }
-    .form-header h3 { font-size:18px; color:var(--primary); margin-bottom:4px; }
-    .form-header p { font-size:13px; color:var(--gray); margin-bottom:14px; }
-
-    .form-group { margin-bottom:14px; }
-    .form-group label { display:block; margin-bottom:6px; font-weight:600; color:var(--dark); font-size:14px; }
-    .form-group .hint { font-size:12px; color:var(--gray); margin-top:4px; }
-
-    input, textarea, select { width:100%; padding:9px 11px; border:1px solid var(--light-gray); border-radius:var(--border-radius); font-size:14px; transition:var(--transition); }
-    textarea { min-height:110px; resize:vertical; }
-    input:focus, textarea:focus, select:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(72,149,239,0.12); }
-
-    .file-upload { border:2px dashed var(--light-gray); border-radius:var(--border-radius); padding:18px; text-align:center; cursor:pointer; transition:var(--transition); font-size:13px; color:var(--gray); }
-    .file-upload i { font-size:24px; margin-bottom:6px; color:var(--gray); }
-    .file-upload:hover { border-color:var(--accent); background-color:rgba(72,149,239,0.05); }
-
-    .swot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-    .swot-box { border-radius:var(--border-radius); border:1px solid var(--light-gray); padding:10px; background:var(--light); }
-    .swot-box h4 { font-size:13px; margin-bottom:6px; }
-
-    .form-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:10px; }
-    .btn { padding:9px 16px; border-radius:var(--border-radius); border:none; font-size:14px; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:6px; transition:var(--transition); }
-    .btn-primary { background:var(--primary); color:white; }
-    .btn-primary:hover { background:var(--secondary); }
-    .btn-outline { border:1px solid var(--primary); color:var(--primary); background:transparent; }
-    .btn-outline:hover { background:rgba(243,112,33,0.08); }
-
-    .empty-state { text-align:center; color:var(--gray); padding:60px 20px; }
-    .empty-state i { font-size:48px; margin-bottom:12px; color:var(--light-gray); }
-
-    /* chips */
-    .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
-    .chip-toggle { padding:6px 12px; border-radius:999px; border:1px solid var(--light-gray); background:#fff; font-size:13px; cursor:pointer; transition:var(--transition); }
-    .chip-toggle.active { background:var(--primary); color:#fff; border-color:var(--primary); }
-    .radio-row { display:flex; gap:16px; font-size:13px; margin-bottom:8px; }
-    .selected-tags { min-height:40px; padding:8px; border-radius:var(--border-radius); border:1px dashed var(--light-gray); font-size:13px; display:flex; flex-wrap:wrap; gap:6px; }
-    .tag-pill { padding:4px 10px; background:var(--light); border-radius:999px; font-size:12px; cursor:pointer; }
-
-    /* Audience-specific UI */
-    .audience-action-row { display:flex; justify-content:flex-end; margin-bottom:10px; }
-    .audience-add-btn { color:var(--accent); cursor:pointer; font-weight:600; text-decoration:none; display:inline-flex; gap:8px; align-items:center; }
-    .audience-block { border:1px solid var(--light-gray); border-radius:10px; padding:14px; margin-bottom:12px; background:#fff; position:relative; }
-    .audience-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
-    .audience-header h4 { margin:0; font-size:15px; }
-    .audience-controls { display:flex; gap:10px; align-items:center; }
-    .audience-remove { background:transparent; border:1px solid #f1a59d; color:#d6452a; padding:6px 10px; border-radius:8px; cursor:pointer; }
-    .audience-name-input input { width:260px; padding:8px 10px; }
-    .audience-error-note { color:#e55353; font-size:12px; margin-top:6px; display:none; }
-
-    .audience-section-label { font-size:13px; font-weight:600; margin:12px 0 8px; display:block; }
-    .location-row { display:flex; gap:18px; align-items:center; margin-bottom:8px; }
-    .location-input { margin-top:10px; }
-    .loc-type-box { border:1px dashed var(--light-gray); padding:12px; border-radius:8px; margin-top:8px; }
-    .detailed-targeting-input input { padding-left:34px; }
-    .detailed-targeting-input i { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--gray); }
-
-    .audience-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:12px; }
-    .btn-outline { border:1px solid var(--primary); color:var(--primary); background:transparent; }
-    .btn-primary { background:var(--primary); color:#fff; }
-
-    @media (max-width:992px) {
-      .container { flex-direction:column; }
-      .sidebar { width:100%; max-height:40vh; }
-      .swot-grid { grid-template-columns:1fr; }
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto; /* main content scrolls separately */
     }
 
-    @keyframes fadeIn { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:translateY(0);} }
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .content-header h2 {
+      font-size: 22px;
+      color: var(--dark);
+    }
+
+    .content-sub {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    /* ===== LPU-style completion card ===== */
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #f37021, #f9a826);
+      border-radius: 10px;
+      color: white;
+      box-shadow: var(--shadow);
+      min-width: 280px;
+    }
+
+    .progress-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      opacity: 0.95;
+      letter-spacing: 0.06em;
+    }
+
+    .progress-main-num {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+
+    .progress-bar {
+      width: 280px;
+      height: 14px;
+      background-color: rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #ffffff, #d2f5dd);
+      width: 0%;
+      border-radius: 14px;
+      transition: width 0.45s cubic-bezier(.2,.9,.2,1);
+    }
+
+    .progress-text {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* rest of form styles (kept from original) */
+    .form-container {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .form-header h3 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .form-group .hint {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(72, 149, 239, 0.2);
+    }
+
+    .file-upload {
+      border: 2px dashed var(--light-gray);
+      border-radius: var(--border-radius);
+      padding: 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .file-upload i {
+      font-size: 26px;
+      margin-bottom: 6px;
+      color: var(--gray);
+    }
+
+    .file-upload:hover {
+      border-color: var(--accent);
+      background-color: rgba(72, 149, 239, 0.05);
+    }
+
+    .swot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .swot-box {
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      padding: 10px;
+      background: var(--light);
+    }
+
+    .swot-box h4 {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--border-radius);
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.08);
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--gray);
+      padding: 60px 20px;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 12px;
+      color: var(--light-gray);
+    }
+
+    /* Cohort chips (Target Audience) */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .chip-toggle {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--light-gray);
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chip-toggle.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .radio-row {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .radio-row label {
+      font-weight: 400;
+    }
+
+    .selected-tags {
+      min-height: 40px;
+      padding: 8px;
+      border-radius: var(--border-radius);
+      border: 1px dashed var(--light-gray);
+      font-size: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      padding: 4px 10px;
+      background: var(--light);
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    /* NEW: Audience-specific UI */
+    .audience-action-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+    
+    .audience-add-btn {
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 14px;
+    }
+    
+    .audience-block {
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #fff;
+      position: relative;
+    }
+    
+    .audience-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .audience-header h4 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    
+    .audience-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .audience-remove {
+      background: transparent;
+      border: 1px solid #f1a59d;
+      color: #d6452a;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    
+    .audience-name-input input {
+      width: 260px;
+      padding: 8px 10px;
+    }
+    
+    .audience-error-note {
+      color: #e55353;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .audience-section-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 12px 0 8px;
+      display: block;
+    }
+    
+    .location-row {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .location-input {
+      margin-top: 10px;
+    }
+    
+    .loc-type-box {
+      border: 1px dashed var(--light-gray);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    
+    .audience-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .small-muted {
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    @media (max-width: 992px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        max-height: 40vh;
+      }
+
+      .progress-bar {
+        width: 220px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -145,12 +603,12 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="logo">
-        <i class="fas fa-graduation-cap"></i>
-        <h1>LPU Brand Book</h1>
+        <i class="fas fa-book"></i>
+        <h1>Brand Book Creator</h1>
       </div>
       <p class="small-note">
-        All pillars & sub-pillars are present and marked as completed for this
-        LPU brand book.
+        Click a pillar → choose a sub-pillar → fill the section. Saved sections
+        update the completion graph.
       </p>
       <ul class="pillar-list" id="pillarList"></ul>
     </div>
@@ -159,63 +617,658 @@
     <div class="main-content">
       <div class="content-header">
         <div>
-          <h2 id="sectionTitle">Brand History</h2>
-          <p id="sectionSubtitle" class="content-sub">Brand Overview</p>
+          <h2 id="sectionTitle">Select a section</h2>
+          <p id="sectionSubtitle" class="content-sub">
+            Start by choosing a pillar and sub-pillar from the left.
+          </p>
         </div>
-        <div class="progress-container">
+
+        <!-- LPU-style completion card -->
+        <div class="progress-container" aria-hidden="false" id="completionCard">
           <div class="progress-title">Brand Book Completion</div>
           <div class="progress-main-num" id="progressPercent">0%</div>
           <div class="progress-bar">
             <div class="progress" id="progressBar"></div>
           </div>
-          <span class="progress-text" id="progressText"></span>
+          <span class="progress-text" id="progressText">0% Complete (0 / 0)</span>
         </div>
       </div>
 
-      <div id="formRoot"></div>
+      <div id="formRoot">
+        <div class="form-container">
+          <div class="empty-state">
+            <i class="fas fa-folder-open"></i>
+            <h3>No section selected</h3>
+            <p>
+              Pick any sub-pillar from the sidebar to start editing your brand
+              book.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    // -------- CONFIG FOR LPU BRAND --------
+    // -------- CONFIG: ALL PILLARS & SUB-PILLARS (unchanged) --------
     // type: 'short', 'long', 'upload', 'swot', 'color', 'table', 'cohort'
     const BRAND_STRUCTURE = [
       {
         id: "brand-overview",
         label: "Brand Overview",
         sections: [
-          { id: "brand-history", label: "Brand History", type: "long", hint: "Capture how LPU started and evolved over time.", content: `Lovely Professional University (LPU) began...` },
-          { id: "brand-purpose", label: "Brand Purpose", type: "long", hint: "Why does the LPU brand exist beyond profit?", content: `LPU exists to transform education...` },
-          { id: "company-snapshot", label: "Company Snapshot", type: "long", hint: "Quick facts and current status of LPU.", content: `• Type: Private state university...` }
+          {
+            id: "brand-history",
+            label: "Brand History",
+            type: "long",
+            hint: "Timeline or story of how the brand evolved over time."
+          },
+          {
+            id: "brand-purpose",
+            label: "Brand Purpose",
+            type: "short",
+            hint: "One clear line on why the brand exists beyond profit."
+          },
+          {
+            id: "company-snapshot",
+            label: "Company Snapshot",
+            type: "table",
+            hint: "Current overview: size, locations, key facts."
+          }
         ]
       },
-      // ... (rest of structure is same as before, for brevity include essential blocks)
+      {
+        id: "mission-vision",
+        label: "Mission & Vision",
+        sections: [
+          {
+            id: "vision-statement",
+            label: "Vision Statement",
+            type: "long",
+            hint: "Future state you want to create."
+          },
+          {
+            id: "purpose-summary",
+            label: "Purpose Summary",
+            type: "short"
+          },
+          {
+            id: "strategic-objectives",
+            label: "Strategic Objectives",
+            type: "table",
+            hint: "List 3–5 key objectives."
+          },
+          {
+            id: "long-term-aspirations",
+            label: "Long-term Aspirations",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "core-values",
+        label: "Core Values",
+        sections: [
+          {
+            id: "behavioral-examples",
+            label: "Behavioral Examples",
+            type: "long"
+          },
+          {
+            id: "values-in-action",
+            label: "Values in Action",
+            type: "long"
+          },
+          {
+            id: "internal-vs-external",
+            label: "Internal vs External Application",
+            type: "table"
+          }
+        ]
+      },
+      {
+        id: "brand-positioning",
+        label: "Brand Positioning",
+        sections: [
+          { id: "brand-promise", label: "Brand Promise", type: "short" },
+          {
+            id: "value-proposition",
+            label: "Value Proposition",
+            type: "long"
+          },
+          { id: "usp", label: "USP", type: "long" },
+          {
+            id: "perception-mapping",
+            label: "Perception Mapping",
+            type: "long",
+            hint: "Describe axes & where you/competitors sit."
+          }
+        ]
+      },
+      {
+        id: "brand-architecture",
+        label: "Brand Architecture",
+        sections: [
+          {
+            id: "product-hierarchy",
+            label: "Product/Service Hierarchy",
+            type: "table"
+          },
+          {
+            id: "naming-conventions",
+            label: "Naming Conventions",
+            type: "long"
+          },
+          {
+            id: "brand-relationship-models",
+            label: "Brand Relationship Models",
+            type: "long"
+          },
+          {
+            id: "brand-evolution",
+            label: "Brand Evolution",
+            type: "long"
+          }
+        ]
+      },
       {
         id: "target-audience",
         label: "Target Audience",
         sections: [
-          { id: "demographics", label: "Demographics (Cohorts)", type: "cohort", hint: "Age, gender, income and basic profile cohorts for LPU." },
-          { id: "psychographics", label: "Psychographics", type: "long", hint: "Mindset, motivations and attitudes of LPU students." },
-          { id: "pain-points", label: "Pain Points", type: "long", hint: "Key challenges and concerns of prospects and parents." },
-          { id: "buyer-journey-map", label: "Buyer Journey Map", type: "long", hint: "End-to-end journey from awareness to onboarding." }
+          {
+            id: "demographics",
+            label: "Demographics",
+            type: "cohort", // special cohort UI
+            hint: "Define age, gender, income and location cohorts."
+          },
+          {
+            id: "psychographics",
+            label: "Psychographics",
+            type: "long"
+          },
+          { id: "pain-points", label: "Pain Points", type: "long" },
+          {
+            id: "buyer-journey-map",
+            label: "Buyer Journey Map",
+            type: "long"
+          }
         ]
       },
       {
         id: "competitive-landscape",
         label: "Competitive Landscape",
         sections: [
-          { id: "market-position-map", label: "Market Position Map", type: "upload", hint: "Visual map of LPU vs competitors on key axes." },
-          { id: "swot-analysis", label: "SWOT Analysis", type: "swot", hint: "Strengths, weaknesses, opportunities, threats for LPU." },
-          { id: "industry-benchmarks", label: "Industry Benchmarks", type: "table", hint: "Metrics to compare LPU with peer institutions." }
+          {
+            id: "market-position-map",
+            label: "Market Position Map",
+            type: "upload"
+          },
+          {
+            id: "swot-analysis",
+            label: "SWOT Analysis",
+            type: "swot"
+          },
+          {
+            id: "differentiation-factors",
+            label: "Differentiation Factors",
+            type: "long"
+          },
+          {
+            id: "industry-benchmarks",
+            label: "Industry Benchmarks",
+            type: "table"
+          }
+        ]
+      },
+      {
+        id: "brand-personality",
+        label: "Brand Personality",
+        sections: [
+          {
+            id: "brand-archetype",
+            label: "Brand Archetype",
+            type: "short"
+          },
+          {
+            id: "voice-attributes",
+            label: "Voice Attributes",
+            type: "long"
+          },
+          {
+            id: "emotional-associations",
+            label: "Emotional Associations",
+            type: "long"
+          },
+          {
+            id: "personality-in-action",
+            label: "Personality in Action",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "tone-of-voice",
+        label: "Tone of Voice",
+        sections: [
+          { id: "dos-donts", label: "Do's & Don'ts", type: "table" },
+          {
+            id: "communication-styles",
+            label: "Communication Styles",
+            type: "long"
+          },
+          {
+            id: "medium-examples",
+            label: "Medium-based Examples",
+            type: "long"
+          },
+          {
+            id: "crisis-tone",
+            label: "Crisis Tone Guidelines",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "messaging-pillars",
+        label: "Messaging Pillars",
+        sections: [
+          {
+            id: "messaging-framework",
+            label: "Messaging Framework",
+            type: "table"
+          },
+          {
+            id: "taglines-slogans",
+            label: "Taglines & Slogans",
+            type: "long"
+          },
+          {
+            id: "elevator-pitch",
+            label: "Elevator Pitch",
+            type: "short"
+          },
+          {
+            id: "copy-style-guide",
+            label: "Copywriting Style Guide",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "logo-guidelines",
+        label: "Logo Guidelines",
+        sections: [
+          { id: "logo-variants", label: "Logo Variants", type: "upload" },
+          {
+            id: "clear-space-sizing",
+            label: "Clear Space & Sizing",
+            type: "long"
+          },
+          {
+            id: "incorrect-usage",
+            label: "Incorrect Usage",
+            type: "upload"
+          },
+          {
+            id: "logo-downloads",
+            label: "Logo File Downloads",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "brand-colors",
+        label: "Brand Colors",
+        sections: [
+          {
+            id: "secondary-colors",
+            label: "Secondary Colors",
+            type: "color"
+          },
+          {
+            id: "color-codes",
+            label: "Color Codes (HEX, RGB, CMYK, Pantone)",
+            type: "table"
+          },
+          {
+            id: "color-usage-guidelines",
+            label: "Usage Guidelines",
+            type: "long"
+          },
+          {
+            id: "accessibility-compliance",
+            label: "Accessibility Compliance",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "typography",
+        label: "Typography",
+        sections: [
+          {
+            id: "supporting-fonts",
+            label: "Supporting Fonts",
+            type: "upload"
+          },
+          {
+            id: "font-hierarchy",
+            label: "Font Hierarchy",
+            type: "table"
+          },
+          {
+            id: "web-print-rules",
+            label: "Web & Print Rules",
+            type: "long"
+          },
+          {
+            id: "line-height-kerning",
+            label: "Line Height & Kerning",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "imagery-style",
+        label: "Imagery Style",
+        sections: [
+          {
+            id: "filters-treatments",
+            label: "Filters & Treatments",
+            type: "long"
+          },
+          {
+            id: "composition",
+            label: "Composition",
+            type: "long"
+          },
+          {
+            id: "subject-guidelines",
+            label: "Subject Guidelines",
+            type: "long"
+          },
+          {
+            id: "image-dos-donts",
+            label: "Image Do's & Don'ts",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "iconography",
+        label: "Iconography",
+        sections: [
+          {
+            id: "grid-spacing-rules",
+            label: "Grid/Spacing Rules",
+            type: "long"
+          },
+          {
+            id: "icon-color-usage",
+            label: "Icon Color Usage",
+            type: "color"
+          },
+          { id: "icon-dos-donts", label: "Do's & Don'ts", type: "upload" },
+          {
+            id: "icon-download-pack",
+            label: "Download Pack",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "graphic-elements",
+        label: "Graphic Elements",
+        sections: [
+          {
+            id: "decorative-shapes",
+            label: "Decorative Shapes",
+            type: "upload"
+          },
+          {
+            id: "illustrations",
+            label: "Illustrations",
+            type: "upload"
+          },
+          {
+            id: "backgrounds",
+            label: "Backgrounds",
+            type: "upload"
+          },
+          {
+            id: "layering-rules",
+            label: "Layering Rules",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "motion-guidelines",
+        label: "Motion Guidelines",
+        sections: [
+          {
+            id: "motion-timing-easing",
+            label: "Motion Timing/Easing",
+            type: "long"
+          },
+          { id: "motion-use-cases", label: "Use Cases", type: "long" },
+          {
+            id: "inappropriate-motion",
+            label: "Inappropriate Motion",
+            type: "long"
+          },
+          {
+            id: "export-specs",
+            label: "Export Specs",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "ui-components",
+        label: "UI Components",
+        sections: [
+          { id: "inputs", label: "Inputs", type: "long" },
+          { id: "cards", label: "Cards", type: "long" },
+          { id: "navigation", label: "Navigation", type: "long" },
+          {
+            id: "interactive-states",
+            label: "Interactive States",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "packaging-guidelines",
+        label: "Packaging Guidelines",
+        sections: [
+          { id: "label-design", label: "Label Design", type: "upload" },
+          {
+            id: "barcoding-legal",
+            label: "Barcoding & Legal Info",
+            type: "long"
+          },
+          {
+            id: "unboxing-experience",
+            label: "Unboxing Experience",
+            type: "long"
+          },
+          {
+            id: "sustainability-standards",
+            label: "Sustainability Standards",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "signage-print",
+        label: "Signage & Print",
+        sections: [
+          {
+            id: "outdoor-signage",
+            label: "Outdoor Signage",
+            type: "upload"
+          },
+          {
+            id: "retail-displays",
+            label: "Retail Displays",
+            type: "upload"
+          },
+          { id: "print-sizes", label: "Print Sizes", type: "table" },
+          {
+            id: "exhibition-booth",
+            label: "Exhibition Booth Branding",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "templates-assets",
+        label: "Templates & Assets",
+        sections: [
+          {
+            id: "business-cards",
+            label: "Business Cards",
+            type: "upload"
+          },
+          {
+            id: "letterhead-design",
+            label: "Letterhead Design",
+            type: "upload"
+          },
+          {
+            id: "email-signatures",
+            label: "Email Signatures",
+            type: "long"
+          },
+          {
+            id: "social-media-kits",
+            label: "Social Media Kits",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "usage-dos-donts",
+        label: "Usage Do's & Don'ts",
+        sections: [
+          {
+            id: "color-misuse",
+            label: "Color Misuse",
+            type: "upload"
+          },
+          {
+            id: "typography-errors",
+            label: "Typography Errors",
+            type: "upload"
+          },
+          {
+            id: "messaging-misalignment",
+            label: "Messaging Misalignment",
+            type: "long"
+          },
+          {
+            id: "visual-mistakes",
+            label: "Visual Mistakes",
+            type: "upload"
+          }
+        ]
+      },
+      {
+        id: "co-branding-rules",
+        label: "Co-Branding Rules",
+        sections: [
+          { id: "co-brand-hierarchy", label: "Brand Hierarchy", type: "long" },
+          {
+            id: "co-brand-campaign-examples",
+            label: "Campaign Examples",
+            type: "upload"
+          },
+          {
+            id: "co-brand-dos-donts",
+            label: "Do's & Don'ts",
+            type: "long"
+          },
+          {
+            id: "co-brand-terms",
+            label: "Co-brand Terms & Guidelines",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "legal-trademarks",
+        label: "Legal & Trademarks",
+        sections: [
+          {
+            id: "copyright-claims",
+            label: "Copyright Claims",
+            type: "long"
+          },
+          {
+            id: "licensing-terms",
+            label: "Licensing Terms",
+            type: "long"
+          },
+          { id: "disclaimers", label: "Disclaimers", type: "long" },
+          {
+            id: "brand-abuse-reporting",
+            label: "Brand Abuse Reporting",
+            type: "short"
+          }
+        ]
+      },
+      {
+        id: "industry-custom",
+        label: "Industry Custom Modules",
+        sections: [
+          {
+            id: "fashion-lookbooks",
+            label: "Fashion: Fabric Visuals, Lookbooks",
+            type: "upload"
+          },
+          {
+            id: "food-label-regs",
+            label: "Food: Label Regulations",
+            type: "long"
+          },
+          {
+            id: "finance-disclosures",
+            label: "Finance: Legal Disclosures",
+            type: "long"
+          }
+        ]
+      },
+      {
+        id: "accessibility-standards",
+        label: "Accessibility Standards",
+        sections: [
+          {
+            id: "font-readability",
+            label: "Font Readability",
+            type: "long"
+          },
+          { id: "alt-text-rules", label: "Alt Text Rules", type: "long" },
+          {
+            id: "screen-reader-labels",
+            label: "Screen Reader Labels",
+            type: "long"
+          },
+          {
+            id: "wcag-ada-guidelines",
+            label: "WCAG/ADA Guidelines",
+            type: "long"
+          }
         ]
       }
-      // (You can add more pillars/sections as in your original file)
     ];
 
     // ---------- STATE ----------
-    const completionState = {};
-    BRAND_STRUCTURE.forEach(p => p.sections.forEach(sec => { completionState[sec.id] = true; }));
-    const totalSections = BRAND_STRUCTURE.reduce((sum, p) => sum + p.sections.length, 0);
+    const completionState = {}; // { sectionId: true }
+    const totalSections = BRAND_STRUCTURE.reduce(
+      (sum, p) => sum + p.sections.length,
+      0
+    );
 
     // ---------- DOM REFS ----------
     const pillarListEl = document.getElementById("pillarList");
@@ -226,38 +1279,44 @@
     const progressTextEl = document.getElementById("progressText");
     const progressPercentEl = document.getElementById("progressPercent");
 
-    // ---------- SIDEBAR RENDER ----------
+    // ---------- RENDER SIDEBAR ----------
     function renderSidebar() {
       pillarListEl.innerHTML = "";
       BRAND_STRUCTURE.forEach((pillar, idx) => {
-        const li = document.createElement("li"); li.className = "pillar-item";
+        const li = document.createElement("li");
+        li.className = "pillar-item";
+
         const header = document.createElement("div");
         header.className = "pillar-header" + (idx === 0 ? " active" : "");
         header.dataset.pillarId = pillar.id;
-        header.innerHTML = `<span>${pillar.label}</span><i class="fas fa-chevron-right"></i>`;
+        header.innerHTML = `
+          <span>${pillar.label}</span>
+          <i class="fas fa-chevron-right"></i>
+        `;
+
         const subList = document.createElement("ul");
         subList.className = "sub-pillars" + (idx === 0 ? " show" : "");
         pillar.sections.forEach((sec, sIdx) => {
           const subLi = document.createElement("li");
-          subLi.className = "sub-pillar" + (idx === 0 && sIdx === 0 ? " active completed" : " completed");
+          subLi.className =
+            "sub-pillar" +
+            (idx === 0 && sIdx === 0 ? " active" : "");
           subLi.dataset.sectionId = sec.id;
-          const summaryText = sec.hint || "Click to edit details for this section.";
           subLi.innerHTML = `
-            <div class="sub-pillar-main">
-              <div class="sub-pillar-left">
-                <i class="fas fa-circle-notch"></i>
-                <span>${sec.label}</span>
-              </div>
-              <span class="status-dot"></span>
+            <div class="sub-pillar-left">
+              <i class="fas fa-circle-notch"></i>
+              <span>${sec.label}</span>
             </div>
-            <div class="sub-pillar-summary">${summaryText}</div>
+            <span class="status-dot"></span>
           `;
           subList.appendChild(subLi);
         });
-        li.appendChild(header); li.appendChild(subList); pillarListEl.appendChild(li);
+
+        li.appendChild(header);
+        li.appendChild(subList);
+        pillarListEl.appendChild(li);
       });
 
-      document.querySelectorAll(".sub-pillar.completed .status-dot").forEach(dot => dot.style.background = "var(--success)");
       bindSidebarEvents();
     }
 
@@ -265,7 +1324,10 @@
       document.querySelectorAll(".pillar-header").forEach((header) => {
         header.addEventListener("click", () => {
           document.querySelectorAll(".pillar-header").forEach((h) => {
-            if (h !== header) { h.classList.remove("active"); h.nextElementSibling.classList.remove("show"); }
+            if (h !== header) {
+              h.classList.remove("active");
+              h.nextElementSibling.classList.remove("show");
+            }
           });
           header.classList.toggle("active");
           header.nextElementSibling.classList.toggle("show");
@@ -275,10 +1337,12 @@
       document.querySelectorAll(".sub-pillar").forEach((sub) => {
         sub.addEventListener("click", () => {
           const sectionId = sub.dataset.sectionId;
-          document.querySelectorAll(".sub-pillar").forEach((s) => s.classList.remove("active"));
+          document
+            .querySelectorAll(".sub-pillar")
+            .forEach((s) => s.classList.remove("active"));
           sub.classList.add("active");
           const section = findSectionById(sectionId);
-          if (section) renderSectionForm(section);
+          renderSectionForm(section);
         });
       });
     }
@@ -302,20 +1366,37 @@
 
       const header = document.createElement("div");
       header.className = "form-header";
-      header.innerHTML = `<h3>${sec.label}</h3><p>${sec.hint || "Edit the pre-filled LPU content for this section if needed."}</p>`;
+      header.innerHTML = `
+        <h3>${sec.label}</h3>
+        <p>${sec.hint || "Fill the content for this brand book section."}</p>
+      `;
       container.appendChild(header);
 
       const formBody = document.createElement("div");
 
       switch (sec.type) {
-        case "short": formBody.appendChild(makeShortField(sec)); break;
-        case "upload": formBody.appendChild(makeUploadField()); break;
-        case "table": formBody.appendChild(makeTableField(sec)); break;
-        case "swot": formBody.appendChild(makeSwotField()); break;
-        case "color": formBody.appendChild(makeColorField()); break;
-        case "cohort": formBody.appendChild(makeCohortField()); break;
+        case "short":
+          formBody.appendChild(makeShortField(sec));
+          break;
+        case "upload":
+          formBody.appendChild(makeUploadField());
+          break;
+        case "table":
+          formBody.appendChild(makeTableField());
+          break;
+        case "swot":
+          formBody.appendChild(makeSwotField());
+          break;
+        case "color":
+          formBody.appendChild(makeColorField());
+          break;
+        case "cohort":
+          formBody.appendChild(makeCohortField());
+          break;
         case "long":
-        default: formBody.appendChild(makeLongField(sec)); break;
+        default:
+          formBody.appendChild(makeLongField(sec));
+          break;
       }
 
       container.appendChild(formBody);
@@ -323,8 +1404,12 @@
       const actions = document.createElement("div");
       actions.className = "form-actions";
       actions.innerHTML = `
-        <button class="btn btn-outline" type="button"><i class="fas fa-rotate-left"></i> Reset</button>
-        <button class="btn btn-primary" type="button">Save Section <i class="fas fa-check"></i></button>
+        <button class="btn btn-outline" type="button">
+          <i class="fas fa-rotate-left"></i> Reset
+        </button>
+        <button class="btn btn-primary" type="button">
+          Save Section <i class="fas fa-check"></i>
+        </button>
       `;
       const [resetBtn, saveBtn] = actions.querySelectorAll("button");
 
@@ -334,7 +1419,9 @@
           if (el.type === "radio") return;
           el.value = "";
         });
-        container.querySelectorAll(".chip-toggle").forEach((c) => c.classList.remove("active"));
+        container
+          .querySelectorAll(".chip-toggle")
+          .forEach((c) => c.classList.remove("active"));
       });
 
       saveBtn.addEventListener("click", () => {
@@ -344,10 +1431,11 @@
       });
 
       container.appendChild(actions);
+
       formRoot.innerHTML = "";
       formRoot.appendChild(container);
 
-      // attach global click handling for chip-toggle behavior in any section
+      // enable chip toggle behavior in cohort sections
       container.addEventListener("click", (e) => {
         if (e.target.classList.contains("chip-toggle")) {
           e.target.classList.toggle("active");
@@ -362,82 +1450,124 @@
 
     // ---------- FIELD BUILDERS ----------
     function makeShortField(sec) {
-      const wrapper = document.createElement("div"); wrapper.className = "form-group";
-      wrapper.innerHTML = `<label>${sec.label}</label><input type="text" value="${sec.content || ""}" />`; return wrapper;
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>${sec.label}</label>
+        <input type="text" placeholder="Write a concise line here..." />
+      `;
+      return wrapper;
     }
 
     function makeLongField(sec) {
-      const wrapper = document.createElement("div"); wrapper.className = "form-group";
-      const content = sec.content || "";
-      wrapper.innerHTML = `<label>${sec.label}</label><textarea>${content}</textarea><div class="hint">Pre-filled for LPU – you can edit this text.</div>`;
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>${sec.label}</label>
+        <textarea placeholder="Write detailed content for this section..."></textarea>
+        <div class="hint">Use paragraphs or bullet points as needed.</div>
+      `;
       return wrapper;
     }
 
     function makeUploadField() {
-      const wrapper = document.createElement("div"); wrapper.className = "form-group";
-      wrapper.innerHTML = `<label>Upload Asset (Placeholder)</label><div class="file-upload"><i class="fas fa-cloud-upload-alt"></i><p>Click to simulate uploading an image/file</p></div><div class="hint">Replace with a real file input when you integrate the backend.</div>`;
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>Upload Asset</label>
+        <div class="file-upload">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Click to simulate uploading an image/file</p>
+        </div>
+        <div class="hint">In a real app this would open the file picker.</div>
+      `;
       wrapper.querySelector(".file-upload").addEventListener("click", (e) => {
-        e.currentTarget.innerHTML = '<i class="fas fa-check-circle"></i><p>File uploaded (demo)</p>';
-        e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.backgroundColor = "rgba(72,149,239,0.08)";
+        e.currentTarget.innerHTML =
+          '<i class="fas fa-check-circle"></i><p>File uploaded (demo)</p>';
+        e.currentTarget.style.borderColor = "var(--accent)";
+        e.currentTarget.style.backgroundColor = "rgba(72,149,239,0.08)";
       });
       return wrapper;
     }
 
-    function makeTableField(sec) {
-      const wrapper = document.createElement("div"); wrapper.className = "form-group";
-      wrapper.innerHTML = `<label>${sec.label}</label><div class="swot-grid"><div class="swot-box"><h4>Item 1</h4><textarea placeholder="Describe item 1"></textarea></div><div class="swot-box"><h4>Item 2</h4><textarea placeholder="Describe item 2"></textarea></div><div class="swot-box"><h4>Item 3</h4><textarea placeholder="Describe item 3"></textarea></div><div class="swot-box"><h4>Item 4</h4><textarea placeholder="Describe item 4"></textarea></div></div><div class="hint">${sec.content || ""}</div>`;
+    function makeTableField() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>Structured List</label>
+        <div class="swot-grid">
+          <div class="swot-box">
+            <h4>Item 1</h4>
+            <textarea placeholder="Describe item 1"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 2</h4>
+            <textarea placeholder="Describe item 2"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 3</h4>
+            <textarea placeholder="Describe item 3"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Item 4</h4>
+            <textarea placeholder="Describe item 4"></textarea>
+          </div>
+        </div>
+      `;
       return wrapper;
     }
 
     function makeSwotField() {
-      const wrapper = document.createElement("div"); wrapper.className = "form-group";
-      wrapper.innerHTML = `<label>SWOT Analysis</label><div class="swot-grid"><div class="swot-box"><h4>Strengths</h4><textarea placeholder="Internal positive attributes of LPU"></textarea></div><div class="swot-box"><h4>Weaknesses</h4><textarea placeholder="Internal challenges or gaps"></textarea></div><div class="swot-box"><h4>Opportunities</h4><textarea placeholder="External trends or opportunities"></textarea></div><div class="swot-box"><h4>Threats</h4><textarea placeholder="External risks or competition"></textarea></div></div>`;
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>SWOT Analysis</label>
+        <div class="swot-grid">
+          <div class="swot-box">
+            <h4>Strengths</h4>
+            <textarea placeholder="Internal positive attributes"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Weaknesses</h4>
+            <textarea placeholder="Internal negative attributes"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Opportunities</h4>
+            <textarea placeholder="External positive factors"></textarea>
+          </div>
+          <div class="swot-box">
+            <h4>Threats</h4>
+            <textarea placeholder="External negative factors"></textarea>
+          </div>
+        </div>
+      `;
       return wrapper;
     }
 
     function makeColorField() {
-      const wrapper = document.createElement("div"); wrapper.className = "form-group";
-      wrapper.innerHTML = `<label>Primary / Secondary Color (Demo)</label><input type="color" value="#F37021" /><div class="hint">Approximate LPU orange – confirm exact values with official brand team.</div>`;
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-group";
+      wrapper.innerHTML = `
+        <label>Primary Color</label>
+        <input type="color" value="#4361ee" />
+        <div class="hint">Pick your brand secondary or accent color.</div>
+      `;
       return wrapper;
     }
 
-    // ---- REPLACED COHORT FIELD ----
-    // This returns a container; the cohort builder is initialized in initCohortBuilder()
+    // ----- UPDATED COHORT FIELD -----
     function makeCohortField() {
       const wrapper = document.createElement("div");
       wrapper.className = "form-group";
       wrapper.innerHTML = `
         <label>Demographics (Cohorts)</label>
-        <div class="hint">Define age, gender, income and basic profile cohorts for LPU. Use multiple audiences if needed.</div>
+        <div class="hint">Define age, gender, income and basic profile cohorts. Use multiple audiences if needed.</div>
         <div id="cohortRoot" style="margin-top:12px;"></div>
       `;
       return wrapper;
     }
 
-    // ---------- COMPLETION ----------
-    function updateCompletionUI() {
-      const completed = Object.keys(completionState).length;
-      const percent = 100; // fixed at 100% because everything is pre-completed in this demo
-      progressBarEl.style.width = percent + "%";
-      progressTextEl.textContent = `${percent}% Complete (${completed} / ${totalSections} sections)`;
-      progressPercentEl.textContent = `${percent}%`;
-    }
-
-    function markSidebarCompleted(sectionId) {
-      const node = document.querySelector(`.sub-pillar[data-section-id="${sectionId}"]`);
-      if (node) node.classList.add("completed");
-    }
-
-    // ---------- INIT ----------
-    renderSidebar();
-    updateCompletionUI();
-    // open first section (Brand History) by default
-    const firstPillar = BRAND_STRUCTURE[0];
-    const firstSec = firstPillar.sections[0];
-    renderSectionForm({ pillar: firstPillar, sec: firstSec });
-
     // ---------- COHORT BUILDER IMPLEMENTATION ----------
-    // initCohortBuilder(container) will render the multi-audience UI inside the given container element
     function initCohortBuilder(container) {
       const cohortRoot = container.querySelector('#cohortRoot');
       if (!cohortRoot) return;
@@ -675,6 +1805,37 @@
 
     } // end initCohortBuilder
 
+    // ---------- COMPLETION ----------
+
+    function updateCompletionUI() {
+      const completed = Object.keys(completionState).length;
+      const percent = totalSections ? Math.round((completed / totalSections) * 100) : 0;
+      progressBarEl.style.width = percent + "%";
+      progressPercentEl.textContent = `${percent}%`;
+      progressTextEl.textContent = `${percent}% Complete (${completed} / ${totalSections})`;
+    }
+
+    function markSidebarCompleted(sectionId) {
+      const node = document.querySelector(
+        `.sub-pillar[data-section-id="${sectionId}"]`
+      );
+      if (node) node.classList.add("completed");
+    }
+
+    // ---------- INIT ----------
+    renderSidebar();
+    updateCompletionUI();
+
+    // open first section by default (Brand History)
+    const firstPillar = BRAND_STRUCTURE[0];
+    if (firstPillar && firstPillar.sections[0]) {
+      const firstSec = firstPillar.sections[0];
+      const node = document.querySelector(
+        `.sub-pillar[data-section-id="${firstSec.id}"]`
+      );
+      if (node) node.classList.add("active");
+      renderSectionForm({ pillar: firstPillar, sec: firstSec });
+    }
   </script>
 </body>
 </html>
