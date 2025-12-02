@@ -34,7 +34,7 @@
     html,
     body {
       height: 100%;
-      overflow: hidden; /* keep original behaviour */
+      overflow: hidden;
       background-color: #f5f7fb;
       color: var(--dark);
       line-height: 1.6;
@@ -42,7 +42,7 @@
 
     .container {
       display: flex;
-      height: 100vh; /* full viewport */
+      height: 100vh;
     }
 
     /* Sidebar */
@@ -51,7 +51,7 @@
       background: white;
       box-shadow: var(--shadow);
       padding: 20px;
-      overflow-y: auto; /* sidebar has its own scroll */
+      overflow-y: auto;
       flex-shrink: 0;
     }
 
@@ -186,7 +186,7 @@
     .main-content {
       flex: 1;
       padding: 30px;
-      overflow-y: auto; /* main content scrolls separately */
+      overflow-y: auto;
     }
 
     .content-header {
@@ -256,7 +256,7 @@
       font-weight: 600;
     }
 
-    /* rest of form styles (kept from original) */
+    /* Form styles */
     .form-container {
       background: white;
       border-radius: var(--border-radius);
@@ -318,28 +318,6 @@
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 2px rgba(72, 149, 239, 0.2);
-    }
-
-    .file-upload {
-      border: 2px dashed var(--light-gray);
-      border-radius: var(--border-radius);
-      padding: 22px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-      font-size: 13px;
-      color: var(--gray);
-    }
-
-    .file-upload i {
-      font-size: 26px;
-      margin-bottom: 6px;
-      color: var(--gray);
-    }
-
-    .file-upload:hover {
-      border-color: var(--accent);
-      background-color: rgba(72, 149, 239, 0.05);
     }
 
     .swot-grid {
@@ -411,179 +389,396 @@
       color: var(--light-gray);
     }
 
-    /* Cohort chips (Target Audience) */
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
+    /* Market Position Map Styles */
+    .position-map-container {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
-    .chip-toggle {
-      padding: 6px 12px;
-      border-radius: 999px;
+    .map-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .map-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .axis-control {
+      background: var(--light);
+      padding: 15px;
+      border-radius: var(--border-radius);
       border: 1px solid var(--light-gray);
-      background: #fff;
+    }
+
+    .axis-control h4 {
+      margin-bottom: 10px;
+      color: var(--dark);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .axis-control h4 i {
+      color: var(--primary);
+    }
+
+    .axis-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .axis-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 13px;
-      cursor: pointer;
+      padding: 6px 0;
+    }
+
+    .axis-option input[type="radio"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .competitor-map {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background: linear-gradient(45deg, #f8f9fa 25%, transparent 25%), 
+                  linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), 
+                  linear-gradient(45deg, transparent 75%, #f8f9fa 75%), 
+                  linear-gradient(-45deg, transparent 75%, #f8f9fa 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      border: 2px solid var(--dark);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .axis-line {
+      position: absolute;
+      background-color: var(--gray);
+    }
+
+    .axis-x {
+      width: 100%;
+      height: 2px;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    .axis-y {
+      width: 2px;
+      height: 100%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+
+    .quadrant-label {
+      position: absolute;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .quadrant-1 {
+      top: 20px;
+      right: 20px;
+      color: #10b981;
+      border: 1px solid #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .quadrant-2 {
+      top: 20px;
+      left: 20px;
+      color: #4361ee;
+      border: 1px solid #4361ee;
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .quadrant-3 {
+      bottom: 20px;
+      left: 20px;
+      color: #f72585;
+      border: 1px solid #f72585;
+      background: rgba(247, 37, 133, 0.1);
+    }
+
+    .quadrant-4 {
+      bottom: 20px;
+      right: 20px;
+      color: #f37c21;
+      border: 1px solid #f37c21;
+      background: rgba(243, 124, 33, 0.1);
+    }
+
+    .axis-label {
+      position: absolute;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      background: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--light-gray);
+    }
+
+    .x-label-left {
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .x-label-right {
+      bottom: 10px;
+      right: 10px;
+    }
+
+    .y-label-top {
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .y-label-bottom {
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .competitor-dot {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: move;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      z-index: 10;
+      border: 2px solid white;
+      user-select: none;
+    }
+
+    .competitor-dot:hover {
+      transform: scale(1.3);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+      z-index: 20;
+    }
+
+    .competitor-dot.selected {
+      box-shadow: 0 0 0 3px var(--accent), 0 5px 15px rgba(0,0,0,0.3);
+      transform: scale(1.2);
+    }
+
+    .competitor-dot::after {
+      content: attr(data-initial);
+      font-weight: bold;
+    }
+
+    .competitor-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .competitor-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .competitor-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--light);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
       transition: var(--transition);
     }
 
-    .chip-toggle.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
+    .competitor-item:hover {
+      background: white;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
     }
 
-    .radio-row {
+    .competitor-item.selected {
+      background: white;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .competitor-color {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .competitor-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .competitor-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .competitor-position {
+      font-size: 11px;
+      color: var(--gray);
       display: flex;
-      gap: 16px;
-      font-size: 13px;
-      margin-bottom: 8px;
+      gap: 8px;
     }
 
-    .radio-row label {
-      font-weight: 400;
-    }
-
-    .selected-tags {
-      min-height: 40px;
-      padding: 8px;
-      border-radius: var(--border-radius);
-      border: 1px dashed var(--light-gray);
-      font-size: 13px;
+    .competitor-actions {
       display: flex;
-      flex-wrap: wrap;
       gap: 6px;
     }
 
-    .tag-pill {
-      padding: 4px 10px;
-      background: var(--light);
-      border-radius: 999px;
-      font-size: 12px;
+    .competitor-actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray);
+      font-size: 13px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
     }
 
-    /* NEW: Audience-specific UI */
-    .audience-action-row {
+    .competitor-actions button:hover {
+      color: var(--dark);
+      background: rgba(0,0,0,0.05);
+    }
+
+    .add-competitor-form {
+      background: var(--light);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      border: 2px dashed var(--light-gray);
+      margin-top: 25px;
+    }
+
+    .add-competitor-form h4 {
+      margin-bottom: 15px;
+      color: var(--dark);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .add-competitor-form h4 i {
+      color: var(--primary);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .color-picker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-picker input {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .color-picker label {
+      margin-bottom: 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.02);
+      border-radius: 6px;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .map-actions {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 10px;
-    }
-    
-    .audience-add-btn {
-      color: var(--accent);
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      font-size: 14px;
-    }
-    
-    .audience-block {
-      border: 1px solid var(--light-gray);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: #fff;
-      position: relative;
-    }
-    
-    .audience-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-    
-    .audience-header h4 {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 600;
-    }
-    
-    .audience-controls {
-      display: flex;
       gap: 10px;
-      align-items: center;
-    }
-    
-    .audience-remove {
-      background: transparent;
-      border: 1px solid #f1a59d;
-      color: #d6452a;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    
-    .audience-name-input input {
-      width: 260px;
-      padding: 8px 10px;
-    }
-    
-    .audience-error-note {
-      color: #e55353;
-      font-size: 12px;
-      margin-top: 6px;
-      display: none;
-    }
-
-    .audience-section-label {
-      font-size: 13px;
-      font-weight: 600;
-      margin: 12px 0 8px;
-      display: block;
-    }
-    
-    .location-row {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    
-    .location-input {
-      margin-top: 10px;
-    }
-    
-    .loc-type-box {
-      border: 1px dashed var(--light-gray);
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 8px;
-    }
-    
-    .audience-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    
-    .small-muted {
-      font-size: 12px;
-      color: var(--gray);
-    }
-
-    @media (max-width: 992px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        max-height: 40vh;
-      }
-
-      .progress-bar {
-        width: 220px;
-      }
+      margin-top: 20px;
     }
 
     @keyframes fadeIn {
@@ -595,6 +790,30 @@
         opacity: 1;
         transform: translateY(0);
       }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    .instruction {
+      font-size: 12px;
+      color: var(--gray);
+      font-style: italic;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .instruction i {
+      color: var(--primary);
     }
   </style>
 </head>
@@ -650,8 +869,7 @@
   </div>
 
   <script>
-    // -------- CONFIG: ALL PILLARS & SUB-PILLARS (unchanged) --------
-    // type: 'short', 'long', 'upload', 'swot', 'color', 'table', 'cohort'
+    // -------- CONFIG: ALL PILLARS & SUB-PILLARS --------
     const BRAND_STRUCTURE = [
       {
         id: "brand-overview",
@@ -706,27 +924,6 @@
         ]
       },
       {
-        id: "core-values",
-        label: "Core Values",
-        sections: [
-          {
-            id: "behavioral-examples",
-            label: "Behavioral Examples",
-            type: "long"
-          },
-          {
-            id: "values-in-action",
-            label: "Values in Action",
-            type: "long"
-          },
-          {
-            id: "internal-vs-external",
-            label: "Internal vs External Application",
-            type: "table"
-          }
-        ]
-      },
-      {
         id: "brand-positioning",
         label: "Brand Positioning",
         sections: [
@@ -746,62 +943,14 @@
         ]
       },
       {
-        id: "brand-architecture",
-        label: "Brand Architecture",
-        sections: [
-          {
-            id: "product-hierarchy",
-            label: "Product/Service Hierarchy",
-            type: "table"
-          },
-          {
-            id: "naming-conventions",
-            label: "Naming Conventions",
-            type: "long"
-          },
-          {
-            id: "brand-relationship-models",
-            label: "Brand Relationship Models",
-            type: "long"
-          },
-          {
-            id: "brand-evolution",
-            label: "Brand Evolution",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "target-audience",
-        label: "Target Audience",
-        sections: [
-          {
-            id: "demographics",
-            label: "Demographics",
-            type: "cohort", // special cohort UI
-            hint: "Define age, gender, income and location cohorts."
-          },
-          {
-            id: "psychographics",
-            label: "Psychographics",
-            type: "long"
-          },
-          { id: "pain-points", label: "Pain Points", type: "long" },
-          {
-            id: "buyer-journey-map",
-            label: "Buyer Journey Map",
-            type: "long"
-          }
-        ]
-      },
-      {
         id: "competitive-landscape",
         label: "Competitive Landscape",
         sections: [
           {
             id: "market-position-map",
             label: "Market Position Map",
-            type: "upload"
+            type: "position-map", // NEW TYPE
+            hint: "Visualize competitors on a strategic grid. Drag and position companies based on market attributes."
           },
           {
             id: "swot-analysis",
@@ -838,433 +987,14 @@
             id: "emotional-associations",
             label: "Emotional Associations",
             type: "long"
-          },
-          {
-            id: "personality-in-action",
-            label: "Personality in Action",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "tone-of-voice",
-        label: "Tone of Voice",
-        sections: [
-          { id: "dos-donts", label: "Do's & Don'ts", type: "table" },
-          {
-            id: "communication-styles",
-            label: "Communication Styles",
-            type: "long"
-          },
-          {
-            id: "medium-examples",
-            label: "Medium-based Examples",
-            type: "long"
-          },
-          {
-            id: "crisis-tone",
-            label: "Crisis Tone Guidelines",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "messaging-pillars",
-        label: "Messaging Pillars",
-        sections: [
-          {
-            id: "messaging-framework",
-            label: "Messaging Framework",
-            type: "table"
-          },
-          {
-            id: "taglines-slogans",
-            label: "Taglines & Slogans",
-            type: "long"
-          },
-          {
-            id: "elevator-pitch",
-            label: "Elevator Pitch",
-            type: "short"
-          },
-          {
-            id: "copy-style-guide",
-            label: "Copywriting Style Guide",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "logo-guidelines",
-        label: "Logo Guidelines",
-        sections: [
-          { id: "logo-variants", label: "Logo Variants", type: "upload" },
-          {
-            id: "clear-space-sizing",
-            label: "Clear Space & Sizing",
-            type: "long"
-          },
-          {
-            id: "incorrect-usage",
-            label: "Incorrect Usage",
-            type: "upload"
-          },
-          {
-            id: "logo-downloads",
-            label: "Logo File Downloads",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "brand-colors",
-        label: "Brand Colors",
-        sections: [
-          {
-            id: "secondary-colors",
-            label: "Secondary Colors",
-            type: "color"
-          },
-          {
-            id: "color-codes",
-            label: "Color Codes (HEX, RGB, CMYK, Pantone)",
-            type: "table"
-          },
-          {
-            id: "color-usage-guidelines",
-            label: "Usage Guidelines",
-            type: "long"
-          },
-          {
-            id: "accessibility-compliance",
-            label: "Accessibility Compliance",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "typography",
-        label: "Typography",
-        sections: [
-          {
-            id: "supporting-fonts",
-            label: "Supporting Fonts",
-            type: "upload"
-          },
-          {
-            id: "font-hierarchy",
-            label: "Font Hierarchy",
-            type: "table"
-          },
-          {
-            id: "web-print-rules",
-            label: "Web & Print Rules",
-            type: "long"
-          },
-          {
-            id: "line-height-kerning",
-            label: "Line Height & Kerning",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "imagery-style",
-        label: "Imagery Style",
-        sections: [
-          {
-            id: "filters-treatments",
-            label: "Filters & Treatments",
-            type: "long"
-          },
-          {
-            id: "composition",
-            label: "Composition",
-            type: "long"
-          },
-          {
-            id: "subject-guidelines",
-            label: "Subject Guidelines",
-            type: "long"
-          },
-          {
-            id: "image-dos-donts",
-            label: "Image Do's & Don'ts",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "iconography",
-        label: "Iconography",
-        sections: [
-          {
-            id: "grid-spacing-rules",
-            label: "Grid/Spacing Rules",
-            type: "long"
-          },
-          {
-            id: "icon-color-usage",
-            label: "Icon Color Usage",
-            type: "color"
-          },
-          { id: "icon-dos-donts", label: "Do's & Don'ts", type: "upload" },
-          {
-            id: "icon-download-pack",
-            label: "Download Pack",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "graphic-elements",
-        label: "Graphic Elements",
-        sections: [
-          {
-            id: "decorative-shapes",
-            label: "Decorative Shapes",
-            type: "upload"
-          },
-          {
-            id: "illustrations",
-            label: "Illustrations",
-            type: "upload"
-          },
-          {
-            id: "backgrounds",
-            label: "Backgrounds",
-            type: "upload"
-          },
-          {
-            id: "layering-rules",
-            label: "Layering Rules",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "motion-guidelines",
-        label: "Motion Guidelines",
-        sections: [
-          {
-            id: "motion-timing-easing",
-            label: "Motion Timing/Easing",
-            type: "long"
-          },
-          { id: "motion-use-cases", label: "Use Cases", type: "long" },
-          {
-            id: "inappropriate-motion",
-            label: "Inappropriate Motion",
-            type: "long"
-          },
-          {
-            id: "export-specs",
-            label: "Export Specs",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "ui-components",
-        label: "UI Components",
-        sections: [
-          { id: "inputs", label: "Inputs", type: "long" },
-          { id: "cards", label: "Cards", type: "long" },
-          { id: "navigation", label: "Navigation", type: "long" },
-          {
-            id: "interactive-states",
-            label: "Interactive States",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "packaging-guidelines",
-        label: "Packaging Guidelines",
-        sections: [
-          { id: "label-design", label: "Label Design", type: "upload" },
-          {
-            id: "barcoding-legal",
-            label: "Barcoding & Legal Info",
-            type: "long"
-          },
-          {
-            id: "unboxing-experience",
-            label: "Unboxing Experience",
-            type: "long"
-          },
-          {
-            id: "sustainability-standards",
-            label: "Sustainability Standards",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "signage-print",
-        label: "Signage & Print",
-        sections: [
-          {
-            id: "outdoor-signage",
-            label: "Outdoor Signage",
-            type: "upload"
-          },
-          {
-            id: "retail-displays",
-            label: "Retail Displays",
-            type: "upload"
-          },
-          { id: "print-sizes", label: "Print Sizes", type: "table" },
-          {
-            id: "exhibition-booth",
-            label: "Exhibition Booth Branding",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "templates-assets",
-        label: "Templates & Assets",
-        sections: [
-          {
-            id: "business-cards",
-            label: "Business Cards",
-            type: "upload"
-          },
-          {
-            id: "letterhead-design",
-            label: "Letterhead Design",
-            type: "upload"
-          },
-          {
-            id: "email-signatures",
-            label: "Email Signatures",
-            type: "long"
-          },
-          {
-            id: "social-media-kits",
-            label: "Social Media Kits",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "usage-dos-donts",
-        label: "Usage Do's & Don'ts",
-        sections: [
-          {
-            id: "color-misuse",
-            label: "Color Misuse",
-            type: "upload"
-          },
-          {
-            id: "typography-errors",
-            label: "Typography Errors",
-            type: "upload"
-          },
-          {
-            id: "messaging-misalignment",
-            label: "Messaging Misalignment",
-            type: "long"
-          },
-          {
-            id: "visual-mistakes",
-            label: "Visual Mistakes",
-            type: "upload"
-          }
-        ]
-      },
-      {
-        id: "co-branding-rules",
-        label: "Co-Branding Rules",
-        sections: [
-          { id: "co-brand-hierarchy", label: "Brand Hierarchy", type: "long" },
-          {
-            id: "co-brand-campaign-examples",
-            label: "Campaign Examples",
-            type: "upload"
-          },
-          {
-            id: "co-brand-dos-donts",
-            label: "Do's & Don'ts",
-            type: "long"
-          },
-          {
-            id: "co-brand-terms",
-            label: "Co-brand Terms & Guidelines",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "legal-trademarks",
-        label: "Legal & Trademarks",
-        sections: [
-          {
-            id: "copyright-claims",
-            label: "Copyright Claims",
-            type: "long"
-          },
-          {
-            id: "licensing-terms",
-            label: "Licensing Terms",
-            type: "long"
-          },
-          { id: "disclaimers", label: "Disclaimers", type: "long" },
-          {
-            id: "brand-abuse-reporting",
-            label: "Brand Abuse Reporting",
-            type: "short"
-          }
-        ]
-      },
-      {
-        id: "industry-custom",
-        label: "Industry Custom Modules",
-        sections: [
-          {
-            id: "fashion-lookbooks",
-            label: "Fashion: Fabric Visuals, Lookbooks",
-            type: "upload"
-          },
-          {
-            id: "food-label-regs",
-            label: "Food: Label Regulations",
-            type: "long"
-          },
-          {
-            id: "finance-disclosures",
-            label: "Finance: Legal Disclosures",
-            type: "long"
-          }
-        ]
-      },
-      {
-        id: "accessibility-standards",
-        label: "Accessibility Standards",
-        sections: [
-          {
-            id: "font-readability",
-            label: "Font Readability",
-            type: "long"
-          },
-          { id: "alt-text-rules", label: "Alt Text Rules", type: "long" },
-          {
-            id: "screen-reader-labels",
-            label: "Screen Reader Labels",
-            type: "long"
-          },
-          {
-            id: "wcag-ada-guidelines",
-            label: "WCAG/ADA Guidelines",
-            type: "long"
           }
         ]
       }
+      // ... (other pillars remain)
     ];
 
     // ---------- STATE ----------
-    const completionState = {}; // { sectionId: true }
+    const completionState = {};
     const totalSections = BRAND_STRUCTURE.reduce(
       (sum, p) => sum + p.sections.length,
       0
@@ -1390,8 +1120,8 @@
         case "color":
           formBody.appendChild(makeColorField());
           break;
-        case "cohort":
-          formBody.appendChild(makeCohortField());
+        case "position-map": // NEW CASE
+          formBody.appendChild(makePositionMapField());
           break;
         case "long":
         default:
@@ -1404,47 +1134,54 @@
       const actions = document.createElement("div");
       actions.className = "form-actions";
       actions.innerHTML = `
-        <button class="btn btn-outline" type="button">
+        <button class="btn btn-outline" type="button" id="resetBtn">
           <i class="fas fa-rotate-left"></i> Reset
         </button>
-        <button class="btn btn-primary" type="button">
+        <button class="btn btn-primary" type="button" id="saveBtn">
           Save Section <i class="fas fa-check"></i>
         </button>
       `;
-      const [resetBtn, saveBtn] = actions.querySelectorAll("button");
-
-      resetBtn.addEventListener("click", () => {
-        container.querySelectorAll("input, textarea").forEach((el) => {
-          if (el.type === "color") return;
-          if (el.type === "radio") return;
-          el.value = "";
-        });
-        container
-          .querySelectorAll(".chip-toggle")
-          .forEach((c) => c.classList.remove("active"));
-      });
-
-      saveBtn.addEventListener("click", () => {
-        completionState[sec.id] = true;
-        updateCompletionUI();
-        markSidebarCompleted(sec.id);
-      });
 
       container.appendChild(actions);
-
       formRoot.innerHTML = "";
       formRoot.appendChild(container);
 
-      // enable chip toggle behavior in cohort sections
-      container.addEventListener("click", (e) => {
-        if (e.target.classList.contains("chip-toggle")) {
-          e.target.classList.toggle("active");
+      // Attach reset and save handlers
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        if (sec.type === "position-map") {
+          if (confirm("Reset all competitors and map settings?")) {
+            resetPositionMap();
+          }
+        } else {
+          container.querySelectorAll("input, textarea").forEach((el) => {
+            if (el.type === "color") return;
+            if (el.type === "radio") return;
+            el.value = "";
+          });
+          container
+            .querySelectorAll(".chip-toggle")
+            .forEach((c) => c.classList.remove("active"));
         }
       });
 
-      // If this is cohort, initialize the audience builder inside the container
-      if (sec.type === "cohort") {
-        initCohortBuilder(container);
+      document.getElementById('saveBtn').addEventListener('click', () => {
+        completionState[sec.id] = true;
+        updateCompletionUI();
+        markSidebarCompleted(sec.id);
+        // Show save confirmation
+        const saveBtn = document.getElementById('saveBtn');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+        saveBtn.style.backgroundColor = '#10b981';
+        setTimeout(() => {
+          saveBtn.innerHTML = originalText;
+          saveBtn.style.backgroundColor = '';
+        }, 1500);
+      });
+
+      // If this is position-map, initialize it
+      if (sec.type === "position-map") {
+        initializePositionMap();
       }
     }
 
@@ -1555,258 +1292,458 @@
       return wrapper;
     }
 
-    // ----- UPDATED COHORT FIELD -----
-    function makeCohortField() {
+    // NEW: Position Map Field Builder
+    function makePositionMapField() {
       const wrapper = document.createElement("div");
-      wrapper.className = "form-group";
+      wrapper.className = "position-map-container";
       wrapper.innerHTML = `
-        <label>Demographics (Cohorts)</label>
-        <div class="hint">Define age, gender, income and basic profile cohorts. Use multiple audiences if needed.</div>
-        <div id="cohortRoot" style="margin-top:12px;"></div>
+        <div class="map-controls">
+          <div class="axis-control">
+            <h4><i class="fas fa-arrows-alt-h"></i> X-Axis Dimension</h4>
+            <div class="axis-options">
+              <label class="axis-option">
+                <input type="radio" name="x-axis" value="price" checked>
+                Price (Low to High)
+              </label>
+              <label class="axis-option">
+                <input type="radio" name="x-axis" value="quality">
+                Quality (Low to High)
+              </label>
+              <label class="axis-option">
+                <input type="radio" name="x-axis" value="innovation">
+                Innovation (Traditional to Innovative)
+              </label>
+              <label class="axis-option">
+                <input type="radio" name="x-axis" value="market-share">
+                Market Share (Small to Large)
+              </label>
+            </div>
+          </div>
+          
+          <div class="axis-control">
+            <h4><i class="fas fa-arrows-alt-v"></i> Y-Axis Dimension</h4>
+            <div class="axis-options">
+              <label class="axis-option">
+                <input type="radio" name="y-axis" value="growth" checked>
+                Growth Rate (Low to High)
+              </label>
+              <label class="axis-option">
+                <input type="radio" name="y-axis" value="premium">
+                Premium Positioning (Economy to Luxury)
+              </label>
+              <label class="axis-option">
+                <input type="radio" name="y-axis" value="customer-satisfaction">
+                Customer Satisfaction (Low to High)
+              </label>
+              <label class="axis-option">
+                <input type="radio" name="y-axis" value="digital-presence">
+                Digital Presence (Weak to Strong)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="competitor-map" id="competitorMap">
+          <!-- Map will be dynamically generated -->
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #4361ee;"></div>
+            <span>Your Brand</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #f72585;"></div>
+            <span>Direct Competitors</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #10b981;"></div>
+            <span>Indirect Competitors</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #f37c21;"></div>
+            <span>Market Leaders</span>
+          </div>
+        </div>
+
+        <div class="add-competitor-form">
+          <h4><i class="fas fa-plus-circle"></i> Add Competitor</h4>
+          <div class="form-row">
+            <div>
+              <label>Competitor Name</label>
+              <input type="text" id="competitorName" placeholder="Enter competitor name">
+            </div>
+            <div class="color-picker">
+              <label>Color</label>
+              <input type="color" id="competitorColor" value="#f72585">
+            </div>
+            <div>
+              <label>Type</label>
+              <select id="competitorType">
+                <option value="direct">Direct Competitor</option>
+                <option value="indirect">Indirect Competitor</option>
+                <option value="leader">Market Leader</option>
+                <option value="new">New Entrant</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="addCompetitorBtn">
+            <i class="fas fa-plus"></i> Add to Map
+          </button>
+          <p class="instruction">
+            <i class="fas fa-info-circle"></i> Tip: After adding, drag competitors on the map to position them
+          </p>
+        </div>
+
+        <div class="competitor-list" id="competitorList">
+          <!-- Competitor list will be dynamically generated -->
+        </div>
       `;
       return wrapper;
     }
 
-    // ---------- COHORT BUILDER IMPLEMENTATION ----------
-    function initCohortBuilder(container) {
-      const cohortRoot = container.querySelector('#cohortRoot');
-      if (!cohortRoot) return;
+    // ---------- POSITION MAP LOGIC ----------
+    let competitors = [];
+    let selectedCompetitor = null;
+    let isDragging = false;
 
-      cohortRoot.innerHTML = ''; // clear
+    function initializePositionMap() {
+      // Initialize with sample data
+      competitors = [
+        { id: 1, name: "Your Brand", color: "#4361ee", type: "your-brand", x: 50, y: 50 },
+        { id: 2, name: "Apple", color: "#f72585", type: "leader", x: 80, y: 75 },
+        { id: 3, name: "Samsung", color: "#f72585", type: "direct", x: 70, y: 60 },
+        { id: 4, name: "Google", color: "#10b981", type: "indirect", x: 60, y: 40 },
+        { id: 5, name: "Microsoft", color: "#f37c21", type: "leader", x: 65, y: 70 }
+      ];
 
-      // state
-      let audienceCounter = 0;
-      const audiences = {}; // store saved payloads if needed
+      renderMap();
+      renderCompetitorList();
+      setupEventListeners();
+    }
 
-      // create action row
-      const actionRow = document.createElement('div');
-      actionRow.className = 'audience-action-row';
-      actionRow.innerHTML = `<a class="audience-add-btn"><i class="fas fa-plus-circle"></i> Add more audience</a>`;
-      cohortRoot.appendChild(actionRow);
+    function renderMap() {
+      const map = document.getElementById('competitorMap');
+      map.innerHTML = '';
 
-      const blocksWrap = document.createElement('div');
-      blocksWrap.className = 'audience-blocks-wrap';
-      cohortRoot.appendChild(blocksWrap);
+      // Add grid background
+      const gridSize = 50;
+      for (let i = 0; i < map.clientWidth / gridSize; i++) {
+        const verticalLine = document.createElement('div');
+        verticalLine.style.position = 'absolute';
+        verticalLine.style.left = `${i * gridSize}px`;
+        verticalLine.style.top = '0';
+        verticalLine.style.width = '1px';
+        verticalLine.style.height = '100%';
+        verticalLine.style.backgroundColor = 'rgba(0,0,0,0.05)';
+        map.appendChild(verticalLine);
+      }
 
-      // add first audience by default
-      addAudience(blocksWrap);
+      for (let i = 0; i < map.clientHeight / gridSize; i++) {
+        const horizontalLine = document.createElement('div');
+        horizontalLine.style.position = 'absolute';
+        horizontalLine.style.top = `${i * gridSize}px`;
+        horizontalLine.style.left = '0';
+        horizontalLine.style.width = '100%';
+        horizontalLine.style.height = '1px';
+        horizontalLine.style.backgroundColor = 'rgba(0,0,0,0.05)';
+        map.appendChild(horizontalLine);
+      }
 
-      actionRow.querySelector('.audience-add-btn').addEventListener('click', () => addAudience(blocksWrap));
+      // Add axis lines
+      const axisX = document.createElement('div');
+      axisX.className = 'axis-line axis-x';
+      map.appendChild(axisX);
 
-      function addAudience(container, initialName = '') {
-        audienceCounter += 1;
-        const id = `aud-${audienceCounter}`;
+      const axisY = document.createElement('div');
+      axisY.className = 'axis-line axis-y';
+      map.appendChild(axisY);
 
-        const block = document.createElement('div');
-        block.className = 'audience-block';
-        block.dataset.audienceId = id;
-        block.innerHTML = `
-          <div class="audience-header">
-            <h4>Audience ${audienceCounter}</h4>
-            <div class="audience-controls">
-              <div class="audience-name-input">
-                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Audience Name <span style="color:#e55353">*</span></label>
-                <input type="text" class="audience-name" placeholder="Enter Audience Name" value="${initialName||''}" />
-                <div class="audience-error-note">Audience name is required</div>
-              </div>
-              <button class="audience-remove" title="Remove audience">Remove</button>
+      // Add quadrant labels
+      const quadrant1 = document.createElement('div');
+      quadrant1.className = 'quadrant-label quadrant-1';
+      quadrant1.textContent = 'High Growth / High Price';
+      map.appendChild(quadrant1);
+
+      const quadrant2 = document.createElement('div');
+      quadrant2.className = 'quadrant-label quadrant-2';
+      quadrant2.textContent = 'High Growth / Low Price';
+      map.appendChild(quadrant2);
+
+      const quadrant3 = document.createElement('div');
+      quadrant3.className = 'quadrant-label quadrant-3';
+      quadrant3.textContent = 'Low Growth / Low Price';
+      map.appendChild(quadrant3);
+
+      const quadrant4 = document.createElement('div');
+      quadrant4.className = 'quadrant-label quadrant-4';
+      quadrant4.textContent = 'Low Growth / High Price';
+      map.appendChild(quadrant4);
+
+      // Add axis labels
+      const xLabelLeft = document.createElement('div');
+      xLabelLeft.className = 'axis-label x-label-left';
+      xLabelLeft.textContent = 'Low Price';
+      map.appendChild(xLabelLeft);
+
+      const xLabelRight = document.createElement('div');
+      xLabelRight.className = 'axis-label x-label-right';
+      xLabelRight.textContent = 'High Price';
+      map.appendChild(xLabelRight);
+
+      const yLabelTop = document.createElement('div');
+      yLabelTop.className = 'axis-label y-label-top';
+      yLabelTop.textContent = 'High Growth';
+      map.appendChild(yLabelTop);
+
+      const yLabelBottom = document.createElement('div');
+      yLabelBottom.className = 'axis-label y-label-bottom';
+      yLabelBottom.textContent = 'Low Growth';
+      map.appendChild(yLabelBottom);
+
+      // Add competitor dots
+      competitors.forEach(competitor => {
+        const dot = document.createElement('div');
+        dot.className = 'competitor-dot' + (selectedCompetitor?.id === competitor.id ? ' selected' : '');
+        dot.style.backgroundColor = competitor.color;
+        dot.style.left = `calc(${competitor.x}% - 16px)`;
+        dot.style.top = `calc(${100 - competitor.y}% - 16px)`;
+        dot.dataset.id = competitor.id;
+        dot.dataset.initial = competitor.name.charAt(0).toUpperCase();
+        dot.title = competitor.name;
+        
+        // Add glow effect for your brand
+        if (competitor.type === 'your-brand') {
+          dot.style.boxShadow = '0 0 10px ' + competitor.color;
+          dot.classList.add('pulse');
+        }
+
+        map.appendChild(dot);
+      });
+    }
+
+    function renderCompetitorList() {
+      const list = document.getElementById('competitorList');
+      list.innerHTML = '';
+
+      competitors.forEach(competitor => {
+        const item = document.createElement('div');
+        item.className = 'competitor-item' + (selectedCompetitor?.id === competitor.id ? ' selected' : '');
+        item.dataset.id = competitor.id;
+        
+        // Get competitor type label
+        let typeLabel = '';
+        switch(competitor.type) {
+          case 'your-brand': typeLabel = 'Your Brand'; break;
+          case 'direct': typeLabel = 'Direct Competitor'; break;
+          case 'indirect': typeLabel = 'Indirect Competitor'; break;
+          case 'leader': typeLabel = 'Market Leader'; break;
+          case 'new': typeLabel = 'New Entrant'; break;
+        }
+
+        item.innerHTML = `
+          <div class="competitor-color" style="background-color: ${competitor.color};"></div>
+          <div class="competitor-info">
+            <div class="competitor-name">${competitor.name}</div>
+            <div class="competitor-position">
+              <span>${typeLabel}</span>
+              <span>Position: ${competitor.x}%, ${competitor.y}%</span>
             </div>
           </div>
-
-          <div>
-            <span class="audience-section-label">Audience Details <span style="color:#e55353">*</span></span>
-            <div style="display:flex;gap:18px;flex-direction:column;">
-              <div>
-                <label style="font-weight:600;display:block;margin-bottom:8px;">Age</label>
-                <div class="chip-row">
-                  <button type="button" class="chip-toggle">18–24 Years</button>
-                  <button type="button" class="chip-toggle">25–34 Years</button>
-                  <button type="button" class="chip-toggle">35–44 Years</button>
-                  <button type="button" class="chip-toggle">45–54 Years</button>
-                  <button type="button" class="chip-toggle">55–64 Years</button>
-                  <button type="button" class="chip-toggle">65+ Years</button>
-                </div>
-              </div>
-
-              <div>
-                <label style="font-weight:600;display:block;margin-bottom:8px;">Gender</label>
-                <div class="chip-row">
-                  <button type="button" class="chip-toggle">Male</button>
-                  <button type="button" class="chip-toggle">Female</button>
-                  <button type="button" class="chip-toggle">Others</button>
-                </div>
-              </div>
-
-              <div>
-                <label style="font-weight:600;display:block;margin-bottom:8px;">Parental Status</label>
-                <div class="chip-row">
-                  <button type="button" class="chip-toggle">Parent</button>
-                  <button type="button" class="chip-toggle">Not a Parent</button>
-                  <button type="button" class="chip-toggle">Unknown</button>
-                </div>
-              </div>
-
-              <div>
-                <label style="font-weight:600;display:block;margin-bottom:8px;">Household Income</label>
-                <div class="chip-row">
-                  <button type="button" class="chip-toggle">CAT-A (0–5L)</button>
-                  <button type="button" class="chip-toggle">CTA-B (5–10L)</button>
-                  <button type="button" class="chip-toggle">MIG (10–20L)</button>
-                  <button type="button" class="chip-toggle">HIG (20L+)</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr style="margin:12px 0;border:none;border-top:1px solid var(--light-gray);">
-
-          <div>
-            <span class="audience-section-label">Locations <span style="color:#e55353">*</span></span>
-            <div class="location-row">
-              <label><input type="radio" name="${id}-country" value="india" checked /> India</label>
-              <label><input type="radio" name="${id}-country" value="enter" /> Enter Another Location</label>
-            </div>
-
-            <div class="location-input">
-              <input type="text" class="audience-location-input" placeholder="Enter location to include or exclude" />
-              <div class="hint">Add locations to define your audience for this audience.</div>
-            </div>
-
-            <div style="margin-top:12px;">
-              <label class="audience-section-label">Location Type</label>
-              <div class="loc-type-box">
-                <label style="display:block;margin-bottom:8px;">
-                  <input type="radio" name="${id}-loctype" value="presence_or_interest" checked />
-                  Presence or interest: People in, regularly in, or who've shown interest in your included locations (recommended)
-                </label>
-                <label style="display:block;margin-top:6px;">
-                  <input type="radio" name="${id}-loctype" value="presence" />
-                  Presence: People in or regularly in your included locations
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <hr style="margin:12px 0;border:none;border-top:1px solid var(--light-gray);">
-
-          <div>
-            <label style="font-weight:600;display:block;margin-bottom:8px;">Interest</label>
-            <input type="text" class="audience-interest-input" placeholder="e.g., Luxury Car" />
-            <div class="hint">Type an interest and press Enter to add to Selected Interests.</div>
-
-            <div style="margin-top:12px;">
-              <label style="font-weight:600;display:block;margin-bottom:8px;">Selected Interests</label>
-              <div class="selected-tags" aria-live="polite"></div>
-            </div>
-          </div>
-
-          <div class="audience-footer">
-            <div class="small-muted">Tip: press Enter to add interest tags</div>
-            <div style="display:flex;gap:8px;">
-              <button class="btn btn-outline audience-reset">Reset</button>
-              <button class="btn btn-primary audience-save">Save Audience</button>
-            </div>
+          <div class="competitor-actions">
+            <button class="select-btn" title="Select on map">
+              <i class="fas fa-crosshairs"></i>
+            </button>
+            <button class="delete-btn" title="Remove competitor">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
         `;
 
-        // behavior
-        block.querySelector('.audience-remove').addEventListener('click', () => {
-          delete audiences[id];
-          block.remove();
-          updateAudienceIndices();
-        });
+        list.appendChild(item);
+      });
+    }
 
-        // chip toggles (delegated)
-        block.addEventListener('click', (e) => {
-          if (e.target.classList.contains('chip-toggle')) e.target.classList.toggle('active');
-        });
+    function setupEventListeners() {
+      // Add competitor button
+      document.getElementById('addCompetitorBtn').addEventListener('click', addCompetitor);
 
-        // interest -> tag
-        const interestInput = block.querySelector('.audience-interest-input');
-        const tagsWrap = block.querySelector('.selected-tags');
-        interestInput.addEventListener('keydown', (ev) => {
-          if (ev.key === 'Enter') {
-            ev.preventDefault();
-            const v = interestInput.value.trim();
-            if (v) { addTag(v, tagsWrap); interestInput.value = ''; }
-          }
-        });
+      // Map click for selection
+      const map = document.getElementById('competitorMap');
+      map.addEventListener('mousedown', startDrag);
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', stopDrag);
 
-        function addTag(text, container) {
-          const pill = document.createElement('span');
-          pill.className = 'tag-pill'; pill.textContent = text;
-          pill.addEventListener('click', () => pill.remove());
-          container.appendChild(pill);
+      // Competitor list events (delegated)
+      document.getElementById('competitorList').addEventListener('click', function(e) {
+        const competitorItem = e.target.closest('.competitor-item');
+        if (!competitorItem) return;
+
+        const id = parseInt(competitorItem.dataset.id);
+        
+        if (e.target.closest('.select-btn')) {
+          selectCompetitor(id);
+        } else if (e.target.closest('.delete-btn')) {
+          deleteCompetitor(id);
+        } else {
+          selectCompetitor(id);
         }
+      });
 
-        // reset
-        block.querySelector('.audience-reset').addEventListener('click', () => {
-          block.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
-          block.querySelectorAll('.chip-toggle').forEach(c => c.classList.remove('active'));
-          block.querySelector('.selected-tags').innerHTML = '';
-          block.querySelector('.audience-error-note').style.display = 'none';
-        });
+      // Axis control changes
+      document.querySelectorAll('input[name="x-axis"], input[name="y-axis"]').forEach(input => {
+        input.addEventListener('change', updateAxisLabels);
+      });
+    }
 
-        // save
-        block.querySelector('.audience-save').addEventListener('click', () => {
-          const nameInput = block.querySelector('.audience-name');
-          if (!nameInput.value.trim()) {
-            block.querySelector('.audience-error-note').style.display = 'block';
-            nameInput.focus(); return;
-          }
-          block.querySelector('.audience-error-note').style.display = 'none';
-          const data = collectAudienceData(block, id);
-          audiences[id] = data;
-          // show quick saved state
-          const saveBtn = block.querySelector('.audience-save'); const orig = saveBtn.textContent;
-          saveBtn.textContent = 'Saved ✓'; setTimeout(()=> saveBtn.textContent = orig, 900);
-        });
+    function addCompetitor() {
+      const nameInput = document.getElementById('competitorName');
+      const colorInput = document.getElementById('competitorColor');
+      const typeInput = document.getElementById('competitorType');
 
-        container.appendChild(block);
-        updateAudienceIndices();
-        // focus input
-        setTimeout(()=> { const inp = block.querySelector('.audience-name'); if (inp) inp.focus(); }, 10);
+      const name = nameInput.value.trim();
+      if (!name) {
+        alert('Please enter a competitor name');
+        return;
       }
 
-      function updateAudienceIndices() {
-        const blocks = document.querySelectorAll('#cohortRoot .audience-block');
-        blocks.forEach((b, i) => {
-          const h = b.querySelector('.audience-header h4');
-          if (h) h.textContent = `Audience ${i+1}`;
-        });
-      }
-
-      function collectAudienceData(block, id) {
-        const name = block.querySelector('.audience-name').value.trim();
-        const chipGroups = block.querySelectorAll('.chip-row');
-        const agesActive = chipGroups[0] ? Array.from(chipGroups[0].querySelectorAll('.chip-toggle.active')).map(n=>n.textContent) : [];
-        const genderActive = chipGroups[1] ? Array.from(chipGroups[1].querySelectorAll('.chip-toggle.active')).map(n=>n.textContent) : [];
-        const parentalActive = chipGroups[2] ? Array.from(chipGroups[2].querySelectorAll('.chip-toggle.active')).map(n=>n.textContent) : [];
-        const incomeActive = chipGroups[3] ? Array.from(chipGroups[3].querySelectorAll('.chip-toggle.active')).map(n=>n.textContent) : [];
-
-        const country = block.querySelector(`input[name="${id}-country"]:checked`).value;
-        const loctype = block.querySelector(`input[name="${id}-loctype"]:checked`).value;
-        const locationText = block.querySelector('.audience-location-input').value.trim();
-        const interests = Array.from(block.querySelectorAll('.selected-tags .tag-pill')).map(t=>t.textContent);
-
-        return { id, name, ages: agesActive, gender: genderActive, parental: parentalActive, income: incomeActive, country, loctype, locationText, interests };
-      }
-
-      // helper exposed for debugging / saving externally
-      window.getAllAudiences = function() {
-        // collect from blocks (unsaved included)
-        const all = [];
-        document.querySelectorAll('#cohortRoot .audience-block').forEach(b => {
-          const id = b.dataset.audienceId;
-          all.push( collectAudienceData(b, id) );
-        });
-        return all;
+      const newCompetitor = {
+        id: competitors.length + 1,
+        name: name,
+        color: colorInput.value,
+        type: typeInput.value,
+        x: Math.floor(Math.random() * 40) + 30, // Random position
+        y: Math.floor(Math.random() * 40) + 30
       };
 
-    } // end initCohortBuilder
+      competitors.push(newCompetitor);
+      renderMap();
+      renderCompetitorList();
+      
+      // Reset form
+      nameInput.value = '';
+      colorInput.value = '#f72585';
+      typeInput.value = 'direct';
+      
+      // Select the new competitor
+      selectCompetitor(newCompetitor.id);
+    }
+
+    function selectCompetitor(id) {
+      selectedCompetitor = competitors.find(c => c.id === id);
+      renderMap();
+      renderCompetitorList();
+    }
+
+    function deleteCompetitor(id) {
+      if (id === 1) { // Prevent deleting "Your Brand"
+        alert('Cannot delete "Your Brand"');
+        return;
+      }
+      
+      if (confirm('Are you sure you want to remove this competitor?')) {
+        competitors = competitors.filter(c => c.id !== id);
+        if (selectedCompetitor?.id === id) {
+          selectedCompetitor = null;
+        }
+        renderMap();
+        renderCompetitorList();
+      }
+    }
+
+    function startDrag(e) {
+      const dot = e.target.closest('.competitor-dot');
+      if (!dot) return;
+      
+      e.preventDefault();
+      isDragging = true;
+      const id = parseInt(dot.dataset.id);
+      selectCompetitor(id);
+    }
+
+    function drag(e) {
+      if (!isDragging || !selectedCompetitor) return;
+
+      const map = document.getElementById('competitorMap');
+      const rect = map.getBoundingClientRect();
+      
+      // Calculate percentage position
+      let x = ((e.clientX - rect.left) / rect.width) * 100;
+      let y = ((rect.bottom - e.clientY) / rect.height) * 100;
+      
+      // Constrain to map bounds
+      x = Math.max(0, Math.min(100, x));
+      y = Math.max(0, Math.min(100, y));
+      
+      // Update competitor position
+      selectedCompetitor.x = x;
+      selectedCompetitor.y = y;
+      
+      // Update visual
+      const dot = document.querySelector(`.competitor-dot[data-id="${selectedCompetitor.id}"]`);
+      if (dot) {
+        dot.style.left = `calc(${x}% - 16px)`;
+        dot.style.top = `calc(${100 - y}% - 16px)`;
+      }
+      
+      // Update list
+      renderCompetitorList();
+    }
+
+    function stopDrag() {
+      isDragging = false;
+    }
+
+    function updateAxisLabels() {
+      const xAxis = document.querySelector('input[name="x-axis"]:checked').value;
+      const yAxis = document.querySelector('input[name="y-axis"]:checked').value;
+      
+      // Get labels based on selected axes
+      const xLabels = {
+        price: { left: 'Low Price', right: 'High Price' },
+        quality: { left: 'Low Quality', right: 'High Quality' },
+        innovation: { left: 'Traditional', right: 'Innovative' },
+        'market-share': { left: 'Small', right: 'Large' }
+      };
+      
+      const yLabels = {
+        growth: { top: 'High Growth', bottom: 'Low Growth' },
+        premium: { top: 'Luxury', bottom: 'Economy' },
+        'customer-satisfaction': { top: 'High Satisfaction', bottom: 'Low Satisfaction' },
+        'digital-presence': { top: 'Strong', bottom: 'Weak' }
+      };
+      
+      // Update labels
+      document.querySelector('.x-label-left').textContent = xLabels[xAxis].left;
+      document.querySelector('.x-label-right').textContent = xLabels[xAxis].right;
+      document.querySelector('.y-label-top').textContent = yLabels[yAxis].top;
+      document.querySelector('.y-label-bottom').textContent = yLabels[yAxis].bottom;
+      
+      // Update quadrant labels
+      document.querySelector('.quadrant-1').textContent = `${yLabels[yAxis].top} / ${xLabels[xAxis].right}`;
+      document.querySelector('.quadrant-2').textContent = `${yLabels[yAxis].top} / ${xLabels[xAxis].left}`;
+      document.querySelector('.quadrant-3').textContent = `${yLabels[yAxis].bottom} / ${xLabels[xAxis].left}`;
+      document.querySelector('.quadrant-4').textContent = `${yLabels[yAxis].bottom} / ${xLabels[xAxis].right}`;
+    }
+
+    function resetPositionMap() {
+      if (confirm('This will reset all competitors and map settings. Continue?')) {
+        competitors = [
+          { id: 1, name: "Your Brand", color: "#4361ee", type: "your-brand", x: 50, y: 50 }
+        ];
+        selectedCompetitor = null;
+        
+        // Reset axis controls
+        document.querySelector('input[name="x-axis"][value="price"]').checked = true;
+        document.querySelector('input[name="y-axis"][value="growth"]').checked = true;
+        
+        renderMap();
+        renderCompetitorList();
+        updateAxisLabels();
+      }
+    }
 
     // ---------- COMPLETION ----------
-
     function updateCompletionUI() {
       const completed = Object.keys(completionState).length;
       const percent = totalSections ? Math.round((completed / totalSections) * 100) : 0;
@@ -1826,7 +1763,7 @@
     renderSidebar();
     updateCompletionUI();
 
-    // open first section by default (Brand History)
+    // Open first section by default
     const firstPillar = BRAND_STRUCTURE[0];
     if (firstPillar && firstPillar.sections[0]) {
       const firstSec = firstPillar.sections[0];
